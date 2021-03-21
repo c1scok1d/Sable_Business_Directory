@@ -1,0 +1,2 @@
+include ':TheSableBusinessDirectory', ':easyPhotoPickerLibrary', ':bhlib', ':slideUpLibrary'
+rootProject.name='Sable Business Directory'

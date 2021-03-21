@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.appcompat:appcompat:1.0.0@aar">
+    <ANNOTATIONS>
+      <root url="jar://D:/Yoho Gradle/caches/transforms-2/files-2.1/5e98e2d0a6e2db8fd1e806d486dec135/appcompat-1.0.0/annotations.zip!/" />
+    </ANNOTATIONS>
+    <CLASSES>
+      <root url="file://D:/Yoho Gradle/caches/transforms-2/files-2.1/5e98e2d0a6e2db8fd1e806d486dec135/appcompat-1.0.0/AndroidManifest.xml" />
+      <root url="jar://D:/Yoho Gradle/caches/transforms-2/files-2.1/5e98e2d0a6e2db8fd1e806d486dec135/appcompat-1.0.0/jars/classes.jar!/" />
+      <root url="file://D:/Yoho Gradle/caches/transforms-2/files-2.1/5e98e2d0a6e2db8fd1e806d486dec135/appcompat-1.0.0/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://D:/Yoho Gradle/caches/modules-2/files-2.1/androidx.appcompat/appcompat/1.0.0/1deaac9c124b19a14ebaf64780e7087d561541bd/appcompat-1.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

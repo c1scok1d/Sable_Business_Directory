@@ -1,0 +1,669 @@
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sliding_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="bottom"
+    sothree:umanoDragView="@id/dragView"
+    sothree:umanoOverlay="true"
+    sothree:umanoPanelHeight="25dp"
+    sothree:umanoParallaxOffset="100dp"
+    sothree:umanoShadowHeight="4dp">
+
+    <!-- MAIN CONTENT -->
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/mapLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <fragment
+                    android:id="@+id/mapFragment"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp">
+
+                    <ImageView
+                        android:id="@+id/alertOn"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_above="@id/ivLogo"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="50px"
+                        app:srcCompat="@mipmap/alert_on_foreground" />
+
+                    <ImageView
+                        android:id="@+id/alertOff"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_above="@id/ivLogo"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="50px"
+                        app:srcCompat="@mipmap/alert_off_foreground" />
+
+                    <RelativeLayout
+                        android:id="@+id/fooListingsLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="10dp">
+
+                        <ImageView
+                            android:id="@+id/fooListingsImageView"
+                            android:layout_width="match_parent"
+                            android:layout_height="500dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="false"
+                            android:layout_alignParentBottom="false"
+                            app:srcCompat="@mipmap/noreviews_foreground" />
+
+                        <TextView
+                            android:id="@+id/fooListingsTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/fooListingsImageView"
+                            android:layout_alignParentStart="false"
+                            android:layout_alignParentTop="false"
+                            android:layout_alignParentBottom="false"
+                            android:layout_centerHorizontal="false"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/whitebackgroud_with_rounded_corners"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:text="loadingText"
+                            android:textColor="@color/colorAccent2"
+                            android:textSize="18sp"
+                            tools:text="loadingText" />
+
+
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/ivLogo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="25px"
+                        android:layout_marginBottom="15px"
+                        sothree:srcCompat="@mipmap/sable_logo_black_foreground" />
+
+                    <LinearLayout
+                        android:id="@+id/userImageLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="100dp"
+                        android:layout_marginRight="1dp"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top|center_vertical"
+                            android:layout_marginTop="2dp"
+                            android:gravity="center_horizontal|top"
+                            android:orientation="vertical">
+
+                            <com.facebook.login.widget.LoginButton
+                                android:id="@+id/login_button4"
+                                android:layout_width="30dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/textView4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="1dp"
+                                android:gravity="center_horizontal"
+                                android:text="Logout"
+                                android:textAllCaps="true"
+                                android:textColor="@color/com_facebook_blue"
+                                android:textSize="10sp"
+                                android:visibility="gone" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <AutoCompleteTextView
+                        android:id="@+id/search"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="3dp"
+                        android:background="#FFFFFF"
+                        android:dropDownWidth="match_parent"
+                        android:dropDownHeight="wrap_content"
+                        android:hint="Search black owned businesses..."
+                        android:iconifiedByDefault="false"
+                        android:padding="5dp"
+                        android:queryBackground="@drawable/customborder"
+                        android:textSize="14sp"
+                        android:theme="@style/AppSearchView"
+                        android:visibility="visible">
+
+                    </AutoCompleteTextView>
+
+                    <RelativeLayout
+                        android:id="@+id/noListingsLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="10dp">
+
+                        <ImageView
+                            android:id="@+id/noListingsImageView"
+                            android:layout_width="match_parent"
+                            android:layout_height="500dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="false"
+                            android:layout_alignParentBottom="false"
+                            app:srcCompat="@mipmap/sorry_foreground" />
+
+                        <TextView
+                            android:id="@+id/noListingsTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/noListingsImageView"
+                            android:layout_alignParentStart="false"
+                            android:layout_alignParentTop="false"
+                            android:layout_alignParentBottom="false"
+                            android:layout_centerHorizontal="false"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/whitebackgroud_with_rounded_corners"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:text="loadingText"
+                            android:textColor="@color/colorAccent2"
+                            android:textSize="18sp"
+                            tools:text="loadingText" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/loadingLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="10dp">
+
+                        <ImageView
+                            android:id="@+id/ivLoading"
+                            android:layout_width="match_parent"
+                            android:layout_height="500dp"
+                            android:layout_alignParentStart="false"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            sothree:srcCompat="@mipmap/hello_foreground" />
+
+                        <ProgressBar
+                            android:id="@+id/progressBar1"
+                            style="?android:attr/progressBarStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true" />
+
+                        <TextView
+                            android:id="@+id/tvLoading"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@id/ivLoading"
+                            android:layout_alignParentTop="false"
+                            android:layout_alignParentEnd="false"
+                            android:layout_alignParentBottom="false"
+                            android:layout_centerVertical="false"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@drawable/whitebackgroud_with_rounded_corners"
+                            android:fontFamily="@font/open_sans"
+                            android:padding="5dp"
+                            android:text="loadingText"
+                            android:textColor="@color/colorAccent2"
+                            android:textSize="18sp" />
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_below="@id/search"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnAdd"
+                            android:layout_width="75dp"
+                            android:layout_height="28dp"
+                            android:background="@drawable/buttonshape"
+                            android:gravity="clip_vertical|center_horizontal"
+                            android:padding="5dp"
+                            android:shadowDx="0"
+                            android:shadowDy="0"
+                            android:shadowRadius="5"
+                            android:text="add"
+                            android:textAllCaps="true"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <com.facebook.login.widget.LoginButton
+                            android:id="@+id/login_button3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="3dp"
+                            android:layout_marginEnd="3dp"
+                            android:gravity="clip_vertical|center_horizontal" />
+
+                        <Button
+                            android:id="@+id/btnShowListings"
+                            android:layout_width="75dp"
+                            android:layout_height="28dp"
+                            android:background="@drawable/buttonshape"
+                            android:padding="5dp"
+                            android:shadowDx="0"
+                            android:shadowDy="0"
+                            android:shadowRadius="5"
+                            android:text="refresh"
+                            android:textAllCaps="true"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+    <!-- SLIDING LAYOUT -->
+
+    <LinearLayout
+        android:id="@+id/dragView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:focusable="false"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvMore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/customborder"
+            android:backgroundTint="@color/com_facebook_blue"
+            android:gravity="center_horizontal"
+            android:text="More"
+            android:textAllCaps="true"
+            android:textColor="@color/white" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false">
+
+            <LinearLayout
+                android:id="@+id/sliderLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/recentReviewsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/rounded_top_corners"
+                    android:backgroundTint="@android:color/transparent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvRecentReviews"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:backgroundTint="@color/white"
+                        android:gravity="start|center_vertical"
+                        android:paddingStart="3dp"
+                        android:paddingEnd="3dp"
+                        android:text="Recent Reviews"
+                        android:textAllCaps="true"
+                        android:textColor="#e9774f"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/recentReviewsRecyclerLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recentReviewsRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white" />
+
+                </LinearLayout>
+
+
+                <!-- BEGIN NO LISTINGS ANIMATION -->
+
+
+                <!-- BEGIN ABOUT US LISTINGS ANIMATION -->
+                <LinearLayout
+                    android:id="@+id/aboutUsAnimationLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:background="@android:color/transparent"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:id="@+id/aboutUsAnimationFLayout"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:background="@drawable/roundedcorner"
+                        android:backgroundTint="@color/white"
+                        android:gravity="center_vertical">
+
+                        <com.facebook.login.widget.LoginButton
+                            android:id="@+id/login_button2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom|left"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginBottom="15dp"
+                            android:layout_weight="1" />
+
+                        <LinearLayout
+                            android:id="@+id/textSwitcherLayout"
+                            android:layout_width="200dp"
+                            android:layout_height="200dp"
+                            android:layout_gravity="start"
+                            android:orientation="vertical">
+
+                            <TextSwitcher
+                                android:id="@+id/textSwitcher1"
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:padding="10dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/textSwitcher2Layout"
+                            android:layout_width="200dp"
+                            android:layout_height="200dp"
+                            android:gravity="start"
+                            android:orientation="vertical">
+
+                            <TextSwitcher
+                                android:id="@+id/textSwitcher2"
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:padding="10dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/textSwitcher3Layout"
+                            android:layout_width="200dp"
+                            android:layout_height="200dp"
+                            android:layout_gravity="start"
+                            android:orientation="vertical">
+
+                            <TextSwitcher
+                                android:id="@+id/textSwitcher3"
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:padding="10dp" />
+
+                        </LinearLayout>
+
+                        <ImageSwitcher
+
+                            android:id="@+id/imageSwitcher2"
+                            android:layout_width="200dp"
+                            android:layout_height="200dp"
+                            android:layout_gravity="center_vertical|end">
+
+                            <ImageView
+                                android:id="@+id/imageView2-1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@mipmap/smiling_peace_foreground" />
+
+                            <ImageView
+                                android:id="@+id/imageView2-2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:scaleType="fitCenter" />
+                        </ImageSwitcher>
+
+                        <ImageSwitcher
+
+                            android:id="@+id/imageSwitcher"
+                            android:layout_width="200dp"
+                            android:layout_height="200dp"
+                            android:layout_gravity="center_vertical|end">
+
+                            <ImageView
+                                android:id="@+id/imageView1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@mipmap/sorry_foreground" />
+
+                            <ImageView
+                                android:id="@+id/imageView2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:scaleType="fitCenter" />
+
+                        </ImageSwitcher>
+
+                        <ImageSwitcher
+
+                            android:id="@+id/imageSwitcher3"
+                            android:layout_width="200dp"
+                            android:layout_height="200dp"
+                            android:layout_gravity="center_vertical|end">
+
+                            <ImageView
+                                android:id="@+id/imageView3-1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@mipmap/smiling_peace_foreground" />
+
+                            <ImageView
+                                android:id="@+id/imageView3-2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:scaleType="fitCenter" />
+                        </ImageSwitcher>
+
+
+                    </FrameLayout>
+                    <!-- END NO LISTINGS ANIMATION -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/featuredListings"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvFeaturedListings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:backgroundTint="@color/white"
+                        android:gravity="start|center_vertical"
+                        android:paddingStart="3dp"
+                        android:paddingEnd="3dp"
+                        android:text="Featured"
+                        android:textAllCaps="true"
+                        android:textColor="#e9774f"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/featuredListingsRecyclerViewLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/featuredListingsRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/nearByListingsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvNearbyListings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:gravity="start|center_vertical"
+                        android:paddingStart="3dp"
+                        android:paddingEnd="3dp"
+                        android:text="Near by"
+                        android:textAllCaps="true"
+                        android:textColor="#e9774f"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/verticalRecyclerLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/verticalRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:clipToPadding="false"
+                        android:paddingBottom="5dp"
+                        android:visibility="visible">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/recentListingsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvRecentListings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:backgroundTint="@color/white"
+                        android:gravity="start|center_vertical"
+                        android:paddingStart="3dp"
+                        android:paddingEnd="3dp"
+                        android:text="New"
+                        android:textAllCaps="true"
+                        android:textColor="#e9774f"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recentListingsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="@color/white">
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+

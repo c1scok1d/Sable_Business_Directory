@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.seatgeek:placesautocomplete:0.3-SNAPSHOT@aar">
+    <CLASSES>
+      <root url="file://D:/Yoho Gradle/caches/transforms-2/files-2.1/e242a2d0607b974e83d0ee88d4bc6454/jetified-placesautocomplete-0.3-SNAPSHOT/AndroidManifest.xml" />
+      <root url="jar://D:/Yoho Gradle/caches/transforms-2/files-2.1/e242a2d0607b974e83d0ee88d4bc6454/jetified-placesautocomplete-0.3-SNAPSHOT/jars/classes.jar!/" />
+      <root url="file://D:/Yoho Gradle/caches/transforms-2/files-2.1/e242a2d0607b974e83d0ee88d4bc6454/jetified-placesautocomplete-0.3-SNAPSHOT/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

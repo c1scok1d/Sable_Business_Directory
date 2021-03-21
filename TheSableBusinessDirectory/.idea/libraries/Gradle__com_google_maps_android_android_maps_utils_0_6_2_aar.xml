@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.google.maps.android:android-maps-utils:0.6.2@aar">
+    <CLASSES>
+      <root url="file://D:/Yoho Gradle/caches/transforms-2/files-2.1/1179514835ffaf26d26c727dc43fa4ce/jetified-android-maps-utils-0.6.2/AndroidManifest.xml" />
+      <root url="jar://D:/Yoho Gradle/caches/transforms-2/files-2.1/1179514835ffaf26d26c727dc43fa4ce/jetified-android-maps-utils-0.6.2/jars/classes.jar!/" />
+      <root url="file://D:/Yoho Gradle/caches/transforms-2/files-2.1/1179514835ffaf26d26c727dc43fa4ce/jetified-android-maps-utils-0.6.2/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

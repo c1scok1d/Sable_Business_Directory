@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center_vertical"
+    android:background="#B3FFFFFF"
+    android:gravity="center_vertical">
+
+
+    <LinearLayout
+        android:id="@+id/textSwitcher3Layout"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:background="@drawable/customborder"
+        android:orientation="vertical">
+
+        <TextSwitcher
+            android:id="@+id/textSwitcher3"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:padding="10dp" />
+
+    </LinearLayout>
+
+    <ImageSwitcher
+
+        android:id="@+id/imageSwitcher2"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal|center_vertical|end"
+        android:background="#b3ffffff">
+
+        <ImageView
+            android:id="@+id/imageView2-1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            app:srcCompat="@mipmap/hello_foreground" />
+
+        <ImageView
+            android:id="@+id/imageView2-2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|center_horizontal" />
+    </ImageSwitcher>
+
+    <LinearLayout
+        android:id="@+id/textSwitcherLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/customborder"
+        android:orientation="vertical">
+
+        <TextSwitcher
+            android:id="@+id/textSwitcher1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/colorAccent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/textSwitcher2Layout"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_horizontal|center_vertical"
+        android:background="@drawable/customborder"
+        android:orientation="vertical">
+
+        <TextSwitcher
+            android:id="@+id/textSwitcher2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentBottom="false"
+            android:layout_centerHorizontal="false"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:padding="10dp" />
+
+    </LinearLayout>
+
+    <ImageSwitcher
+
+        android:id="@+id/imageSwitcher"
+        android:layout_width="200dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center_vertical|end">
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            app:srcCompat="@mipmap/smiling_peace_foreground" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|center_horizontal" />
+
+    </ImageSwitcher>
+
+    <ImageSwitcher
+
+        android:id="@+id/imageSwitcher3"
+        android:layout_width="200dp"
+        android:layout_height="250dp"
+        android:layout_gravity="start|center_vertical">
+
+        <ImageView
+            android:id="@+id/imageView3-1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|center_horizontal"
+            app:srcCompat="@mipmap/smiling_peace_foreground" />
+
+        <ImageView
+            android:id="@+id/imageView3-2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|center_horizontal" />
+    </ImageSwitcher>
+
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_vertical"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnLearnMore"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Learn More" />
+
+        <Button
+            android:id="@+id/btnDirectory"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Directory" />
+
+    </LinearLayout>
+
+
+</FrameLayout>

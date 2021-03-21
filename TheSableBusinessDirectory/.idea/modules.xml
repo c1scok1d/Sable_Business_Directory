@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-944089519/Sable_Business_Directory.iml" filepath="$PROJECT_DIR$/.idea/modules/-944089519/Sable_Business_Directory.iml" group="Sable_Business_Directory" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TheSableBusinessDirectory.iml" filepath="$PROJECT_DIR$/.idea/modules/TheSableBusinessDirectory.iml" group="Sable Business Directory/TheSableBusinessDirectory" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-20692159/bhlib.iml" filepath="$PROJECT_DIR$/.idea/modules/-20692159/bhlib.iml" group="Sable Business Directory/bhlib" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1505578107/easyPhotoPickerLibrary.iml" filepath="$PROJECT_DIR$/.idea/modules/1505578107/easyPhotoPickerLibrary.iml" group="Sable Business Directory/easyPhotoPickerLibrary" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1942338221/slideUpLibrary.iml" filepath="$PROJECT_DIR$/.idea/modules/1942338221/slideUpLibrary.iml" group="Sable Business Directory/slideUpLibrary" />
+    </modules>
+  </component>
+</project>
