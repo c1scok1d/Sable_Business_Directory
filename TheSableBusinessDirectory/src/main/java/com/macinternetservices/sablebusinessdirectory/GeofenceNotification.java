@@ -66,7 +66,7 @@ public class GeofenceNotification {
                 case Geofence.GEOFENCE_TRANSITION_EXIT:
                     notificationText = "Dont miss an opportunity to upport black business.";
                     notificationText2 = "You are near " + simpleGeofence.toGeofence().getRequestId();
-                    transitionEnterNotification(context, notificationText, notificationText2);
+                    transitionExitNotification(context, notificationText, notificationText2);
                     break;
             }
 
@@ -150,6 +150,25 @@ public class GeofenceNotification {
                 .setStyle(new NotificationCompat.BigPictureStyle()
                        .bigPicture(getBitmapFromURL(url))
                         .bigLargeIcon(null))
+                .setContentIntent(notificationTapIntent) // notification tap action
+                .build();
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        NotificationManager notifManager =
+                (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        notifManager.notify(new Random().nextInt(), notification);
+    }
+
+    private void transitionExitNotification(final Context mContext,final String message, final String message2){
+        createNotificationChannel(mContext);
+        Intent notificationIntent = new Intent(mContext, MainActivity.class);
+
+        PendingIntent notificationTapIntent = PendingIntent.getActivity(mContext,
+                0, notificationIntent, 0);
+        Notification notification = new NotificationCompat.Builder(mContext, CHANNEL_ID)
+                .setSubText("Black Owned Business Alert")
+                .setContentText(message2)
+                .setContentTitle(message)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(notificationTapIntent) // notification tap action
                 .build();
         notification.flags |= Notification.FLAG_AUTO_CANCEL;

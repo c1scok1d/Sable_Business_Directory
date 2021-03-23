@@ -248,6 +248,7 @@ public class AddListingActivity extends AppCompatActivity implements
         // Initialize the AutocompleteSupportFragment.
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment.setHint("Enter address to begin search");
         autocompleteFragment.setTypeFilter(TypeFilter.ADDRESS);
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
         //LatLng latlng = Place.Field.LAT_LNG();

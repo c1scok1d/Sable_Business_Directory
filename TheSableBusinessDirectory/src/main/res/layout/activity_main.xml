@@ -47,6 +47,17 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp">
 
+                    <com.ramotion.circlemenu.CircleMenuView
+                        android:id="@+id/circle_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@id/ivLogo"
+                        android:layout_toLeftOf="@id/alertOn"
+                        app:button_colors="@array/colors"
+                        app:button_icons="@array/icons">
+
+                    </com.ramotion.circlemenu.CircleMenuView>
+
                     <ImageView
                         android:id="@+id/alertOn"
                         android:layout_width="35dp"
@@ -355,7 +366,7 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:clipToPadding="false">
 
             <LinearLayout
@@ -372,7 +383,9 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/rounded_top_corners"
                     android:backgroundTint="@android:color/transparent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="gone">
 
                     <TextView
                         android:id="@+id/tvRecentReviews"
@@ -394,7 +407,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="gone">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recentReviewsRecyclerView"
@@ -412,33 +427,33 @@
                 <LinearLayout
                     android:id="@+id/aboutUsAnimationLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:background="@android:color/transparent"
                     android:orientation="vertical">
 
-                    <FrameLayout
+                    <RelativeLayout
                         android:id="@+id/aboutUsAnimationFLayout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:background="@drawable/roundedcorner"
-                        android:backgroundTint="@color/white"
                         android:gravity="center_vertical">
 
                         <com.facebook.login.widget.LoginButton
                             android:id="@+id/login_button2"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_gravity="bottom|left"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
                             android:layout_marginStart="5dp"
-                            android:layout_marginBottom="15dp"
-                            android:layout_weight="1" />
+                            android:layout_marginBottom="15dp" />
 
                         <LinearLayout
                             android:id="@+id/textSwitcherLayout"
-                            android:layout_width="200dp"
-                            android:layout_height="200dp"
-                            android:layout_gravity="start"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@id/login_button2"
+                            android:layout_below="@id/imageSwitcher"
                             android:orientation="vertical">
 
                             <TextSwitcher
@@ -450,9 +465,11 @@
 
                         <LinearLayout
                             android:id="@+id/textSwitcher2Layout"
-                            android:layout_width="200dp"
-                            android:layout_height="200dp"
-                            android:gravity="start"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@id/login_button2"
+                            android:layout_below="@id/imageSwitcher2"
+                            android:gravity="bottom|start"
                             android:orientation="vertical">
 
                             <TextSwitcher
@@ -465,9 +482,10 @@
 
                         <LinearLayout
                             android:id="@+id/textSwitcher3Layout"
-                            android:layout_width="200dp"
-                            android:layout_height="200dp"
-                            android:layout_gravity="start"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@id/login_button2"
+                            android:layout_below="@id/imageSwitcher"
                             android:orientation="vertical">
 
                             <TextSwitcher
@@ -481,9 +499,10 @@
                         <ImageSwitcher
 
                             android:id="@+id/imageSwitcher2"
-                            android:layout_width="200dp"
-                            android:layout_height="200dp"
-                            android:layout_gravity="center_vertical|end">
+                            android:layout_width="match_parent"
+                            android:layout_height="575dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerInParent="true">
 
                             <ImageView
                                 android:id="@+id/imageView2-1"
@@ -504,9 +523,10 @@
                         <ImageSwitcher
 
                             android:id="@+id/imageSwitcher"
-                            android:layout_width="200dp"
-                            android:layout_height="200dp"
-                            android:layout_gravity="center_vertical|end">
+                            android:layout_width="match_parent"
+                            android:layout_height="575dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerInParent="true">
 
                             <ImageView
                                 android:id="@+id/imageView1"
@@ -528,9 +548,10 @@
                         <ImageSwitcher
 
                             android:id="@+id/imageSwitcher3"
-                            android:layout_width="200dp"
-                            android:layout_height="200dp"
-                            android:layout_gravity="center_vertical|end">
+                            android:layout_width="match_parent"
+                            android:layout_height="575dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerInParent="true">
 
                             <ImageView
                                 android:id="@+id/imageView3-1"
@@ -549,7 +570,7 @@
                         </ImageSwitcher>
 
 
-                    </FrameLayout>
+                    </RelativeLayout>
                     <!-- END NO LISTINGS ANIMATION -->
                 </LinearLayout>
 
@@ -558,7 +579,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="gone">
 
                     <TextView
                         android:id="@+id/tvFeaturedListings"
@@ -580,7 +603,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="gone">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/featuredListingsRecyclerView"
@@ -596,7 +621,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="gone">
 
                     <TextView
                         android:id="@+id/tvNearbyListings"
@@ -617,7 +644,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="gone">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/verticalRecyclerView"
@@ -636,7 +665,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="gone">
 
                     <TextView
                         android:id="@+id/tvRecentListings"
@@ -658,7 +689,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:backgroundTint="@color/white">
+                    android:backgroundTint="@color/white"
+                    android:visibility="gone"
+                    tools:visibility="gone">
 
                 </androidx.recyclerview.widget.RecyclerView>
             </LinearLayout>

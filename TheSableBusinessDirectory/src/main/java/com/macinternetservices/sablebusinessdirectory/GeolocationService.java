@@ -225,8 +225,6 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 
     @Override
     public void onLocationChanged(Location location) {
-
-
         Log.d("Geofence",
                 "new location : " + location.getLatitude() + ", "
                         + location.getLongitude() + ". "
@@ -253,10 +251,6 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
             registerGeofences();
         }
     }
-
-
-
-
     @Override
     public void onConnectionSuspended(int cause) {
         //Log.i("Geofence", "Connection suspended");
