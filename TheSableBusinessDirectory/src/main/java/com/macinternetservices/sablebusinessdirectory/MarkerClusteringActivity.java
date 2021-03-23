@@ -302,30 +302,18 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         mClusterManager.setOnClusterItemClickListener(this);
         mClusterManager.setOnClusterItemInfoWindowClickListener(this);
         if(mapLocations.size() == 0) {
-            if (foo <= 3) {
-                // if no locations near user zoom to current location and display no listing message and spokesman
-                showFooStuff();
-                getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 200));
-
-                CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(new LatLng(latitude, longitude))      // Sets the center of the map to location user
-                        .zoom(17)                   // Sets the zoom
-                        .bearing(90)                // Sets the orientation of the camera to east
-                        .tilt(40)                   // Sets the tilt of the camera to 30 degrees
-                        .build();                   // Creates a CameraPosition from the builder
-                getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            } else {
+            //if (foo <= 3) {
                 showOtherStuff();
-                getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 200));
+                getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 200));
 
                 CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(new LatLng(latitude, longitude))      // Sets the center of the map to location user
+                        .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
                         .zoom(17)                   // Sets the zoom
                         .bearing(90)                // Sets the orientation of the camera to east
                         .tilt(40)                   // Sets the tilt of the camera to 30 degrees
                         .build();                   // Creates a CameraPosition from the builder
                 getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            }
+          //  }
         } else {
         mClusterManager.addItems(mapLocations);
         mClusterManager.cluster();
@@ -347,8 +335,8 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         searchView.setVisibility(View.VISIBLE);
         btnShowListings.setAnimation(imgAnimationIn);
         btnShowListings.setVisibility(View.VISIBLE);
-        btnAdd.setAnimation(imgAnimationIn);
-        btnAdd.setVisibility(View.VISIBLE);
+//        btnAdd.setAnimation(imgAnimationIn);
+//        btnAdd.setVisibility(View.VISIBLE);
         tvMore.setAnimation(imgAnimationIn);
         tvMore.setVisibility(View.VISIBLE);
         sliderLayout.setAnimation(imgAnimationIn);
@@ -362,38 +350,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         fooListingsTextView.setAnimation(imgAnimationOut);
         fooListingsTextView.setVisibility(View.GONE);
     }
-    private void showFooStuff() {
 
-        Animation imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
-        Animation imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        Animation imgZoomOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_out);
-        Animation imgZoomIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in);
-
-        progressBar.setVisibility(View.GONE); //hide progressBar
-        //login_button3.setVisibility(View.VISIBLE);
-        //loadingLayout.setAnimation(imgAnimationOut);
-        //loadingLayout.setVisibility(View.GONE);
-        //searchView.setAnimation(imgAnimationIn);
-        //searchView.setVisibility(View.VISIBLE);
-        noListingsImageView.setAnimation(imgAnimationOut);
-        noListingsImageView.setVisibility(View.GONE);
-        noListingsTextView.setAnimation(imgAnimationOut);
-        noListingsTextView.setVisibility(View.GONE);
-        fooListingImageView.setAnimation(imgAnimationIn);
-        fooListingImageView.setVisibility(View.VISIBLE);
-        fooListingsTextView.setAnimation(imgAnimationIn);
-        fooListingsTextView.setVisibility(View.VISIBLE);
-        //noListingsTextView.setTextSize(16);
-
-        if(isLoggedIn) {
-            fooListingsTextView.setText("Hello " +firstName+"\n\nWe have your current location. We are searching our database for black owned businesses near you.");
-        } else {
-            fooListingsTextView.setText("Hello, We have your current location. We are searching our database for black owned businesses near you.");
-        }
-        btnAdd.setAnimation(imgAnimationIn);
-        btnAdd.setVisibility(View.VISIBLE);
-        //Log.e("showOtherStuff", " Ending showOtherStuff " );
-    }
     private void showOtherStuff() {
 
         Animation imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
@@ -415,13 +372,13 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
 
         if(isLoggedIn) {
            noListingsTextView.setText("This is terrible " + firstName +"!!!!\n\nLooks like there aren't any black owned businesses near you in our directory.\n" +
-                    "Tap ADD to add any black owned business you visit to our directory.");
+                    "Tap Add (+) from the menu to add any black owned business you visit to our directory.");
         } else {
             noListingsTextView.setText("This is terrible!!!!\n\nLooks like there aren't any black owned businesses near you in our directory.\n" +
-                    "Tap ADD to add any black owned business you visit to our directory.");
+                    "Tap add (+) to add any black owned business you visit to our directory.");
+            //btnAdd.setAnimation(imgAnimationIn);
+            //btnAdd.setVisibility(View.VISIBLE);
         }
-        btnAdd.setAnimation(imgAnimationIn);
-        btnAdd.setVisibility(View.VISIBLE);
         //Log.e("showOtherStuff", " Ending showOtherStuff " );
     }
 }

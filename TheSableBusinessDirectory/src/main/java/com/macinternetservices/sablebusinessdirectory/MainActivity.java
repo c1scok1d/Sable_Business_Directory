@@ -33,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -366,10 +367,10 @@ public class MainActivity extends AppCompatActivity implements
 
         //isRestore = savedInstanceState != null;
         ivSettings = findViewById(R.id.btnSettings);
-        ivAlertOn = findViewById(R.id.alertOn);
-        ivAlertOn.setVisibility(View.GONE);
-        ivAlertOff = findViewById(R.id.alertOff);
-        ivAlertOff.setVisibility(View.GONE);
+//        ivAlertOn = findViewById(R.id.alertOn);
+  //      ivAlertOn.setVisibility(View.GONE);
+    //    ivAlertOff = findViewById(R.id.alertOff);
+      //  ivAlertOff.setVisibility(View.GONE);
         loadingLayout = findViewById(R.id.loadingLayout);
         tvLoading = findViewById(R.id.tvLoading);
         tvLoading.setVisibility(View.GONE);
@@ -420,7 +421,6 @@ public class MainActivity extends AppCompatActivity implements
 
         login_button3 = findViewById(R.id.login_button3);
         login_button3.setVisibility(View.GONE);
-        login_button4 = findViewById(R.id.login_button4);
 
         facebookLogin();
 
@@ -604,14 +604,16 @@ public class MainActivity extends AppCompatActivity implements
         recentListingsRecyclervView.setAdapter(recentListingsAdapter);
         recentListingsRecyclervView.setNestedScrollingEnabled(false);
 
-        btnAdd = findViewById(R.id.btnAdd);
-        btnAdd.setVisibility(View.GONE);
+        //btnAdd = findViewById(R.id.btnAdd);
+        //btnAdd.setVisibility(View.GONE);
         spokesperson = findViewById(R.id.spokesperson);
         tvCity = findViewById(R.id.tvCity);
         tvMore = findViewById(R.id.tvMore);
 
         btnShowListings = findViewById(R.id.btnShowListings);
         btnShowListings.setVisibility(View.GONE);
+        searchView = findViewById(R.id.search);
+        searchView.setVisibility(View.GONE);
 
 
         btnShowListings.setOnClickListener(new View.OnClickListener() {
@@ -622,7 +624,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        ivAlertOn = findViewById(R.id.alertOn);
+        /*ivAlertOn = findViewById(R.id.alertOn);
         ivAlertOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -632,7 +634,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        ivAlertOff = findViewById(R.id.alertOff);
+        //ivAlertOff = findViewById(R.id.alertOff);
         ivAlertOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -644,7 +646,7 @@ public class MainActivity extends AppCompatActivity implements
 
         /**
          *  location add button
-         */
+
 
 
         btnAdd.setOnClickListener(view -> {
@@ -658,14 +660,11 @@ public class MainActivity extends AppCompatActivity implements
                 Intent addListingIntent = new Intent(MainActivity.this, AddListingActivity.class);
                 startActivity(addListingIntent);
             }
-        });
+        }); */
 
         /**
          *  directory search
          */
-
-        searchView = findViewById(R.id.search);
-        searchView.setVisibility(View.GONE);
         ArrayAdapter<String> searchViewAdapter = new ArrayAdapter<String>(getApplicationContext(),
                 android.R.layout.simple_list_item_1, listingName);
         searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -751,9 +750,6 @@ public class MainActivity extends AppCompatActivity implements
                                         Geofence.GEOFENCE_TRANSITION_ENTER
                                                 | Geofence.GEOFENCE_TRANSITION_DWELL
                                                 | Geofence.GEOFENCE_TRANSITION_EXIT))));
-
-                                //progressBar.setVisibility(View.GONE);
-
                                 Bundle locationReviewBundle = new Bundle();
                                 locationReviewBundle.putParcelableArrayList("locationReviewBundle", locationReview);
                                 showReviews.putExtra("locationReview", locationReview);
@@ -801,7 +797,9 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
         mLayout.setFadeOnClickListener(view -> mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED));
-        final CircleMenuView menu = (CircleMenuView) findViewById(R.id.circle_menu);
+
+
+        final CircleMenuView menu = findViewById(R.id.circle_menu);
         menu.setEventListener(new CircleMenuView.EventListener() {
             @Override
             public void onMenuOpenAnimationStart(@NonNull CircleMenuView view) {
@@ -831,9 +829,42 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onButtonClickAnimationEnd(@NonNull CircleMenuView view, int index) {
                 Log.d("D", "onButtonClickAnimationEnd| index: " + index);
+                switch(index){
+                    case 1:
+                    case 4:
+                        startActivity(new Intent(getApplicationContext(), MarkerClusteringActivity.class));
+                        finish();
+                        break;
+                    case 2:
+                        searchView.setVisibility(View.VISIBLE);
+                        break;
+                    case 3:
+                        if (!isLoggedIn) {
+                            Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(loginIntent);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
+                            Toast.makeText(getApplicationContext(), "User must be logged in to add a business listing.", Toast.LENGTH_LONG).show();
+                        } else {
+                            Intent addListingIntent = new Intent(MainActivity.this, AddListingActivity.class);
+                            startActivity(addListingIntent);
+                        }
+                        break;
+                    case 5:
+                        if (!isLoggedIn) {
+                            Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(loginIntent);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                        } else {
+                            //logout
+                        }
+                        break;
+                    default:
+                        buildAlertMessageEnableAlerts();
+                        break;
+                }
             }
         });
-
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment)).getMapAsync(this);
         //   Thread.setDefaultUncaughtExceptionHandler(handleAppCrash);
 
@@ -868,13 +899,13 @@ public class MainActivity extends AppCompatActivity implements
             }
             pref.edit().putBoolean("firstrun", false).apply();
         }
-        if (pref.getBoolean("alertOn", false)) {
+       /* if (pref.getBoolean("alertOn", false)) {
             ivAlertOff.setVisibility(View.GONE);
             ivAlertOn.setVisibility(View.VISIBLE);
         } else {
             ivAlertOff.setVisibility(View.VISIBLE);
             ivAlertOn.setVisibility(View.GONE);
-        }
+        } */
 
         if (geofences.size() > 0 && mapLocations.size() > 0) {
             setMarkers();
@@ -1342,6 +1373,27 @@ public class MainActivity extends AppCompatActivity implements
      */
     public void getRetrofit(final Map<String, String> query) {
 
+        progressBar.setVisibility(View.GONE); //hide progressBar
+        /*login_button3.setVisibility(View.VISIBLE);
+        //loadingLayout.setAnimation(imgAnimationOut);
+        //loadingLayout.setVisibility(View.GONE);
+        //searchView.setAnimation(imgAnimationIn);
+        //searchView.setVisibility(View.VISIBLE);
+        noListingsImageView.setAnimation(imgAnimationOut);
+        noListingsImageView.setVisibility(View.GONE);
+        noListingsTextView.setAnimation(imgAnimationOut);
+        noListingsTextView.setVisibility(View.GONE);
+        fooListingImageView.setAnimation(imgAnimationIn);
+        fooListingImageView.setVisibility(View.VISIBLE);
+        fooListingsTextView.setAnimation(imgAnimationIn);
+        fooListingsTextView.setVisibility(View.VISIBLE);
+        //noListingsTextView.setTextSize(16);
+
+        if (isLoggedIn) {
+            tvLoading.setText(Html.fromHtml(("Thanks for your patience " + "<font color='#4FC1E9'>" + firstName + "</font>" + "we are searing our database to see if there are any registered black owned businesses near you.")));
+        } else {
+            tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
+        } */
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         //Cache cache = new Cache(new File(context.getCacheDir(), "http-cache"), 10 * 1024 * 1024);
@@ -1552,6 +1604,10 @@ public class MainActivity extends AppCompatActivity implements
                                 response.body().get(i).getFeaturedImage().getThumbnail()));
                     }
                     spinner.setVisibility(View.GONE);
+                    /*fooListingImageView.setAnimation(imgAnimationOut);
+                    fooListingImageView.setVisibility(View.GONE);
+                    fooListingsTextView.setAnimation(imgAnimationOut);
+                    fooListingsTextView.setVisibility(View.GONE);
                     ivLoading.setVisibility(View.VISIBLE);
                     ivLoading.setAnimation(imgAnimationIn);
                     tvLoading.setVisibility(View.VISIBLE);
@@ -1561,7 +1617,7 @@ public class MainActivity extends AppCompatActivity implements
                         tvLoading.setText(Html.fromHtml(("Thanks for your patience " + "<font color='#4FC1E9'>" + firstName + "</font>" + "<br>Looks like there are " + verticalList.size() + " black owned businesses near you.")));
                     } else {
                         tvLoading.setText("Thank you for your patience \nLooks like there are " + verticalList.size() + " black owned businesses near you.");
-                    }
+                    } */
                     double lat2 = location.getLatitude();
                     double lng2 = location.getLongitude();
                     double lat1 = Double.valueOf(pref.getString("lastKnownLat", String.valueOf(location.getLatitude())));
@@ -1588,17 +1644,24 @@ public class MainActivity extends AppCompatActivity implements
                                 .title("Welcome <font color='#4FC1E9'>" + firstName + "!</font>").snippet("Double tap\nanywhere on\nthe map to zoom")
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                     }
+
+                    spinner.setVisibility(View.GONE);
+                   /* fooListingImageView.setAnimation(imgAnimationOut);
+                    fooListingImageView.setVisibility(View.GONE);
+                    fooListingsTextView.setAnimation(imgAnimationOut);
+                    fooListingsTextView.setVisibility(View.GONE);
+
+                    noListingsImageView.setImageResource(R.mipmap.sorry_foreground);
+                    ivLoading.setVisibility(View.GONE);
+                    ivLoading.setAnimation(imgAnimationOut);
+                    tvLoading.setVisibility(View.GONE);
+                    tvLoading.setAnimation(imgAnimationOut);
+                    noListingsTextView.setText(Html.fromHtml(("Apologies <font color='#4FC1E9'>" + firstName + "!</font>, there are no black owned businesses registered with Sable near you.")));
                     noListingsImageView.setVisibility(View.VISIBLE);
                     noListingsTextView.setVisibility(View.VISIBLE);
                     noListingsImageView.setAnimation(imgAnimationIn);
-                    noListingsTextView.setAnimation(imgAnimationIn);
+                    noListingsTextView.setAnimation(imgAnimationIn); */
 
-                    progressBar.setVisibility(View.GONE);
-                    //noListingsTextView.setVisibility(View.VISIBLE);
-
-                    noListingsImageView.setImageResource(R.mipmap.sorry_foreground);
-                    //String listingName = "<font color='#4FC1E9'>" + parent.getItemAtPosition(pos).toString() + "</font>";
-                    noListingsTextView.setText(Html.fromHtml(("Apologies <font color='#4FC1E9'>" + firstName + "!</font>, there are no black owned businesses registered with Sable near you.")));
                     getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 200));
 
                     CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -1629,6 +1692,38 @@ public class MainActivity extends AppCompatActivity implements
     }
     //END Retrofit API call to get listings
 
+    private void showFooStuff() {
+
+        Animation imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
+        Animation imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+        Animation imgZoomOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_out);
+        Animation imgZoomIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in);
+
+        progressBar.setVisibility(View.GONE); //hide progressBar
+        //login_button3.setVisibility(View.VISIBLE);
+        //loadingLayout.setAnimation(imgAnimationOut);
+        //loadingLayout.setVisibility(View.GONE);
+        //searchView.setAnimation(imgAnimationIn);
+        //searchView.setVisibility(View.VISIBLE);
+        noListingsImageView.setAnimation(imgAnimationOut);
+        noListingsImageView.setVisibility(View.GONE);
+        noListingsTextView.setAnimation(imgAnimationOut);
+        noListingsTextView.setVisibility(View.GONE);
+        fooListingImageView.setAnimation(imgAnimationIn);
+        fooListingImageView.setVisibility(View.VISIBLE);
+        fooListingsTextView.setAnimation(imgAnimationIn);
+        fooListingsTextView.setVisibility(View.VISIBLE);
+        //noListingsTextView.setTextSize(16);
+
+        if (isLoggedIn) {
+            tvLoading.setText(Html.fromHtml(("Thanks for your patience " + "<font color='#4FC1E9'>" + firstName + "</font>" + "we are searing our database to see if there are any registered black owned businesses near you.")));
+        } else {
+            tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
+        }
+        //btnAdd.setAnimation(imgAnimationIn);
+        //btnAdd.setVisibility(View.VISIBLE);
+        //Log.e("showOtherStuff", " Ending showOtherStuff " );
+    }
     /**
      * Retrofit API call to get reviews
      */

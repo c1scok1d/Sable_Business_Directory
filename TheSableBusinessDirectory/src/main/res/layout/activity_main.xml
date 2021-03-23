@@ -23,6 +23,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/MainLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
@@ -47,34 +48,53 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp">
 
+                    <AutoCompleteTextView
+                        android:id="@+id/search"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="3dp"
+                        android:background="#FFFFFF"
+                        android:dropDownWidth="match_parent"
+                        android:dropDownHeight="wrap_content"
+                        android:hint="Search black owned businesses..."
+                        android:iconifiedByDefault="false"
+                        android:padding="5dp"
+                        android:textSize="14sp"
+                        android:theme="@style/AppSearchView"
+                        android:visibility="gone">
+
+                    </AutoCompleteTextView>
+
+                    <ImageView
+                        android:id="@+id/ivLogo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="25px"
+                        android:layout_marginBottom="15px"
+                        sothree:srcCompat="@mipmap/sable_logo_black_foreground" />
+
                     <com.ramotion.circlemenu.CircleMenuView
                         android:id="@+id/circle_menu"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_above="@id/ivLogo"
-                        android:layout_toLeftOf="@id/alertOn"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="false"
+                        android:layout_centerVertical="false"
+                        android:layout_gravity="center_vertical"
                         app:button_colors="@array/colors"
-                        app:button_icons="@array/icons">
+                        app:button_icons="@array/icons"
+                        app:icon_color="#FFFFFF"
+                        app:icon_menu="@mipmap/sable_logo_black_foreground">
 
                     </com.ramotion.circlemenu.CircleMenuView>
-
-                    <ImageView
-                        android:id="@+id/alertOn"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_above="@id/ivLogo"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="50px"
-                        app:srcCompat="@mipmap/alert_on_foreground" />
-
-                    <ImageView
-                        android:id="@+id/alertOff"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_above="@id/ivLogo"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="50px"
-                        app:srcCompat="@mipmap/alert_off_foreground" />
 
                     <RelativeLayout
                         android:id="@+id/fooListingsLayout"
@@ -98,7 +118,7 @@
 
                         <TextView
                             android:id="@+id/fooListingsTextView"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/fooListingsImageView"
                             android:layout_alignParentStart="false"
@@ -116,81 +136,6 @@
 
 
                     </RelativeLayout>
-
-                    <ImageView
-                        android:id="@+id/ivLogo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginEnd="25px"
-                        android:layout_marginBottom="15px"
-                        sothree:srcCompat="@mipmap/sable_logo_black_foreground" />
-
-                    <LinearLayout
-                        android:id="@+id/userImageLayout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="100dp"
-                        android:layout_marginRight="1dp"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:visibility="visible">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="top|center_vertical"
-                            android:layout_marginTop="2dp"
-                            android:gravity="center_horizontal|top"
-                            android:orientation="vertical">
-
-                            <com.facebook.login.widget.LoginButton
-                                android:id="@+id/login_button4"
-                                android:layout_width="30dp"
-                                android:layout_height="wrap_content"
-                                android:gravity="end"
-                                android:visibility="gone" />
-
-                            <TextView
-                                android:id="@+id/textView4"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="1dp"
-                                android:gravity="center_horizontal"
-                                android:text="Logout"
-                                android:textAllCaps="true"
-                                android:textColor="@color/com_facebook_blue"
-                                android:textSize="10sp"
-                                android:visibility="gone" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <AutoCompleteTextView
-                        android:id="@+id/search"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerInParent="true"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="3dp"
-                        android:background="#FFFFFF"
-                        android:dropDownWidth="match_parent"
-                        android:dropDownHeight="wrap_content"
-                        android:hint="Search black owned businesses..."
-                        android:iconifiedByDefault="false"
-                        android:padding="5dp"
-                        android:queryBackground="@drawable/customborder"
-                        android:textSize="14sp"
-                        android:theme="@style/AppSearchView"
-                        android:visibility="visible">
-
-                    </AutoCompleteTextView>
 
                     <RelativeLayout
                         android:id="@+id/noListingsLayout"
@@ -214,7 +159,7 @@
 
                         <TextView
                             android:id="@+id/noListingsTextView"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/noListingsImageView"
                             android:layout_alignParentStart="false"
@@ -261,7 +206,7 @@
 
                         <TextView
                             android:id="@+id/tvLoading"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_above="@id/ivLoading"
                             android:layout_alignParentTop="false"
@@ -281,20 +226,27 @@
                     </RelativeLayout>
 
                     <LinearLayout
+                        android:id="@+id/btnLayout"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_below="@id/search"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="5dp"
                         android:gravity="center_horizontal"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        tools:visibility="gone">
 
                         <Button
                             android:id="@+id/btnAdd"
-                            android:layout_width="75dp"
-                            android:layout_height="28dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp"
                             android:background="@drawable/buttonshape"
-                            android:gravity="clip_vertical|center_horizontal"
+                            android:gravity="center_horizontal"
                             android:padding="5dp"
                             android:shadowDx="0"
                             android:shadowDy="0"
@@ -303,7 +255,9 @@
                             android:textAllCaps="true"
                             android:textColor="@color/white"
                             android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:visibility="gone"
+                            tools:visibility="gone" />
 
                         <com.facebook.login.widget.LoginButton
                             android:id="@+id/login_button3"

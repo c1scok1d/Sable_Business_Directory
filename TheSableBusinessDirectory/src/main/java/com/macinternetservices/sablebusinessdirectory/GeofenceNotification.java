@@ -64,7 +64,7 @@ public class GeofenceNotification {
                     break;
 
                 case Geofence.GEOFENCE_TRANSITION_EXIT:
-                    notificationText = "Dont miss an opportunity to upport black business.";
+                    notificationText = "Don't miss an opportunity to support black business.";
                     notificationText2 = "You are near " + simpleGeofence.toGeofence().getRequestId();
                     transitionExitNotification(context, notificationText, notificationText2);
                     break;
