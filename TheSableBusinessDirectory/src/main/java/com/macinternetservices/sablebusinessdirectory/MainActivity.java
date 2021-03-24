@@ -704,7 +704,7 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     tvMore.setTextColor(Color.parseColor("#000000"));
                     tvMore.setBackgroundResource(R.drawable.buttonshape_wht);
-                    tvMore.setText("Tap For Less");
+                    tvMore.setText("Tap To Close");
                 }
             }
         });

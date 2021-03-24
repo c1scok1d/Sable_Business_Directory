@@ -376,7 +376,7 @@
                 <LinearLayout
                     android:id="@+id/aboutUsAnimationLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginBottom="10dp"
                     android:background="@android:color/transparent"
                     android:orientation="vertical">
@@ -392,9 +392,9 @@
                             android:id="@+id/logo_wht"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
+                            android:layout_alignParentStart="false"
                             android:layout_centerVertical="true"
-                            app:srcCompat="@mipmap/ic_launcher_foreground"/>
+                            app:srcCompat="@mipmap/ic_launcher_foreground" />
 
                         <com.facebook.login.widget.LoginButton
                             android:id="@+id/login_button2"
@@ -511,7 +511,7 @@
                         <LinearLayout
                             android:id="@+id/textSwitcher3Layout"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
                             android:layout_marginStart="10dp"
@@ -520,21 +520,12 @@
                             android:layout_marginBottom="10dp"
                             android:orientation="vertical">
 
-                            <TextSwitcher
-                                android:id="@+id/textSwitcher3"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:padding="10dp" />
-
                             <ImageSwitcher
 
                                 android:id="@+id/imageSwitcher3"
                                 android:layout_width="match_parent"
-                                android:layout_height="500dp"
-                                android:layout_marginStart="10dp"
-                                android:layout_marginEnd="10dp"
-                                android:layout_marginBottom="10dp">
+                                android:layout_height="300dp"
+                                android:layout_weight="1">
 
                                 <ImageView
                                     android:id="@+id/imageView3-1"
@@ -550,6 +541,14 @@
                                     android:layout_gravity="center_vertical"
                                     android:scaleType="fitCenter" />
                             </ImageSwitcher>
+
+                            <TextSwitcher
+                                android:id="@+id/textSwitcher3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_weight="1"
+                                android:padding="10dp" />
 
                         </LinearLayout>
 
