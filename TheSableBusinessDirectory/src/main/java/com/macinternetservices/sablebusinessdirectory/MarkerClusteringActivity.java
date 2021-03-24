@@ -350,10 +350,8 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
             }
         }
     private void showStuff() {
-        Animation imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
-        Animation imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
 
-        progressBar.setVisibility(View.GONE); //hide progressBar
+        spinner.setVisibility(View.GONE); //hide progressBar
         login_button3.setVisibility(View.VISIBLE);
         loadingLayout.setAnimation(imgAnimationOut);
         loadingLayout.setVisibility(View.GONE);
@@ -378,17 +376,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
     }
     private void showFooStuff() {
 
-        Animation imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
-        Animation imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        //Animation imgZoomOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_out);
-        //Animation imgZoomIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in);
-
-        progressBar.setVisibility(View.GONE);
-        //login_button3.setVisibility(View.VISIBLE);
-        //loadingLayout.setAnimation(imgAnimationOut);
-        //loadingLayout.setVisibility(View.GONE);
-        //searchView.setAnimation(imgAnimationIn);
-        //searchView.setVisibility(View.VISIBLE);
+        spinner.setVisibility(View.GONE);
         noListingsImageView.setAnimation(imgAnimationOut);
         noListingsImageView.setVisibility(View.GONE);
         noListingsTextView.setAnimation(imgAnimationOut);
@@ -407,12 +395,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
     }
     private void showOtherStuff() {
 
-        Animation imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
-        Animation imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        //Animation imgZoomOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_out);
-        //Animation imgZoomIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in);
-
-        progressBar.setVisibility(View.GONE); //hide progressBar
+        spinner.setVisibility(View.GONE); //hide progressBar
         login_button3.setVisibility(View.VISIBLE);
         loadingLayout.setAnimation(imgAnimationOut);
         loadingLayout.setVisibility(View.GONE);

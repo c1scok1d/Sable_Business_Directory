@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements
     Button login_button2, login_button4, btnAdd, btnShowListings;
     LoginButton login_button3;
     RecyclerView verticalRecyclerView, featuredRecyclervView, recentListingsRecyclervView, recentReviewsRecyclervView;
-    ProgressBar progressBar;
+    //ProgressBar progressBar;
     LinearLayoutManager mLayoutManager, featuredRecyclerViewLayoutManager,
             recentListingsRecyclerViewLayoutManager, recentReviewsRecyclerViewLayoutManager;
     LinearLayout recentReviewsLayout, recentReviewsRecyclerLayout;
@@ -367,10 +367,6 @@ public class MainActivity extends AppCompatActivity implements
 
         //isRestore = savedInstanceState != null;
         ivSettings = findViewById(R.id.btnSettings);
-//        ivAlertOn = findViewById(R.id.alertOn);
-  //      ivAlertOn.setVisibility(View.GONE);
-    //    ivAlertOff = findViewById(R.id.alertOff);
-      //  ivAlertOff.setVisibility(View.GONE);
         loadingLayout = findViewById(R.id.loadingLayout);
         tvLoading = findViewById(R.id.tvLoading);
         tvLoading.setVisibility(View.GONE);
@@ -378,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements
         tvMore.setVisibility(View.GONE);
         sliderLayout = findViewById(R.id.sliderLayout);
         sliderLayout.setVisibility(View.GONE);
-        progressBar = findViewById(R.id.progressBar1);
+        //progressBar = findViewById(R.id.progressBar1);
         recentReviewsRecyclerLayout = findViewById(R.id.recentReviewsRecyclerLayout);
         recentReviewsRecyclerLayout.setVisibility(View.GONE);
         recentReviewsLayout = findViewById(R.id.recentReviewsLayout);
@@ -397,17 +393,6 @@ public class MainActivity extends AppCompatActivity implements
         imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
         imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
 
-        //Switch alertSwitch = (Switch) findViewById(R.id.alertSwitch);
-        /*alertSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // The toggle is enabled
-                } else {
-                    // The toggle is disabled
-                }
-            }
-        });*/
-
 
         /**
          * ABOUT US
@@ -421,24 +406,6 @@ public class MainActivity extends AppCompatActivity implements
 
         facebookLogin();
 
-        /*textSwitcher = findViewById(R.id.textSwitcher1);
-        textSwitcher.setFactory(() -> {
-            TextView textView = new TextView(getApplicationContext());
-            textView.setLayoutParams(new TextSwitcher.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            textView.setTextSize(22);
-            textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent2));
-            return textView;
-        });
-
-
-        textSwitcher2 = findViewById(R.id.textSwitcher2);
-        textSwitcher2.setFactory(() -> {
-            TextView textView = new TextView(getApplicationContext());
-            textView.setLayoutParams(new TextSwitcher.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            textView.setTextSize(22);
-            textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
-            return textView;
-        }); */
 
         textSwitcher3 = findViewById(R.id.textSwitcher3);
         textSwitcher3.setFactory(() -> {
@@ -449,32 +416,10 @@ public class MainActivity extends AppCompatActivity implements
             return textView;
         });
 
-        /*imageSwitcher = findViewById(R.id.imageSwitcher);
-        imageSwitcher.setVisibility(View.GONE);
-
-        ImageView imageView = new ImageView(getApplicationContext());
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-
-        ViewGroup.LayoutParams params = new ImageSwitcher.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        imageView.setLayoutParams(params);
-
-        imageSwitcher2 = findViewById(R.id.imageSwitcher2);
-        imageSwitcher2.setVisibility(View.GONE);
-
-        ImageView imageView2 = new ImageView(getApplicationContext());
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-
-        ViewGroup.LayoutParams imageView2params = new ImageSwitcher.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        imageView2.setLayoutParams(imageView2params); */
-
         imageSwitcher3 = findViewById(R.id.imageSwitcher3);
-        imageSwitcher3.setVisibility(View.GONE);
         imageSwitcher3.setAnimation(imgAnimationIn);
         imageSwitcher3.setAnimation(imgAnimationOut);
+        imageSwitcher3.setVisibility(View.GONE);
 
 
         ImageView imageView3 = new ImageView(getApplicationContext());
@@ -491,41 +436,18 @@ public class MainActivity extends AppCompatActivity implements
         /**
          *  strt fuckin' around with getting linearLayouts to fade in and out
          */
-        textSwitcherLayout = findViewById(R.id.textSwitcherLayout);
-        textSwitcherLayout.setVisibility(View.GONE);
 
-        LinearLayout textSwitcherLayout = new LinearLayout(getApplicationContext());
+        textSwitcher3Layout = findViewById(R.id.textSwitcher3Layout);
+        textSwitcher3Layout.setAnimation(imgAnimationIn);
+        textSwitcher3Layout.setAnimation(imgAnimationOut);
+        textSwitcher3Layout.setVisibility(View.GONE);
 
         ViewGroup.LayoutParams textSwitcherLayoutParams = new ImageSwitcher.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        textSwitcherLayout.setLayoutParams(textSwitcherLayoutParams);
-
-
-        textSwitcherLayout.setAnimation(imgAnimationIn);
-        textSwitcherLayout.setAnimation(imgAnimationOut);
-        textSwitcherLayout.post(runnableCode);
-
-        textSwitcher2Layout = findViewById(R.id.textSwitcher2Layout);
-        textSwitcher2Layout.setVisibility(View.GONE);
-
-        LinearLayout textSwitcher2Layout = new LinearLayout(getApplicationContext());
-
-
-        textSwitcher2Layout.setLayoutParams(textSwitcherLayoutParams);
-
-        textSwitcher2Layout.setAnimation(imgAnimationIn);
-        textSwitcher2Layout.setAnimation(imgAnimationOut);
-        textSwitcher2Layout.post(runnableCode);
-
-        textSwitcher3Layout = findViewById(R.id.textSwitcher3Layout);
-        textSwitcher3Layout.setVisibility(View.GONE);
-
         LinearLayout textSwitcher3Layout = new LinearLayout(getApplicationContext());
         textSwitcher3Layout.setLayoutParams(textSwitcherLayoutParams);
 
-        textSwitcher3Layout.setAnimation(imgAnimationIn);
-        textSwitcher3Layout.setAnimation(imgAnimationOut);
         textSwitcher3Layout.post(runnableCode);
 
         /**
@@ -592,8 +514,6 @@ public class MainActivity extends AppCompatActivity implements
         recentListingsRecyclervView.setAdapter(recentListingsAdapter);
         recentListingsRecyclervView.setNestedScrollingEnabled(false);
 
-        //btnAdd = findViewById(R.id.btnAdd);
-        //btnAdd.setVisibility(View.GONE);
         spokesperson = findViewById(R.id.spokesperson);
         tvCity = findViewById(R.id.tvCity);
         tvMore = findViewById(R.id.tvMore);
@@ -664,7 +584,7 @@ public class MainActivity extends AppCompatActivity implements
                 Map<String, String> query = new HashMap<>();
                 query.put("per_page", "100");
 
-                progressBar.setVisibility(View.VISIBLE);
+                spinner.setVisibility(View.VISIBLE);
                 loadingLayout.setVisibility(View.VISIBLE);
                 loadingLayout.setAnimation(imgAnimationIn);
                 ivLoading.setImageResource(R.mipmap.online_reviews_foreground);
@@ -1365,7 +1285,7 @@ public class MainActivity extends AppCompatActivity implements
      */
     public void getRetrofit(final Map<String, String> query) {
 
-        progressBar.setVisibility(View.GONE); //hide progressBar
+        spinner.setVisibility(View.GONE); //hide progressBar
         /*login_button3.setVisibility(View.VISIBLE);
         //loadingLayout.setAnimation(imgAnimationOut);
         //loadingLayout.setVisibility(View.GONE);
@@ -1905,7 +1825,6 @@ public class MainActivity extends AppCompatActivity implements
             switch (count) {
 
                 case 8:
-
                     imageSwitcher3.setImageResource(images[count]);
                     imageSwitcher3.setAnimation(imgAnimationIn);
                     imageSwitcher3.setVisibility(View.VISIBLE);
@@ -1928,15 +1847,8 @@ public class MainActivity extends AppCompatActivity implements
                 case 5:
                 case 7:
                 default:
-                    //login_button2.setAnimation(imgAnimationOut);
+                    login_button2.setAnimation(imgAnimationOut);
                     login_button2.setVisibility(View.GONE);
-
-                    //textSwitcher3Layout.setAnimation(imgAnimationOut);
-                    //textSwitcher3Layout.setVisibility(View.GONE);
-
-                    //imageSwitcher3.setAnimation(imgAnimationOut);
-                    //imageSwitcher3.setVisibility(View.GONE);
-
 
                     imageSwitcher3.setImageResource(images[count]);
                     imageSwitcher3.setAnimation(imgAnimationIn);
@@ -1945,7 +1857,6 @@ public class MainActivity extends AppCompatActivity implements
                     textSwitcher3.setText(text[count]);
                     textSwitcher3Layout.setAnimation(imgAnimationIn);
                     textSwitcher3Layout.setVisibility(View.VISIBLE);
-
 
                     imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
                     count++;
