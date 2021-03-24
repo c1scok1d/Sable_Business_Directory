@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -74,7 +75,7 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
     TextSwitcher textSwitcher;
     ImageView imageView;
     Button deny_permission_request, approve_permission_request;
-    private static final int FRAME_TIME_MS = 3000;
+    private static final int FRAME_TIME_MS = 4000;
 
     private Handler imageSwitchHandler;
 
@@ -131,8 +132,9 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
         textSwitcher.setFactory(() -> {
             TextView textView = new TextView(getApplicationContext());
             textView.setLayoutParams(new TextSwitcher.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            textView.setTextSize(16);
-            textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent2));
+            textView.setTextSize(22);
+            textView.setGravity(Gravity.CENTER);
+            textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
             return textView;
         });
     }
@@ -417,33 +419,23 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
 
 
             String[] text = {
-                    "Welcome to The Sable Business Directory!\n",
+                    "Hello and welcome to The Sable Business Directory mobile app.",
 
+                    "We make it easier to find, rate and review black owned businesses.",
 
-                    "The Sable Business Directory is designed to help those wanting to support " +
-                            "and frequent black owned businesses and service providers find black owned" +
-                            "businesses and service providers.",
+                    "Our geo-search technology alerts you when you're near a registered black owned business.",
 
-                    "We provide a one of a kind online platform that makes it easier to find, rate " +
-                            "and review black owned businesses and service providers.",
+                    "It's FREE to register a business and get alerts.",
 
-                    "We have combined geo-search, social media and e-commerce technologies to create an online " +
-                            "platform dedicated to the continued growth and support of black owned businesses.",
+                    "Rate & review black owned everytime you shop.",
 
-                    "To insure high quality services, customers maintain the directory by adding and " +
-                            "reviewing the black owned businesses and service providers they frequent.",
+                    "Online reviews are an great way to increase sales.",
 
-                    "Our combined technologies then compile those listings, ratings and reviews to " +
-                            "provide a directory listing of black owned business and service providers " +
-                            "near your current location.",
+                    "We insure high quality feedback by requiring users to login before adding or reviewing a listing.",
 
-                    "88% of people trust online reviews. Online reviews are an important way you can increase " +
-                            "sales for your business. This is especially important for local businesses and service providers.",
+                    "We need your permission to alert you when you're near a black owned business.",
 
-                    "Adding and reviewing listings is easy. To protect the privacy of our users and insure high quality feedback " +
-                            "we require users to login before adding or reviewing a listing.",
-
-                    "Tap below to begin adding and reviewing black owned businesses using your Facebook account."
+                    "Tap below to allow all permissions all the time to get alerted when you're near a registered black owned business."
 
             };
 
@@ -468,8 +460,8 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
                     approve_permission_request.setAnimation(imgAnimationIn);
                     approve_permission_request.setVisibility(View.VISIBLE);
 
-                    deny_permission_request.setAnimation(imgAnimationIn);
-                    deny_permission_request.setVisibility(View.VISIBLE);
+                    //deny_permission_request.setAnimation(imgAnimationIn);
+                    //deny_permission_request.setVisibility(View.VISIBLE);
 
                     imageSwitchHandler.removeCallbacks(this);
                     //imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
