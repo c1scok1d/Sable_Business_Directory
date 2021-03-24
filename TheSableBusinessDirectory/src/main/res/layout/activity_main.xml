@@ -48,16 +48,50 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp">
 
+                    <ImageView
+                        android:id="@+id/ivAlertOff"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="3dp"
+                        sothree:srcCompat="@mipmap/alert_off_foreground" />
+
+                    <ImageView
+                        android:id="@+id/ivAlertOn"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="3dp"
+                        sothree:srcCompat="@mipmap/alert_on_foreground" />
+
+                    <com.ramotion.circlemenu.CircleMenuView
+                        android:id="@+id/circle_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        app:button_colors="@array/colors"
+                        app:button_icons="@array/icons"
+                        app:distance="60dp"
+                        app:icon_color="#FFFFFF"
+                        app:icon_menu="@mipmap/sable_logo_black_foreground">
+
+                    </com.ramotion.circlemenu.CircleMenuView>
+
                     <AutoCompleteTextView
                         android:id="@+id/search"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerInParent="true"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="3dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="3dp"
+                        android:layout_toEndOf="@id/ivAlertOn"
                         android:background="#FFFFFF"
                         android:dropDownWidth="match_parent"
                         android:dropDownHeight="wrap_content"
@@ -120,18 +154,6 @@
                             android:textSize="18sp"
                             tools:text="loadingText" />
 
-                        <com.ramotion.circlemenu.CircleMenuView
-                            android:id="@+id/circle_menu"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:button_colors="@array/colors"
-                            app:button_icons="@array/icons"
-                            app:distance="60dp"
-                            app:icon_color="#FFFFFF"
-                            app:icon_menu="@mipmap/sable_logo_black_foreground">
-
-                        </com.ramotion.circlemenu.CircleMenuView>
-
 
                     </RelativeLayout>
 
@@ -165,6 +187,7 @@
                             android:layout_alignParentBottom="false"
                             android:layout_centerHorizontal="false"
                             android:layout_centerVertical="true"
+                            android:layout_margin="10dp"
                             android:background="@drawable/whitebackgroud_with_rounded_corners"
                             android:gravity="start"
                             android:padding="5dp"

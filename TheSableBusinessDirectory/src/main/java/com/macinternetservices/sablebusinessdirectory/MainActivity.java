@@ -303,7 +303,6 @@ public class MainActivity extends AppCompatActivity implements
         pref = getApplicationContext().getSharedPreferences("com.example.sable.PREFERENCE_FILE_KEY", MODE_PRIVATE);
         //SharedPreferences.Editor editor = pref.edit();
 
-        //Switch alertSwitch;
 /*
 
 // Storing data as KEY/VALUE pair
@@ -523,6 +522,11 @@ public class MainActivity extends AppCompatActivity implements
         searchView = findViewById(R.id.search);
         searchView.setVisibility(View.GONE);
 
+        ivAlertOn = findViewById(R.id.ivAlertOn);
+        ivAlertOn.setVisibility(View.GONE);
+        ivAlertOff = findViewById(R.id.ivAlertOff);
+        ivAlertOff.setVisibility(View.GONE);
+
 
         btnShowListings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -532,43 +536,6 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        /*ivAlertOn = findViewById(R.id.alertOn);
-        ivAlertOn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //if(ivAlertOff.getVisibility() == View.VISIBLE){
-                buildAlertMessageEnableAlerts();
-                //}
-            }
-        });
-
-        //ivAlertOff = findViewById(R.id.alertOff);
-        ivAlertOff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //if(ivAlertOff.getVisibility() == View.VISIBLE){
-                buildAlertMessageEnableAlerts();
-                //}
-            }
-        });
-
-        /**
-         *  location add button
-
-
-
-        btnAdd.setOnClickListener(view -> {
-            if (!isLoggedIn) {
-                Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(loginIntent);
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-
-                Toast.makeText(getApplicationContext(), "User must be logged in to add a business listing.", Toast.LENGTH_LONG).show();
-            } else {
-                Intent addListingIntent = new Intent(MainActivity.this, AddListingActivity.class);
-                startActivity(addListingIntent);
-            }
-        }); */
 
         /**
          *  directory search
@@ -744,8 +711,26 @@ public class MainActivity extends AppCompatActivity implements
                 switch(index){
                     case 1:
                     case 4:
-                        mapLocations.clear();
-                        setMarkers();
+                        kickItOff = true;
+                        Map<String, String> query = new HashMap<>();
+
+                        if(pref.getString("lastKnownLat", String.valueOf(location.getLatitude())).isEmpty()
+                                ||  pref.getString("lastKnownLat", String.valueOf(location.getLatitude())).equals(null)
+                                ||  pref.getString("lastKnownLng", String.valueOf(location.getLongitude())).isEmpty()
+                                ||  pref.getString("lastKnownLng", String.valueOf(location.getLongitude())).equals(null)){
+                            query.put("latitude", String.valueOf(location.getLatitude()));
+                            query.put("longitude", String.valueOf(location.getLongitude()));
+                            query.put("order", "asc");
+                            query.put("orderby", "distance");
+                        } else {
+                            query.put("latitude", pref.getString("lastKnownLat", String.valueOf(location.getLatitude())));
+                            query.put("longitude", pref.getString("lastKnownLng", String.valueOf(location.getLongitude())));
+                            query.put("order", "asc");
+                            query.put("orderby", "distance");
+                        }
+
+                        getRetrofit(query);
+
                         break;
                     case 2:
                         searchView.setVisibility(View.VISIBLE);
@@ -804,20 +789,28 @@ public class MainActivity extends AppCompatActivity implements
         }
         /* first run check */
         if (pref.getBoolean("firstrun", true)) {
-            if (!pref.getBoolean("alertOn", false)) {
-                //do first run stuff and set first run to false
-                buildAlertMessageEnableAlerts();
-            }
+            pref.edit().putBoolean("alertOn", true).apply();
             pref.edit().putBoolean("firstrun", false).apply();
+        }
+        if (pref.getBoolean("alertOn", true)) {
+            //do first run stuff and set first run to false
+            ivAlertOn.setVisibility(View.VISIBLE);
+            ivAlertOff.setVisibility(View.GONE);
+           /* if (!isMyServiceRunning()) {
+                startService(new Intent(MainActivity.this, GeolocationService.class));
+            }*/
         }
 
         if (geofences.size() > 0 && mapLocations.size() > 0) {
-            setMarkers();
-        } else {
+          //  setMarkers();
+        //} else {
             kickItOff = true;
             Map<String, String> query = new HashMap<>();
 
-            if(pref.getString("lastKnownLat", String.valueOf(location.getLatitude())).isEmpty() ||  pref.getString("lastKnownLat", String.valueOf(location.getLongitude())).isEmpty()) {
+            if(pref.getString("lastKnownLat", String.valueOf(location.getLatitude())).isEmpty()
+                    ||  pref.getString("lastKnownLat", String.valueOf(location.getLatitude())).equals(null)
+                    ||  pref.getString("lastKnownLng", String.valueOf(location.getLongitude())).isEmpty()
+                    ||  pref.getString("lastKnownLng", String.valueOf(location.getLongitude())).equals(null)){
                 query.put("latitude", String.valueOf(location.getLatitude()));
                 query.put("longitude", String.valueOf(location.getLongitude()));
                 query.put("order", "asc");
@@ -830,7 +823,7 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             getRetrofit(query);
-        }
+       }
     }
 
     private boolean isMyServiceRunning() {
@@ -1194,11 +1187,9 @@ public class MainActivity extends AppCompatActivity implements
                 return view;
             }
         });
-        Map<String, String> query = new HashMap<>();
-        query.put("latitude", String.valueOf(location.getLatitude()));
-        query.put("longitude", String.valueOf(location.getLongitude()));
-        query.put("order", "asc");
-        query.put("orderby", "distance");
+        if (geofences.size() > 0 && mapLocations.size() > 0) {
+            setMarkers();
+        }
     }
 
     /**
@@ -1285,30 +1276,21 @@ public class MainActivity extends AppCompatActivity implements
      */
     public void getRetrofit(final Map<String, String> query) {
 
-        spinner.setVisibility(View.GONE); //hide progressBar
-        /*login_button3.setVisibility(View.VISIBLE);
-        //loadingLayout.setAnimation(imgAnimationOut);
-        //loadingLayout.setVisibility(View.GONE);
-        //searchView.setAnimation(imgAnimationIn);
-        //searchView.setVisibility(View.VISIBLE);
-        noListingsImageView.setAnimation(imgAnimationOut);
-        noListingsImageView.setVisibility(View.GONE);
-        noListingsTextView.setAnimation(imgAnimationOut);
-        noListingsTextView.setVisibility(View.GONE);
-        fooListingImageView.setAnimation(imgAnimationIn);
-        fooListingImageView.setVisibility(View.VISIBLE);
-        fooListingsTextView.setAnimation(imgAnimationIn);
-        fooListingsTextView.setVisibility(View.VISIBLE);
-        //noListingsTextView.setTextSize(16);
-
+        spinner.setVisibility(View.VISIBLE); //hide progressBar
         if (isLoggedIn) {
             tvLoading.setText(Html.fromHtml(("Thanks for your patience " + "<font color='#4FC1E9'>" + firstName + "</font>" + "we are searing our database to see if there are any registered black owned businesses near you.")));
         } else {
             tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
-        } */
+        }
+
+        fooListingImageView.setAnimation(imgAnimationIn);
+        fooListingImageView.setVisibility(View.VISIBLE);
+        tvLoading.setAnimation(imgAnimationIn);
+        tvLoading.setVisibility(View.VISIBLE);
+
+
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        //Cache cache = new Cache(new File(context.getCacheDir(), "http-cache"), 10 * 1024 * 1024);
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
@@ -1318,7 +1300,7 @@ public class MainActivity extends AppCompatActivity implements
                 .addInterceptor(offlineInterceptor)
                 .addInterceptor(onlineInterceptor)
                 //.addNetworkInterceptor(provideCacheInterceptor)
-                //.cache(cache)
+                .cache(cache)
                 .build();
 
         retrofit = null;
@@ -1565,7 +1547,7 @@ public class MainActivity extends AppCompatActivity implements
                 .addInterceptor(logging)
                 .addInterceptor(offlineInterceptor)
                 .addInterceptor(onlineInterceptor)
-                //.cache(cache)
+                .cache(cache)
                 .build();
 
         retrofit = new Retrofit.Builder()

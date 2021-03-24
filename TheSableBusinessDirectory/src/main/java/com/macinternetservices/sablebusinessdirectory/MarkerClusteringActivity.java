@@ -302,19 +302,6 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         mClusterManager.setOnClusterItemClickListener(this);
         mClusterManager.setOnClusterItemInfoWindowClickListener(this);
         if(mapLocations.size() == 0) {
-            if (foo <= 3) {
-                // if no locations near user zoom to current location and display no listing message and spokesman
-                showFooStuff();
-                getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 200));
-
-                CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(new LatLng(latitude, longitude))      // Sets the center of the map to location user
-                        .zoom(17)                   // Sets the zoom
-                        .bearing(90)                // Sets the orientation of the camera to east
-                        .tilt(40)                   // Sets the tilt of the camera to 30 degrees
-                        .build();                   // Creates a CameraPosition from the builder
-                getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            } else {
                 showOtherStuff();
                 getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 200));
 
@@ -325,7 +312,6 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
                         .tilt(40)                   // Sets the tilt of the camera to 30 degrees
                         .build();                   // Creates a CameraPosition from the builder
                 getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            }
         } else {
         mClusterManager.addItems(mapLocations);
         mClusterManager.cluster();

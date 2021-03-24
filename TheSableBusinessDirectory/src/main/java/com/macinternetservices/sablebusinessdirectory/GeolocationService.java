@@ -248,7 +248,11 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
         }
 
         if (!MainActivity.geofencesAlreadyRegistered) {
-            registerGeofences();
+            if (MainActivity.geofences.size() == 0 || MainActivity.mapLocations.size() == 0) {
+                return;
+            } else {
+                registerGeofences();
+            }
         }
     }
     @Override
