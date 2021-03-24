@@ -421,7 +421,7 @@ public class MainActivity extends AppCompatActivity implements
 
         facebookLogin();
 
-        textSwitcher = findViewById(R.id.textSwitcher1);
+        /*textSwitcher = findViewById(R.id.textSwitcher1);
         textSwitcher.setFactory(() -> {
             TextView textView = new TextView(getApplicationContext());
             textView.setLayoutParams(new TextSwitcher.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -438,7 +438,7 @@ public class MainActivity extends AppCompatActivity implements
             textView.setTextSize(22);
             textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
             return textView;
-        });
+        }); */
 
         textSwitcher3 = findViewById(R.id.textSwitcher3);
         textSwitcher3.setFactory(() -> {
@@ -449,7 +449,7 @@ public class MainActivity extends AppCompatActivity implements
             return textView;
         });
 
-        imageSwitcher = findViewById(R.id.imageSwitcher);
+        /*imageSwitcher = findViewById(R.id.imageSwitcher);
         imageSwitcher.setVisibility(View.GONE);
 
         ImageView imageView = new ImageView(getApplicationContext());
@@ -469,13 +469,16 @@ public class MainActivity extends AppCompatActivity implements
         ViewGroup.LayoutParams imageView2params = new ImageSwitcher.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        imageView2.setLayoutParams(imageView2params);
+        imageView2.setLayoutParams(imageView2params); */
 
         imageSwitcher3 = findViewById(R.id.imageSwitcher3);
         imageSwitcher3.setVisibility(View.GONE);
+        imageSwitcher3.setAnimation(imgAnimationIn);
+        imageSwitcher3.setAnimation(imgAnimationOut);
+
 
         ImageView imageView3 = new ImageView(getApplicationContext());
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        imageView3.setScaleType(ImageView.ScaleType.FIT_XY);
 
         ViewGroup.LayoutParams imageView3params = new ImageSwitcher.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -1900,65 +1903,8 @@ public class MainActivity extends AppCompatActivity implements
                 count = 0;
             }
             switch (count) {
-                case 1:
-                case 3:
-                case 5:
-                case 7:
-                    textSwitcherLayout.setAnimation(imgAnimationOut);
-                    textSwitcherLayout.setVisibility(View.GONE);
-
-                    imageSwitcher.setAnimation(imgAnimationOut);
-                    imageSwitcher.setVisibility(View.GONE);
-
-
-                    imageSwitcher3.setImageResource(images[count]);
-                    imageSwitcher3.setAnimation(imgAnimationIn);
-                    imageSwitcher3.setVisibility(View.VISIBLE);
-
-                    textSwitcher3.setText(text[count]);
-                    textSwitcher3Layout.setAnimation(imgAnimationIn);
-                    textSwitcher3Layout.setVisibility(View.VISIBLE);
-
-                    //login_button2.setAnimation(imgAnimationIn);
-                    //login_button2.setVisibility(View.VISIBLE);
-
-                    imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
-                    count++;
-                    break;
-
-                   /* //imageSwitcher2.setImageResource(images[count]);
-                    imageSwitcher2.setAnimation(imgAnimationOut);
-                    imageSwitcher2.setVisibility(View.GONE);
-
-                    //textSwitcher2.setText(text[count]);
-                    textSwitcher2Layout.setAnimation(imgAnimationOut);
-                    textSwitcher2Layout.setVisibility(View.GONE);
-
-                    imageSwitcher3.setVisibility(View.GONE);
-                    textSwitcher3Layout.setVisibility(View.GONE);
-
-                    imageSwitcher2.setVisibility(View.GONE);
-                    textSwitcher2Layout.setVisibility(View.GONE);
-
-                    imageSwitcher.setImageResource(images[count]);
-                    imageSwitcher.setAnimation(imgAnimationIn);
-                    imageSwitcher.setVisibility(View.VISIBLE);
-
-                    textSwitcher.setText(text[count]);
-                    textSwitcherLayout.setAnimation(imgAnimationIn);
-                    textSwitcherLayout.setVisibility(View.VISIBLE);
-
-                    imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
-                    count++;
-                    break; */
 
                 case 8:
-                    textSwitcherLayout.setAnimation(imgAnimationOut);
-                    textSwitcherLayout.setVisibility(View.GONE);
-
-                    imageSwitcher.setAnimation(imgAnimationOut);
-                    imageSwitcher.setVisibility(View.GONE);
-
 
                     imageSwitcher3.setImageResource(images[count]);
                     imageSwitcher3.setAnimation(imgAnimationIn);
@@ -1977,12 +1923,19 @@ public class MainActivity extends AppCompatActivity implements
                 case 2:
                 case 4:
                 case 6:
+                case 1:
+                case 3:
+                case 5:
+                case 7:
                 default:
-                    textSwitcherLayout.setAnimation(imgAnimationOut);
-                    textSwitcherLayout.setVisibility(View.GONE);
+                    //login_button2.setAnimation(imgAnimationOut);
+                    login_button2.setVisibility(View.GONE);
 
-                    imageSwitcher.setAnimation(imgAnimationOut);
-                    imageSwitcher.setVisibility(View.GONE);
+                    //textSwitcher3Layout.setAnimation(imgAnimationOut);
+                    //textSwitcher3Layout.setVisibility(View.GONE);
+
+                    //imageSwitcher3.setAnimation(imgAnimationOut);
+                    //imageSwitcher3.setVisibility(View.GONE);
 
 
                     imageSwitcher3.setImageResource(images[count]);
@@ -1993,45 +1946,10 @@ public class MainActivity extends AppCompatActivity implements
                     textSwitcher3Layout.setAnimation(imgAnimationIn);
                     textSwitcher3Layout.setVisibility(View.VISIBLE);
 
-                    //login_button2.setAnimation(imgAnimationIn);
-                    //login_button2.setVisibility(View.VISIBLE);
 
                     imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
                     count++;
                     break;
-
-                    /*imageSwitcher3.setVisibility(View.GONE);
-                    textSwitcher3Layout.setVisibility(View.GONE);
-
-                    imageSwitcher.setAnimation(imgAnimationOut);
-                    imageSwitcher.setVisibility(View.GONE);
-
-                    textSwitcherLayout.setAnimation(imgAnimationOut);
-                    textSwitcherLayout.setVisibility(View.GONE);
-
-                    //imageSwitcher3.setImageResource(images[count]);
-                    imageSwitcher3.setAnimation(imgAnimationOut);
-                    imageSwitcher3.setVisibility(View.GONE);
-
-                    //textSwitcher3.setText(text[count]);
-                    textSwitcher3Layout.setAnimation(imgAnimationOut);
-                    textSwitcher3Layout.setVisibility(View.GONE);
-
-                    login_button2.setAnimation(imgAnimationOut);
-                    login_button2.setVisibility(View.GONE);
-
-                    imageSwitcher2.setImageResource(images[count]);
-                    imageSwitcher2.setAnimation(imgAnimationIn);
-                    imageSwitcher2.setVisibility(View.VISIBLE);
-
-                    textSwitcher2.setText(text[count]);
-                    textSwitcher2Layout.setAnimation(imgAnimationIn);
-                    textSwitcher2Layout.setVisibility(View.VISIBLE);
-
-                    imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
-                    count++;
-                    break; */
-
             }
         }
     };

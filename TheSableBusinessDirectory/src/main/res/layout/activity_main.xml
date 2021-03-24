@@ -392,9 +392,14 @@
                             android:id="@+id/login_button2"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentEnd="false"
                             android:layout_alignParentBottom="true"
-                            android:layout_margin="10dp" />
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="false"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp" />
 
                         <LinearLayout
                             android:id="@+id/textSwitcherLayout"
@@ -406,7 +411,9 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="10dp"
                             android:layout_marginBottom="10dp"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            tools:visibility="gone">
 
                             <TextSwitcher
                                 android:id="@+id/textSwitcher1"
@@ -452,7 +459,9 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="10dp"
                             android:layout_marginBottom="10dp"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            tools:visibility="gone">
 
                             <TextSwitcher
                                 android:id="@+id/textSwitcher2"
@@ -513,19 +522,17 @@
 
                                 android:id="@+id/imageSwitcher3"
                                 android:layout_width="match_parent"
-                                android:layout_height="550dp"
+                                android:layout_height="500dp"
                                 android:layout_marginStart="10dp"
-                                android:layout_marginTop="10dp"
                                 android:layout_marginEnd="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:layout_weight="1">
+                                android:layout_marginBottom="10dp">
 
                                 <ImageView
                                     android:id="@+id/imageView3-1"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:scaleType="fitCenter"
-                                    app:srcCompat="@mipmap/smiling_peace_foreground" />
+                                    android:layout_gravity="center_vertical"
+                                    android:scaleType="fitCenter" />
 
                                 <ImageView
                                     android:id="@+id/imageView3-2"
