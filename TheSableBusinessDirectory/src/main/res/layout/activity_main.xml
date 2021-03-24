@@ -78,23 +78,9 @@
                         android:layout_alignParentBottom="true"
                         android:layout_marginEnd="25px"
                         android:layout_marginBottom="15px"
-                        sothree:srcCompat="@mipmap/sable_logo_black_foreground" />
-
-                    <com.ramotion.circlemenu.CircleMenuView
-                        android:id="@+id/circle_menu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="false"
-                        android:layout_centerVertical="false"
-                        android:layout_gravity="center_vertical"
-                        app:button_colors="@array/colors"
-                        app:button_icons="@array/icons"
-                        app:icon_color="#FFFFFF"
-                        app:icon_menu="@mipmap/sable_logo_black_foreground">
-
-                    </com.ramotion.circlemenu.CircleMenuView>
+                        android:visibility="gone"
+                        sothree:srcCompat="@mipmap/sable_logo_black_foreground"
+                        tools:visibility="gone" />
 
                     <RelativeLayout
                         android:id="@+id/fooListingsLayout"
@@ -133,6 +119,18 @@
                             android:textColor="@color/colorAccent2"
                             android:textSize="18sp"
                             tools:text="loadingText" />
+
+                        <com.ramotion.circlemenu.CircleMenuView
+                            android:id="@+id/circle_menu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:button_colors="@array/colors"
+                            app:button_icons="@array/icons"
+                            app:distance="60dp"
+                            app:icon_color="#FFFFFF"
+                            app:icon_menu="@mipmap/sable_logo_black_foreground">
+
+                        </com.ramotion.circlemenu.CircleMenuView>
 
 
                     </RelativeLayout>

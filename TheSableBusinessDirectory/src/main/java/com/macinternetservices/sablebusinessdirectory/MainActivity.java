@@ -832,8 +832,8 @@ public class MainActivity extends AppCompatActivity implements
                 switch(index){
                     case 1:
                     case 4:
-                        startActivity(new Intent(getApplicationContext(), MarkerClusteringActivity.class));
-                        finish();
+                        mapLocations.clear();
+                        setMarkers();
                         break;
                     case 2:
                         searchView.setVisibility(View.VISIBLE);
@@ -866,7 +866,6 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment)).getMapAsync(this);
-        //   Thread.setDefaultUncaughtExceptionHandler(handleAppCrash);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -899,13 +898,6 @@ public class MainActivity extends AppCompatActivity implements
             }
             pref.edit().putBoolean("firstrun", false).apply();
         }
-       /* if (pref.getBoolean("alertOn", false)) {
-            ivAlertOff.setVisibility(View.GONE);
-            ivAlertOn.setVisibility(View.VISIBLE);
-        } else {
-            ivAlertOff.setVisibility(View.VISIBLE);
-            ivAlertOn.setVisibility(View.GONE);
-        } */
 
         if (geofences.size() > 0 && mapLocations.size() > 0) {
             setMarkers();
@@ -1628,50 +1620,8 @@ public class MainActivity extends AppCompatActivity implements
                         kickItOff = false;
                         setMarkers();
                     }
-                } else {
-                    if (isLoggedIn) {
-                        if (currentMarker != null)
-                            currentMarker.remove();
-                        currentMarker = mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                                .title("You are here!").snippet("Double tap\nanywhere on\nthe map to zoom")
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    } else {
-                        if (currentMarker != null)
-                            currentMarker.remove();
-                        currentMarker = mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                                .title("Welcome <font color='#4FC1E9'>" + firstName + "!</font>").snippet("Double tap\nanywhere on\nthe map to zoom")
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    }
-
-                    spinner.setVisibility(View.GONE);
-                   /* fooListingImageView.setAnimation(imgAnimationOut);
-                    fooListingImageView.setVisibility(View.GONE);
-                    fooListingsTextView.setAnimation(imgAnimationOut);
-                    fooListingsTextView.setVisibility(View.GONE);
-
-                    noListingsImageView.setImageResource(R.mipmap.sorry_foreground);
-                    ivLoading.setVisibility(View.GONE);
-                    ivLoading.setAnimation(imgAnimationOut);
-                    tvLoading.setVisibility(View.GONE);
-                    tvLoading.setAnimation(imgAnimationOut);
-                    noListingsTextView.setText(Html.fromHtml(("Apologies <font color='#4FC1E9'>" + firstName + "!</font>, there are no black owned businesses registered with Sable near you.")));
-                    noListingsImageView.setVisibility(View.VISIBLE);
-                    noListingsTextView.setVisibility(View.VISIBLE);
-                    noListingsImageView.setAnimation(imgAnimationIn);
-                    noListingsTextView.setAnimation(imgAnimationIn); */
-
-                    getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 200));
-
-                    CameraPosition cameraPosition = new CameraPosition.Builder()
-                            .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
-                            .zoom(17)                   // Sets the zoom
-                            .bearing(90)                // Sets the orientation of the camera to east
-                            .tilt(40)                   // Sets the tilt of the camera to 30 degrees
-                            .build();                   // Creates a CameraPosition from the builder
-                    getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 }
+                spinner.setVisibility(View.GONE);
             }
 
             @Override
