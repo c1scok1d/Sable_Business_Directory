@@ -710,8 +710,10 @@ public class MainActivity extends AppCompatActivity implements
                 Log.d("D", "onButtonClickAnimationEnd| index: " + index);
                 switch(index){
                     case 1:
-                    case 4:
+                    case 4: //clear and reload
                         kickItOff = true;
+                        mapLocations.clear();
+                        geofences.clear();
                         Map<String, String> query = new HashMap<>();
 
                         if(pref.getString("lastKnownLat", String.valueOf(location.getLatitude())).isEmpty()
@@ -732,10 +734,10 @@ public class MainActivity extends AppCompatActivity implements
                         getRetrofit(query);
 
                         break;
-                    case 2:
+                    case 2: //search popup
                         searchView.setVisibility(View.VISIBLE);
                         break;
-                    case 3:
+                    case 3: //add listing
                         if (!isLoggedIn) {
                             Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(loginIntent);
@@ -747,7 +749,7 @@ public class MainActivity extends AppCompatActivity implements
                             startActivity(addListingIntent);
                         }
                         break;
-                    case 5:
+                    case 5: //login
                         if (!isLoggedIn) {
                             Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(loginIntent);
@@ -764,8 +766,20 @@ public class MainActivity extends AppCompatActivity implements
         });
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment)).getMapAsync(this);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+       locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+      // location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        spinner.setVisibility(View.VISIBLE); //hide progressBar
+        if (isLoggedIn) {
+            tvLoading.setText(Html.fromHtml(("Thanks for your patience " + "<font color='#4FC1E9'>" + firstName + "</font>" + "we are searing our database to see if there are any registered black owned businesses near you.")));
+        } else {
+            tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
+        }
+
+        ivLoading.setAnimation(imgAnimationIn);
+        ivLoading.setVisibility(View.VISIBLE);
+        ivLoading.setImageResource(R.mipmap.online_reviews_foreground);
+        tvLoading.setAnimation(imgAnimationIn);
+        tvLoading.setVisibility(View.VISIBLE);
 
     }
 
@@ -821,6 +835,18 @@ public class MainActivity extends AppCompatActivity implements
                 query.put("order", "asc");
                 query.put("orderby", "distance");
             }
+
+            spinner.setVisibility(View.VISIBLE); //hide progressBar
+            if (isLoggedIn) {
+                tvLoading.setText(Html.fromHtml(("Thanks for your patience " + "<font color='#4FC1E9'>" + firstName + "</font>" + "we are searing our database to see if there are any registered black owned businesses near you.")));
+            } else {
+                tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
+            }
+
+            ivLoading.setAnimation(imgAnimationIn);
+            ivLoading.setVisibility(View.VISIBLE);
+            tvLoading.setAnimation(imgAnimationIn);
+            tvLoading.setVisibility(View.VISIBLE);
 
             getRetrofit(query);
        }
@@ -1083,9 +1109,8 @@ public class MainActivity extends AppCompatActivity implements
          */
         @Override
         public void onLocationChanged(Location location) {
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-
+           /* latitude = location.getLatitude();
+            longitude = location.getLongitude(); */
             if (geofences.size() == 0 || mapLocations.size() == 0) {
                 Map<String, String> query = new HashMap<>();
                 query.put("latitude", String.valueOf(location.getLatitude()));
@@ -1094,21 +1119,26 @@ public class MainActivity extends AppCompatActivity implements
                 query.put("orderby", "distance");
 
                 getRetrofit(query);
-            } else {
+            } else{
+                double lat2 = location.getLatitude();
+                double lng2 = location.getLongitude();
+                double lat1 = Double.valueOf(pref.getString("lastKnownLat", String.valueOf(location.getLatitude())));
+                double lng1 = Double.valueOf(pref.getString("lastKnownLng", String.valueOf(location.getLongitude())));
+
+                // lat1 and lng1 are the values of a previously stored location
+                if (distance(lat1, lng1, lat2, lng2) > 3 || kickItOff) { // if distance < 0.1 miles we take locations as equal
+                    kickItOff = false;
+                    if (pref.getBoolean("alertOn", true)) {
+                        if (!isMyServiceRunning()) {
+                            startService(new Intent(MainActivity.this, GeolocationService.class));
+                        }
+                    }
+                    setMarkers();
+                }
                 if (pref.getBoolean("alertOn", true)) {
                     if (!isMyServiceRunning()) {
                         startService(new Intent(MainActivity.this, GeolocationService.class));
                     }
-                }
-                ivLoading.setVisibility(View.VISIBLE);
-                ivLoading.setAnimation(imgAnimationIn);
-                tvLoading.setVisibility(View.VISIBLE);
-                tvLoading.setAnimation(imgAnimationIn);
-                if (isLoggedIn) {
-                    //String name = "<font color='#4FC1E9'>" + firstName + "</font>";
-                    tvLoading.setText(Html.fromHtml(("Thanks for your patience <font color='#4FC1E9'>" +firstName+ "!</font>\nWe are searching our directory for black owned businesses near you.")));
-                } else {
-                    tvLoading.setText("Thank you for waiting while we search our directory for black owned businesses near you.");
                 }
                 if (isLoggedIn) {
                     if (currentMarker != null)
@@ -1160,7 +1190,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onMapReady(GoogleMap map) {
         mMap = map;
         mMap.setOnMyLocationClickListener(this);
-        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+       /* mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
             @Override
             public View getInfoWindow(Marker arg0) {
@@ -1169,9 +1199,9 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public View getInfoContents(Marker marker) {
-                View view = getLayoutInflater().inflate(R.layout.infowindowlayout, null);
+                View view = getLayoutInflater().inflate(R.layout.custom_info_window, null);
 
-                TextView title = view.findViewById(R.id.textView1);
+                TextView title = view.findViewById(R.id.venue_name);
                 title.setTextColor(Color.BLACK);
                 title.setTypeface(null, Typeface.BOLD);
                 title.setText(marker.getTitle());
@@ -1186,7 +1216,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 return view;
             }
-        });
+        }); */
         if (geofences.size() > 0 && mapLocations.size() > 0) {
             setMarkers();
         }
@@ -1276,19 +1306,6 @@ public class MainActivity extends AppCompatActivity implements
      */
     public void getRetrofit(final Map<String, String> query) {
 
-        spinner.setVisibility(View.VISIBLE); //hide progressBar
-        if (isLoggedIn) {
-            tvLoading.setText(Html.fromHtml(("Thanks for your patience " + "<font color='#4FC1E9'>" + firstName + "</font>" + "we are searing our database to see if there are any registered black owned businesses near you.")));
-        } else {
-            tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
-        }
-
-        fooListingImageView.setAnimation(imgAnimationIn);
-        fooListingImageView.setVisibility(View.VISIBLE);
-        tvLoading.setAnimation(imgAnimationIn);
-        tvLoading.setVisibility(View.VISIBLE);
-
-
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
@@ -1331,7 +1348,25 @@ public class MainActivity extends AppCompatActivity implements
                     Log.e("Network", "Response came from server");
                 }
                 if (response.body().isEmpty()) {
+                    spinner.setVisibility(View.GONE); //hide progressBar
+                    login_button3.setVisibility(View.VISIBLE);
+                    loadingLayout.setAnimation(imgAnimationOut);
+                    loadingLayout.setVisibility(View.GONE);
+                    //searchView.setAnimation(imgAnimationIn);
+                    //searchView.setVisibility(View.VISIBLE);
+                    noListingsImageView.setAnimation(imgAnimationIn);
+                    noListingsImageView.setVisibility(View.VISIBLE);
+                    noListingsTextView.setAnimation(imgAnimationIn);
+                    noListingsTextView.setVisibility(View.VISIBLE);
+                    //noListingsTextView.setTextSize(16);
 
+                    if(isLoggedIn) {
+                        noListingsTextView.setText("This is terrible " + firstName +"!!!!\n\nLooks like there aren't any black owned businesses near you in our directory.\n" +
+                                "Tap Add (+) from the menu to add any black owned business you visit to our directory.");
+                    } else {
+                        noListingsTextView.setText("This is terrible!!!!\n\nLooks like there aren't any black owned businesses near you in our directory.\n" +
+                                "Tap add (+) to add any black owned business you visit to our directory.");
+                    };
                 }
                 if (response.isSuccessful()) {
                     for (int i = 0; i < response.body().size(); i++) {
@@ -1498,6 +1533,11 @@ public class MainActivity extends AppCompatActivity implements
                                 response.body().get(i).getFeaturedImage().getThumbnail()));
                     }
                     spinner.setVisibility(View.GONE);
+                    ivLoading.setAnimation(imgAnimationOut);
+                    ivLoading.setVisibility(View.GONE);
+                    tvLoading.setAnimation(imgAnimationOut);
+                    tvLoading.setVisibility(View.GONE);
+
                     double lat2 = location.getLatitude();
                     double lng2 = location.getLongitude();
                     double lat1 = Double.valueOf(pref.getString("lastKnownLat", String.valueOf(location.getLatitude())));
@@ -1506,10 +1546,14 @@ public class MainActivity extends AppCompatActivity implements
                     // lat1 and lng1 are the values of a previously stored location
                     if (distance(lat1, lng1, lat2, lng2) > 3 || kickItOff) { // if distance < 0.1 miles we take locations as equal
                         kickItOff = false;
+                        if (pref.getBoolean("alertOn", true)) {
+                            if (!isMyServiceRunning()) {
+                                startService(new Intent(MainActivity.this, GeolocationService.class));
+                            }
+                        }
                         setMarkers();
                     }
                 }
-                spinner.setVisibility(View.GONE);
             }
 
             @Override
