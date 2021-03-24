@@ -141,7 +141,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="25dp"
                             android:layout_margin="5dp"
-                            android:layout_marginEnd="5dp"
                             android:background="@drawable/buttonshape"
                             android:padding="5dp"
                             android:shadowRadius="5"
@@ -154,7 +153,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="25dp"
                             android:layout_margin="5dp"
-                            android:layout_marginEnd="5dp"
                             android:background="@drawable/buttonshape"
                             android:padding="5dp"
                             android:shadowRadius="5"
@@ -167,7 +165,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="25dp"
                             android:layout_margin="5dp"
-                            android:layout_marginEnd="5dp"
                             android:background="@drawable/buttonshape"
                             android:padding="5dp"
                             android:shadowRadius="5"
@@ -544,7 +541,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="5dp"
-                android:background="@color/colorAccent"
+                android:background="@drawable/buttonshape"
                 android:text="Add Listing"
                 android:textColor="@color/white" />
 

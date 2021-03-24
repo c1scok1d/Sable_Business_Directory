@@ -305,7 +305,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
             mClusterManager.addItems(mapLocations);
             mClusterManager.cluster();
             showStuff();
-            Toast.makeText(this, "Show Stuff", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Show Stuff", Toast.LENGTH_SHORT).show();
 
             getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 200));
 
@@ -323,7 +323,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         } else if (foo <= 3) {
                 // if no locations near user zoom to current location and display no listing message and spokesman
                 showFooStuff();
-            Toast.makeText(this, "Show Foo Stuff", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "Show Foo Stuff", Toast.LENGTH_SHORT).show();
 
             getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 200));
 
@@ -336,7 +336,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
                 getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             } else {
                 showOtherStuff();
-            Toast.makeText(this, "Show Other Stuff", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Show Other Stuff", Toast.LENGTH_SHORT).show();
 
             getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 200));
 
@@ -380,10 +380,10 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
 
         Animation imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
         Animation imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        Animation imgZoomOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_out);
-        Animation imgZoomIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in);
+        //Animation imgZoomOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_out);
+        //Animation imgZoomIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in);
 
-        progressBar.setVisibility(View.GONE); //hide progressBar
+        progressBar.setVisibility(View.GONE);
         //login_button3.setVisibility(View.VISIBLE);
         //loadingLayout.setAnimation(imgAnimationOut);
         //loadingLayout.setVisibility(View.GONE);
@@ -404,9 +404,6 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         } else {
             fooListingsTextView.setText("Hello, We have your current location. We are searching our database for black owned businesses near you.");
         }
-//        btnAdd.setAnimation(imgAnimationIn);
-//        btnAdd.setVisibility(View.VISIBLE);
-        //Log.e("showOtherStuff", " Ending showOtherStuff " );
     }
     private void showOtherStuff() {
 
@@ -433,9 +430,6 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         } else {
             noListingsTextView.setText("This is terrible!!!!\n\nLooks like there aren't any black owned businesses near you in our directory.\n" +
                     "Tap add (+) to add any black owned business you visit to our directory.");
-            //btnAdd.setAnimation(imgAnimationIn);
-            //btnAdd.setVisibility(View.VISIBLE);
         }
-        //Log.e("showOtherStuff", " Ending showOtherStuff " );
     }
 }

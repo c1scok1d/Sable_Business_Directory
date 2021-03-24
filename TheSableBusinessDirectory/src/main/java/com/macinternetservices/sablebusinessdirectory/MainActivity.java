@@ -412,9 +412,6 @@ public class MainActivity extends AppCompatActivity implements
         /**
          * ABOUT US
          */
-        textSwitcherLayout = findViewById(R.id.textSwitcherLayout);
-        textSwitcher2Layout = findViewById(R.id.textSwitcher2Layout);
-        textSwitcher3Layout = findViewById(R.id.textSwitcher3Layout);
 
         login_button2 = findViewById(R.id.login_button2);
         login_button2.setVisibility(View.GONE);
@@ -428,39 +425,32 @@ public class MainActivity extends AppCompatActivity implements
         textSwitcher.setFactory(() -> {
             TextView textView = new TextView(getApplicationContext());
             textView.setLayoutParams(new TextSwitcher.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            textView.setTextSize(16);
+            textView.setTextSize(22);
             textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent2));
             return textView;
         });
 
-        textSwitcher.setInAnimation(imgAnimationIn);
-        textSwitcher.setOutAnimation(imgAnimationOut);
 
         textSwitcher2 = findViewById(R.id.textSwitcher2);
         textSwitcher2.setFactory(() -> {
             TextView textView = new TextView(getApplicationContext());
             textView.setLayoutParams(new TextSwitcher.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            textView.setTextSize(16);
+            textView.setTextSize(22);
             textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
             return textView;
         });
-
-        textSwitcher2.setInAnimation(imgAnimationIn);
-        textSwitcher2.setOutAnimation(imgAnimationOut);
 
         textSwitcher3 = findViewById(R.id.textSwitcher3);
         textSwitcher3.setFactory(() -> {
             TextView textView = new TextView(getApplicationContext());
             textView.setLayoutParams(new TextSwitcher.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            textView.setTextSize(16);
+            textView.setTextSize(22);
             textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent2));
             return textView;
         });
 
-        textSwitcher3.setInAnimation(imgAnimationIn);
-        textSwitcher3.setOutAnimation(imgAnimationOut);
-
         imageSwitcher = findViewById(R.id.imageSwitcher);
+        imageSwitcher.setVisibility(View.GONE);
 
         ImageView imageView = new ImageView(getApplicationContext());
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -471,6 +461,7 @@ public class MainActivity extends AppCompatActivity implements
         imageView.setLayoutParams(params);
 
         imageSwitcher2 = findViewById(R.id.imageSwitcher2);
+        imageSwitcher2.setVisibility(View.GONE);
 
         ImageView imageView2 = new ImageView(getApplicationContext());
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -481,6 +472,7 @@ public class MainActivity extends AppCompatActivity implements
         imageView2.setLayoutParams(imageView2params);
 
         imageSwitcher3 = findViewById(R.id.imageSwitcher3);
+        imageSwitcher3.setVisibility(View.GONE);
 
         ImageView imageView3 = new ImageView(getApplicationContext());
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -497,6 +489,7 @@ public class MainActivity extends AppCompatActivity implements
          *  strt fuckin' around with getting linearLayouts to fade in and out
          */
         textSwitcherLayout = findViewById(R.id.textSwitcherLayout);
+        textSwitcherLayout.setVisibility(View.GONE);
 
         LinearLayout textSwitcherLayout = new LinearLayout(getApplicationContext());
 
@@ -511,6 +504,7 @@ public class MainActivity extends AppCompatActivity implements
         textSwitcherLayout.post(runnableCode);
 
         textSwitcher2Layout = findViewById(R.id.textSwitcher2Layout);
+        textSwitcher2Layout.setVisibility(View.GONE);
 
         LinearLayout textSwitcher2Layout = new LinearLayout(getApplicationContext());
 
@@ -522,10 +516,9 @@ public class MainActivity extends AppCompatActivity implements
         textSwitcher2Layout.post(runnableCode);
 
         textSwitcher3Layout = findViewById(R.id.textSwitcher3Layout);
+        textSwitcher3Layout.setVisibility(View.GONE);
 
         LinearLayout textSwitcher3Layout = new LinearLayout(getApplicationContext());
-
-
         textSwitcher3Layout.setLayoutParams(textSwitcherLayoutParams);
 
         textSwitcher3Layout.setAnimation(imgAnimationIn);
@@ -535,14 +528,6 @@ public class MainActivity extends AppCompatActivity implements
         /**
          * end fuckin' around with getting lienarlayouts to fade in and out
          */
-
-        imageSwitcher.setVisibility(View.GONE);
-        imageSwitcher2.setVisibility(View.GONE);
-        imageSwitcher3.setVisibility(View.GONE);
-
-        textSwitcherLayout.setVisibility(View.GONE);
-        textSwitcher2Layout.setVisibility(View.GONE);
-        textSwitcher3Layout.setVisibility(View.GONE);
 
 ///END ABOUT US////
 
@@ -790,9 +775,13 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
                 if (String.valueOf(newState).equals("COLLAPSED")) {
-                    tvMore.setText("More");
+                    tvMore.setTextColor(Color.parseColor("#ffffff"));
+                    tvMore.setBackgroundResource(R.drawable.buttonshape);
+                    tvMore.setText("Tap For More");
                 } else {
-                    tvMore.setText("Less");
+                    tvMore.setTextColor(Color.parseColor("#000000"));
+                    tvMore.setBackgroundResource(R.drawable.buttonshape_wht);
+                    tvMore.setText("Tap For Less");
                 }
             }
         });
@@ -904,10 +893,18 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             kickItOff = true;
             Map<String, String> query = new HashMap<>();
-            query.put("latitude", String.valueOf(location.getLatitude()));
-            query.put("longitude", String.valueOf(location.getLongitude()));
-            query.put("order", "asc");
-            query.put("orderby", "distance");
+
+            if(pref.getString("lastKnownLat", String.valueOf(location.getLatitude())).isEmpty() ||  pref.getString("lastKnownLat", String.valueOf(location.getLongitude())).isEmpty()) {
+                query.put("latitude", String.valueOf(location.getLatitude()));
+                query.put("longitude", String.valueOf(location.getLongitude()));
+                query.put("order", "asc");
+                query.put("orderby", "distance");
+            } else {
+                query.put("latitude", pref.getString("lastKnownLat", String.valueOf(location.getLatitude())));
+                query.put("longitude", pref.getString("lastKnownLng", String.valueOf(location.getLongitude())));
+                query.put("order", "asc");
+                query.put("orderby", "distance");
+            }
 
             getRetrofit(query);
         }
@@ -1596,20 +1593,6 @@ public class MainActivity extends AppCompatActivity implements
                                 response.body().get(i).getFeaturedImage().getThumbnail()));
                     }
                     spinner.setVisibility(View.GONE);
-                    /*fooListingImageView.setAnimation(imgAnimationOut);
-                    fooListingImageView.setVisibility(View.GONE);
-                    fooListingsTextView.setAnimation(imgAnimationOut);
-                    fooListingsTextView.setVisibility(View.GONE);
-                    ivLoading.setVisibility(View.VISIBLE);
-                    ivLoading.setAnimation(imgAnimationIn);
-                    tvLoading.setVisibility(View.VISIBLE);
-                    tvLoading.setAnimation(imgAnimationIn);
-                    if (isLoggedIn) {
-                        //String name = "<font color='#4FC1E9'>" + firstName + "</font>";
-                        tvLoading.setText(Html.fromHtml(("Thanks for your patience " + "<font color='#4FC1E9'>" + firstName + "</font>" + "<br>Looks like there are " + verticalList.size() + " black owned businesses near you.")));
-                    } else {
-                        tvLoading.setText("Thank you for your patience \nLooks like there are " + verticalList.size() + " black owned businesses near you.");
-                    } */
                     double lat2 = location.getLatitude();
                     double lng2 = location.getLongitude();
                     double lat1 = Double.valueOf(pref.getString("lastKnownLat", String.valueOf(location.getLatitude())));
@@ -1642,38 +1625,6 @@ public class MainActivity extends AppCompatActivity implements
     }
     //END Retrofit API call to get listings
 
-    private void showFooStuff() {
-
-        Animation imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
-        Animation imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        Animation imgZoomOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_out);
-        Animation imgZoomIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in);
-
-        progressBar.setVisibility(View.GONE); //hide progressBar
-        //login_button3.setVisibility(View.VISIBLE);
-        //loadingLayout.setAnimation(imgAnimationOut);
-        //loadingLayout.setVisibility(View.GONE);
-        //searchView.setAnimation(imgAnimationIn);
-        //searchView.setVisibility(View.VISIBLE);
-        noListingsImageView.setAnimation(imgAnimationOut);
-        noListingsImageView.setVisibility(View.GONE);
-        noListingsTextView.setAnimation(imgAnimationOut);
-        noListingsTextView.setVisibility(View.GONE);
-        fooListingImageView.setAnimation(imgAnimationIn);
-        fooListingImageView.setVisibility(View.VISIBLE);
-        fooListingsTextView.setAnimation(imgAnimationIn);
-        fooListingsTextView.setVisibility(View.VISIBLE);
-        //noListingsTextView.setTextSize(16);
-
-        if (isLoggedIn) {
-            tvLoading.setText(Html.fromHtml(("Thanks for your patience " + "<font color='#4FC1E9'>" + firstName + "</font>" + "we are searing our database to see if there are any registered black owned businesses near you.")));
-        } else {
-            tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
-        }
-        //btnAdd.setAnimation(imgAnimationIn);
-        //btnAdd.setVisibility(View.VISIBLE);
-        //Log.e("showOtherStuff", " Ending showOtherStuff " );
-    }
     /**
      * Retrofit API call to get reviews
      */
@@ -1945,7 +1896,7 @@ public class MainActivity extends AppCompatActivity implements
                     R.mipmap.one_of_akind_foreground, R.mipmap.showing_tablet_foreground, R.mipmap.holding_phone_foreground, R.mipmap.making_thumbs_up_foreground,
                     R.mipmap.online_reviews_foreground, R.mipmap.showing_with_left_hand_foreground, R.mipmap.smiling_peace_foreground};
 
-            if (count > text.length) {
+            if (count == text.length) {
                 count = 0;
             }
             switch (count) {
@@ -1953,96 +1904,133 @@ public class MainActivity extends AppCompatActivity implements
                 case 3:
                 case 5:
                 case 7:
+                    textSwitcherLayout.setAnimation(imgAnimationOut);
+                    textSwitcherLayout.setVisibility(View.GONE);
 
-                    imageSwitcher3.setAnimation(imgAnimationOut);
-                    //imageSwitcher3.setVisibility(View.GONE);
+                    imageSwitcher.setAnimation(imgAnimationOut);
+                    imageSwitcher.setVisibility(View.GONE);
+
+
+                    imageSwitcher3.setImageResource(images[count]);
+                    imageSwitcher3.setAnimation(imgAnimationIn);
+                    imageSwitcher3.setVisibility(View.VISIBLE);
+
+                    textSwitcher3.setText(text[count]);
+                    textSwitcher3Layout.setAnimation(imgAnimationIn);
+                    textSwitcher3Layout.setVisibility(View.VISIBLE);
+
+                    //login_button2.setAnimation(imgAnimationIn);
+                    //login_button2.setVisibility(View.VISIBLE);
+
+                    imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
+                    count++;
+                    break;
+
+                   /* //imageSwitcher2.setImageResource(images[count]);
+                    imageSwitcher2.setAnimation(imgAnimationOut);
+                    imageSwitcher2.setVisibility(View.GONE);
+
+                    //textSwitcher2.setText(text[count]);
+                    textSwitcher2Layout.setAnimation(imgAnimationOut);
+                    textSwitcher2Layout.setVisibility(View.GONE);
+
+                    imageSwitcher3.setVisibility(View.GONE);
+                    textSwitcher3Layout.setVisibility(View.GONE);
+
+                    imageSwitcher2.setVisibility(View.GONE);
+                    textSwitcher2Layout.setVisibility(View.GONE);
 
                     imageSwitcher.setImageResource(images[count]);
                     imageSwitcher.setAnimation(imgAnimationIn);
                     imageSwitcher.setVisibility(View.VISIBLE);
 
+                    textSwitcher.setText(text[count]);
+                    textSwitcherLayout.setAnimation(imgAnimationIn);
+                    textSwitcherLayout.setVisibility(View.VISIBLE);
+
+                    imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
+                    count++;
+                    break; */
+
+                case 8:
+                    textSwitcherLayout.setAnimation(imgAnimationOut);
+                    textSwitcherLayout.setVisibility(View.GONE);
+
+                    imageSwitcher.setAnimation(imgAnimationOut);
+                    imageSwitcher.setVisibility(View.GONE);
+
+
+                    imageSwitcher3.setImageResource(images[count]);
+                    imageSwitcher3.setAnimation(imgAnimationIn);
+                    imageSwitcher3.setVisibility(View.VISIBLE);
+
+                    textSwitcher3.setText(text[count]);
+                    textSwitcher3Layout.setAnimation(imgAnimationIn);
+                    textSwitcher3Layout.setVisibility(View.VISIBLE);
+
+                    login_button2.setAnimation(imgAnimationIn);
+                    login_button2.setVisibility(View.VISIBLE);
+
+                    imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
+                    count++;
+                    break;
+                case 2:
+                case 4:
+                case 6:
+                default:
+                    textSwitcherLayout.setAnimation(imgAnimationOut);
+                    textSwitcherLayout.setVisibility(View.GONE);
+
+                    imageSwitcher.setAnimation(imgAnimationOut);
+                    imageSwitcher.setVisibility(View.GONE);
+
+
+                    imageSwitcher3.setImageResource(images[count]);
+                    imageSwitcher3.setAnimation(imgAnimationIn);
+                    imageSwitcher3.setVisibility(View.VISIBLE);
+
+                    textSwitcher3.setText(text[count]);
+                    textSwitcher3Layout.setAnimation(imgAnimationIn);
+                    textSwitcher3Layout.setVisibility(View.VISIBLE);
+
+                    //login_button2.setAnimation(imgAnimationIn);
+                    //login_button2.setVisibility(View.VISIBLE);
+
+                    imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
+                    count++;
+                    break;
+
+                    /*imageSwitcher3.setVisibility(View.GONE);
+                    textSwitcher3Layout.setVisibility(View.GONE);
+
+                    imageSwitcher.setAnimation(imgAnimationOut);
+                    imageSwitcher.setVisibility(View.GONE);
+
+                    textSwitcherLayout.setAnimation(imgAnimationOut);
+                    textSwitcherLayout.setVisibility(View.GONE);
+
+                    //imageSwitcher3.setImageResource(images[count]);
+                    imageSwitcher3.setAnimation(imgAnimationOut);
+                    imageSwitcher3.setVisibility(View.GONE);
+
+                    //textSwitcher3.setText(text[count]);
                     textSwitcher3Layout.setAnimation(imgAnimationOut);
-                    // textSwitcher3Layout.setVisibility(View.GONE);
+                    textSwitcher3Layout.setVisibility(View.GONE);
+
+                    login_button2.setAnimation(imgAnimationOut);
+                    login_button2.setVisibility(View.GONE);
+
+                    imageSwitcher2.setImageResource(images[count]);
+                    imageSwitcher2.setAnimation(imgAnimationIn);
+                    imageSwitcher2.setVisibility(View.VISIBLE);
 
                     textSwitcher2.setText(text[count]);
                     textSwitcher2Layout.setAnimation(imgAnimationIn);
                     textSwitcher2Layout.setVisibility(View.VISIBLE);
 
                     imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
-                    // i = randomGenerator.nextInt(100);
                     count++;
-                    break;
-                case 2:
-                case 4:
-                case 6:
-                    //case 8:
-
-                    imageSwitcher.setAnimation(imgAnimationOut);
-                    imageSwitcher.setVisibility(View.GONE);
-
-                    textSwitcher2Layout.setAnimation(imgAnimationOut);
-                    textSwitcher2Layout.setVisibility(View.GONE);
-
-                    imageSwitcher3.setImageResource(images[count]);
-                    imageSwitcher3.setVisibility(View.VISIBLE);
-                    imageSwitcher3.setAnimation(imgAnimationIn);
-                    imageSwitcher.setAnimation(imgAnimationOut);
-
-
-                    textSwitcher3.setText(text[count]);
-                    textSwitcher3Layout.setVisibility(View.VISIBLE);
-                    textSwitcher3Layout.setAnimation(imgAnimationIn);
-                    //imageSwitcher.setVisibility(View.GONE);
-                    //textSwitcher2Layout.setVisibility(View.GONE);
-                    imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
-                    // i = randomGenerator.nextInt(100);
-                    count++;
-                    break;
-
-                case 8:
-                    imageSwitcher.setAnimation(imgAnimationOut);
-                    // imageSwitcher.setVisibility(View.GONE);
-
-                    imageSwitcher2.setImageResource(images[count]);
-                    imageSwitcher2.setAnimation(imgAnimationIn);
-                    imageSwitcher2.setVisibility(View.VISIBLE);
-
-
-                    textSwitcher2Layout.setAnimation(imgAnimationOut);
-                    // textSwitcher2Layout.setVisibility(View.GONE);
-
-                    textSwitcher.setText(text[count]);
-                    textSwitcherLayout.setAnimation(imgAnimationIn);
-                    textSwitcherLayout.setVisibility(View.VISIBLE);
-
-                    login_button2.setAnimation(imgAnimationIn);
-                    login_button2.setVisibility(View.VISIBLE);
-
-                    imageSwitchHandler.removeCallbacks(runnableCode);
-                    count++;
-                    break;
-                default:
-                    imageSwitcher.setAnimation(imgAnimationOut);
-                    //imageSwitcher.setVisibility(View.GONE);
-
-                    textSwitcher2Layout.setAnimation(imgAnimationOut);
-                    //textSwitcher2Layout.setVisibility(View.GONE);
-
-                    imageSwitcher3.setImageResource(images[count]);
-                    imageSwitcher3.setVisibility(View.VISIBLE);
-                    imageSwitcher3.setAnimation(imgAnimationIn);
-                    //imageSwitcher.setAnimation(imgAnimationOut);
-
-
-                    textSwitcher3.setText(text[count]);
-                    textSwitcher3Layout.setVisibility(View.VISIBLE);
-                    textSwitcher3Layout.setAnimation(imgAnimationIn);
-                    //imageSwitcher.setVisibility(View.GONE);
-                    //textSwitcher2Layout.setAnimation(imgAnimationOut);
-                    //textSwitcher2Layout.setVisibility(View.GONE);
-                    imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
-                    count++;
-                    break;
+                    break; */
 
             }
         }
