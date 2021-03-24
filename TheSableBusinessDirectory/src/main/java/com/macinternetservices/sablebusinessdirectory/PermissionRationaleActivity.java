@@ -71,9 +71,10 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
             REQUEST_FOREGROUND_SERVICE = 120;
 
 
-    TextSwitcher textSwitcher, textSwitcher2, textSwitcher3;
-    ImageView imageView, imageView2, imageView3;
-    private static final int FRAME_TIME_MS = 10000;
+    TextSwitcher textSwitcher;
+    ImageView imageView;
+    Button deny_permission_request, approve_permission_request;
+    private static final int FRAME_TIME_MS = 3000;
 
     private Handler imageSwitchHandler;
 
@@ -88,32 +89,28 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
          * ABOUT US
          */
        imageView = findViewById(R.id.imageView);
-       //imageView.setVisibility(View.GONE);
-       imageView2 = findViewById(R.id.imageView2);
-       //imageView2.setVisibility(View.GONE);
-       //imageView3 = findViewById(R.id.imageView3);
-       //imageView3.setVisibility(View.GONE);
-
+       imageView.setVisibility(View.GONE);
         ImageView imageView = new ImageView(getApplicationContext());
+
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         ViewGroup.LayoutParams params = new ImageSwitcher.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         imageView.setLayoutParams(params);
 
+        deny_permission_request =findViewById(R.id.deny_permission_request);
+        deny_permission_request.setVisibility(View.GONE);
+        approve_permission_request = findViewById(R.id.approve_permission_request);
+        approve_permission_request.setVisibility(View.GONE);
 
-
+        /*imageView2 = findViewById(R.id.imageView2);
+        imageView2.setVisibility(View.GONE);
         ImageView imageView2 = new ImageView(getApplicationContext());
+
         imageView2.setScaleType(ImageView.ScaleType.FIT_XY);
         ViewGroup.LayoutParams imageView2params = new ImageSwitcher.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        imageView2.setLayoutParams(imageView2params);
+        imageView2.setLayoutParams(imageView2params); */
 
-
-        ImageView imageView3 = new ImageView(getApplicationContext());
-        imageView3.setScaleType(ImageView.ScaleType.FIT_XY);
-        ViewGroup.LayoutParams imageView3params = new ImageSwitcher.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        imageView3.setLayoutParams(imageView3params);
 
         imageSwitchHandler = new Handler();
         imageSwitchHandler.post(runnableCode);
@@ -138,42 +135,6 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
             textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent2));
             return textView;
         });
-
-        /*
-        LinearLayout textSwitcher2Layout = new LinearLayout(getApplicationContext());
-        ViewGroup.LayoutParams textSwitcher2LayoutParams = new ImageSwitcher.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        textSwitcher2Layout.setLayoutParams(textSwitcher2LayoutParams);
-        textSwitcher2Layout.setAnimation(imgAnimationIn);
-        textSwitcher2Layout.setAnimation(imgAnimationOut);
-        textSwitcher2Layout.post(runnableCode);
-
-        textSwitcher2 = findViewById(R.id.textSwitcher2);
-        textSwitcher2.setFactory(() -> {
-            TextView textView = new TextView(getApplicationContext());
-            textView.setLayoutParams(new TextSwitcher.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            textView.setTextSize(16);
-            textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
-            return textView;
-        });
-
-        //textSwitcher3Layout = findViewById(R.id.textSwitcher3Layout);
-        LinearLayout textSwitcher3Layout = new LinearLayout(getApplicationContext());
-        ViewGroup.LayoutParams textSwitcher3LayoutParams = new ImageSwitcher.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        textSwitcher3Layout.setLayoutParams(textSwitcher3LayoutParams);
-        textSwitcher3Layout.setAnimation(imgAnimationIn);
-        textSwitcher3Layout.setAnimation(imgAnimationOut);
-        textSwitcher3Layout.post(runnableCode);
-
-        textSwitcher3 = findViewById(R.id.textSwitcher3);
-        textSwitcher3.setFactory(() -> {
-            TextView textView = new TextView(getApplicationContext());
-            textView.setLayoutParams(new TextSwitcher.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            textView.setTextSize(16);
-            textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent2));
-            return textView;
-        }); */
     }
 
     //@RequiresApi(api = Build.VERSION_CODES.Q)
@@ -446,8 +407,7 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
 
     private Runnable runnableCode = new Runnable() {
 
-       // Random r = new Random();
-        //int random = (int)(Math.random()*8);
+       int count=0;
 
         // String image;
         @Override
@@ -491,65 +451,50 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
                     R.mipmap.one_of_akind_foreground, R.mipmap.showing_tablet_foreground, R.mipmap.holding_phone_foreground, R.mipmap.making_thumbs_up_foreground,
                     R.mipmap.online_reviews_foreground, R.mipmap.showing_with_left_hand_foreground, R.mipmap.smiling_peace_foreground};
 
-                int random = new Random().nextInt(text.length);
+            if (count == text.length) {
+                count = 0;
+            }
+            switch (count) {
 
-                switch (random){
-                    case 0:
-                    case 1:
-                    case 5:
-                        imageView2.setAnimation(imgAnimationOut);
-                        //imageView2.setVisibility(View.GONE);
-                        imageView.setAnimation(imgAnimationOut);
-                        //imageView.setVisibility(View.GONE);
+                case 8:
+                    imageView.setImageResource(images[count]);
+                    imageView.setAnimation(imgAnimationIn);
+                    imageView.setVisibility(View.VISIBLE);
 
-                        textSwitcher.setText(text[random]);
-                        textSwitcher.setAnimation(imgAnimationIn);
-                        //textSwitcher.setVisibility(View.VISIBLE);
+                    textSwitcher.setText(text[count]);
+                    textSwitcher.setAnimation(imgAnimationIn);
+                    textSwitcher.setVisibility(View.VISIBLE);
 
-                        imageView2.setImageResource(images[random]);
-                        imageView2.setAnimation(imgAnimationIn);
-                        //imageView2.setVisibility(View.VISIBLE);
+                    approve_permission_request.setAnimation(imgAnimationIn);
+                    approve_permission_request.setVisibility(View.VISIBLE);
 
-                        imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
+                    deny_permission_request.setAnimation(imgAnimationIn);
+                    deny_permission_request.setVisibility(View.VISIBLE);
+
+                    imageSwitchHandler.removeCallbacks(this);
+                    //imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
+                    count++;
                     break;
-                    case 2:
-                    case 6:
-                    case 8:
-                        imageView2.setAnimation(imgAnimationOut);
-                        //imageView2.setVisibility(View.GONE);
-                        imageView.setAnimation(imgAnimationOut);
-                        //imageView.setVisibility(View.GONE);
+                case 2:
+                case 4:
+                case 6:
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                default:
+                    imageView.setImageResource(images[count]);
+                    imageView.setAnimation(imgAnimationIn);
+                    imageView.setVisibility(View.VISIBLE);
 
+                    textSwitcher.setText(text[count]);
+                    textSwitcher.setAnimation(imgAnimationIn);
+                    textSwitcher.setVisibility(View.VISIBLE);
 
-                        textSwitcher.setText(text[random]);
-                        textSwitcher.setAnimation(imgAnimationIn);
-                        //textSwitcher.setVisibility(View.VISIBLE);
-
-                        imageView.setImageResource(images[random]);
-                        imageView.setAnimation(imgAnimationIn);
-                        //imageView.setVisibility(View.VISIBLE);
-
-                        imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
+                    imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
+                    count++;
                     break;
-                    case 3:
-                    case 4:
-                    case 7:
-                        imageView.setAnimation(imgAnimationOut);
-                        //imageView.setVisibility(View.GONE);
-                        imageView2.setAnimation(imgAnimationOut);
-                        //imageView2.setVisibility(View.GONE);
-
-                        textSwitcher.setText(text[random]);
-                        textSwitcher.setAnimation(imgAnimationIn);
-                        //textSwitcher.setVisibility(View.VISIBLE);
-
-                        imageView.setImageResource(images[random]);
-                        imageView.setAnimation(imgAnimationIn);
-                        //imageView.setVisibility(View.VISIBLE);
-
-                        imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
-                   break;
-                }
+            }
         }
     };
 }
