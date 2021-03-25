@@ -223,7 +223,6 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
                 ratingBar.setRating(clickedVenueMarker.getRating());
 
                 ImageView featuredImage = view.findViewById(R.id.featuredImage);
-                String foo = clickedVenueMarker.getFeaturedImage();
                 Picasso.get().load(clickedVenueMarker.getFeaturedImage()).into(featuredImage);
 
                 if(clickedVenueMarker.getRating() == 0){
@@ -289,7 +288,6 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         }
     }
 
-    int foo = 0;
    @Override
     public void setMarkers() {
         mClusterManager = new ClusterManager<>(this, getMap());
@@ -319,20 +317,13 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         getMap().setOnMapLoadedCallback(() -> getMap().animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200)));
         showStuff();
         }
-        //Log.e("setMarkers", " Ending setMarkers " );
     }
     private void showStuff() {
 
         spinner.setVisibility(View.GONE); //hide progressBar
-        login_button3.setVisibility(View.VISIBLE);
+        login_button2.setVisibility(View.VISIBLE);
         loadingLayout.setAnimation(imgAnimationOut);
         loadingLayout.setVisibility(View.GONE);
-        searchView.setAnimation(imgAnimationIn);
-        searchView.setVisibility(View.VISIBLE);
-        btnShowListings.setAnimation(imgAnimationIn);
-        btnShowListings.setVisibility(View.VISIBLE);
-//        btnAdd.setAnimation(imgAnimationIn);
-//        btnAdd.setVisibility(View.VISIBLE);
         tvMore.setAnimation(imgAnimationIn);
         tvMore.setVisibility(View.VISIBLE);
         sliderLayout.setAnimation(imgAnimationIn);
@@ -341,40 +332,8 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         noListingsImageView.setVisibility(View.GONE);
         noListingsTextView.setAnimation(imgAnimationOut);
         noListingsTextView.setVisibility(View.GONE);
-        fooListingImageView.setAnimation(imgAnimationOut);
-        fooListingImageView.setVisibility(View.GONE);
-        //fooListingsTextView.setAnimation(imgAnimationOut);
-        //fooListingsTextView.setVisibility(View.GONE);
     }
-    private void showFooStuff() {
 
-        Animation imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
-        Animation imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        Animation imgZoomOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_out);
-        Animation imgZoomIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in);
-
-        spinner.setVisibility(View.GONE); //hide progressBar
-        //login_button3.setVisibility(View.VISIBLE);
-        //loadingLayout.setAnimation(imgAnimationOut);
-        //loadingLayout.setVisibility(View.GONE);
-        //searchView.setAnimation(imgAnimationIn);
-        //searchView.setVisibility(View.VISIBLE);
-        noListingsImageView.setAnimation(imgAnimationOut);
-        noListingsImageView.setVisibility(View.GONE);
-        noListingsTextView.setAnimation(imgAnimationOut);
-        noListingsTextView.setVisibility(View.GONE);
-        fooListingImageView.setAnimation(imgAnimationIn);
-        fooListingImageView.setVisibility(View.VISIBLE);
-        //fooListingsTextView.setAnimation(imgAnimationIn);
-        //fooListingsTextView.setVisibility(View.VISIBLE);
-        //noListingsTextView.setTextSize(16);
-
-        if(isLoggedIn) {
-            //fooListingsTextView.setText("Hello " +firstName+"\n\nWe have your current location. We are searching our database for black owned businesses near you.");
-        } else {
-          //  fooListingsTextView.setText("Hello, We have your current location. We are searching our database for black owned businesses near you.");
-        }
-    }
     private void showOtherStuff() {
 
         Animation imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
@@ -383,7 +342,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         Animation imgZoomIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in);
 
         spinner.setVisibility(View.GONE); //hide progressBar
-        login_button3.setVisibility(View.VISIBLE);
+        login_button2.setVisibility(View.VISIBLE);
         loadingLayout.setAnimation(imgAnimationOut);
         loadingLayout.setVisibility(View.GONE);
         //searchView.setAnimation(imgAnimationIn);

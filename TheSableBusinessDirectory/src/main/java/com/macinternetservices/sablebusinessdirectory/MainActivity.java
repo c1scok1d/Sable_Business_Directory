@@ -159,8 +159,8 @@ public class MainActivity extends AppCompatActivity implements
     public static Double latitude, longitude;
 
     public static TextView tvMore, tvUserName, tvWpUserId, tvCity, tvCategories, tvLoading, noListingsTextView, fooListingsTextView;
-    Button login_button2, login_button4, btnAdd, btnShowListings;
-    LoginButton login_button3;
+    Button  btnShowListings;
+    LoginButton login_button2;
     RecyclerView verticalRecyclerView, featuredRecyclervView, recentListingsRecyclervView, recentReviewsRecyclervView;
     //ProgressBar progressBar;
     LinearLayoutManager mLayoutManager, featuredRecyclerViewLayoutManager,
@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public static AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
-    TextSwitcher textSwitcher, textSwitcher2, textSwitcher3;
+    TextSwitcher textSwitcher, textSwitcher3;
     private SlidingUpPanelLayout mLayout;
 
 
@@ -269,8 +269,8 @@ public class MainActivity extends AppCompatActivity implements
         return chain.proceed(request);
     };
 
-    ImageSwitcher imageSwitcher, imageSwitcher2, imageSwitcher3;
-    LinearLayout textSwitcherLayout, textSwitcher2Layout, textSwitcher3Layout, sliderLayout;
+    ImageSwitcher imageSwitcher3;
+    LinearLayout  textSwitcher3Layout, sliderLayout;
     private Handler imageSwitchHandler;
     SharedPreferences pref;
 
@@ -400,8 +400,8 @@ public class MainActivity extends AppCompatActivity implements
         login_button2 = findViewById(R.id.login_button2);
         login_button2.setVisibility(View.GONE);
 
-        login_button3 = findViewById(R.id.login_button3);
-        login_button3.setVisibility(View.GONE);
+        /*login_button3 = findViewById(R.id.login_button3);
+        login_button3.setVisibility(View.GONE); */
 
         facebookLogin();
 
@@ -411,7 +411,7 @@ public class MainActivity extends AppCompatActivity implements
             TextView textView = new TextView(getApplicationContext());
             textView.setLayoutParams(new TextSwitcher.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             textView.setTextSize(22);
-            textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent2));
+            textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
             return textView;
         });
 
@@ -517,10 +517,10 @@ public class MainActivity extends AppCompatActivity implements
         tvCity = findViewById(R.id.tvCity);
         tvMore = findViewById(R.id.tvMore);
 
-        btnShowListings = findViewById(R.id.btnShowListings);
+       /* btnShowListings = findViewById(R.id.btnShowListings);
         btnShowListings.setVisibility(View.GONE);
         searchView = findViewById(R.id.search);
-        searchView.setVisibility(View.GONE);
+        searchView.setVisibility(View.GONE); */
 
         ivAlertOn = findViewById(R.id.ivAlertOn);
         ivAlertOn.setVisibility(View.GONE);
@@ -528,19 +528,19 @@ public class MainActivity extends AppCompatActivity implements
         ivAlertOff.setVisibility(View.GONE);
 
 
-        btnShowListings.setOnClickListener(new View.OnClickListener() {
+        /*btnShowListings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), MarkerClusteringActivity.class));
                 finish();
             }
-        });
+        }); */
 
 
         /**
          *  directory search
          */
-        ArrayAdapter<String> searchViewAdapter = new ArrayAdapter<String>(getApplicationContext(),
+        /*ArrayAdapter<String> searchViewAdapter = new ArrayAdapter<String>(getApplicationContext(),
                 android.R.layout.simple_list_item_1, listingName);
         searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -647,7 +647,7 @@ public class MainActivity extends AppCompatActivity implements
 
         if (!userActivityArray.isEmpty()) {
             userActivityArray = this.getIntent().getExtras().getStringArrayList("userActivityArray");
-        }
+        } */
 
 
         /***
@@ -735,7 +735,7 @@ public class MainActivity extends AppCompatActivity implements
 
                         break;
                     case 2: //search popup
-                        searchView.setVisibility(View.VISIBLE);
+                        //searchView.setVisibility(View.VISIBLE);
                         break;
                     case 3: //add listing
                         if (!isLoggedIn) {
@@ -838,14 +838,6 @@ public class MainActivity extends AppCompatActivity implements
             tvLoading.setVisibility(View.VISIBLE);
 
             getRetrofit(query);
-
-            if (pref.getBoolean("alertOn", true)) {
-            ivAlertOn.setVisibility(View.VISIBLE);
-            ivAlertOff.setVisibility(View.GONE);
-            if (!isMyServiceRunning()) {
-                startService(new Intent(MainActivity.this, GeolocationService.class));
-            }
-        }
     }
 
     private boolean isMyServiceRunning() {
@@ -880,7 +872,7 @@ public class MainActivity extends AppCompatActivity implements
     private void buildAlertMessageEnableAlerts() {
         String message;
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        if (pref.getBoolean("alertOn", false)) {
+        if (pref.getBoolean("alertOn", true)) {
             if (isLoggedIn) {
                 message = "Hello <font color='#4FC1E9'>" + firstName + "!</font> \nWould you like to disable alerts when you are near a black owned business?";
 
@@ -934,8 +926,8 @@ public class MainActivity extends AppCompatActivity implements
                         public void onClick(final DialogInterface dialog, final int id) {
                             dialog.cancel();
                             pref.edit().putBoolean("alertOn", false).apply();
-                            ivAlertOff.setVisibility(View.GONE);
-                            ivAlertOn.setVisibility(View.VISIBLE);
+                            ivAlertOff.setVisibility(View.VISIBLE);
+                            ivAlertOn.setVisibility(View.GONE);
                             if (isMyServiceRunning()) {
                                 stopService(new Intent(MainActivity.this, GeolocationService.class));
                                 Toast.makeText(MainActivity.this, "You will not be alerted by Sable when near a black owned business", Toast.LENGTH_SHORT).show();
@@ -993,9 +985,9 @@ public class MainActivity extends AppCompatActivity implements
                 useLoginInformation(accessToken);
             }
         };
-        login_button3.setPermissions(Arrays.asList("email", "public_profile"));
+        login_button2.setPermissions(Arrays.asList("email", "public_profile"));
 
-        login_button3.registerCallback(fbLogincallbackManager,
+        login_button2.registerCallback(fbLogincallbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
@@ -1214,6 +1206,13 @@ public class MainActivity extends AppCompatActivity implements
             }
         }); */
         if (geofences.size() > 0 && mapLocations.size() > 0) {
+            if (pref.getBoolean("alertOn", true)) {
+                ivAlertOn.setVisibility(View.VISIBLE);
+                ivAlertOff.setVisibility(View.GONE);
+                if (!isMyServiceRunning()) {
+                    startService(new Intent(MainActivity.this, GeolocationService.class));
+                }
+            }
             setMarkers();
         }
     }
@@ -1350,7 +1349,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 if (response.body().isEmpty()) {
                     spinner.setVisibility(View.GONE); //hide progressBar
-                    login_button3.setVisibility(View.VISIBLE);
+                    login_button2.setVisibility(View.VISIBLE);
                     loadingLayout.setAnimation(imgAnimationOut);
                     loadingLayout.setVisibility(View.GONE);
                     //searchView.setAnimation(imgAnimationIn);
@@ -1566,7 +1565,7 @@ public class MainActivity extends AppCompatActivity implements
                 tvLoading.setVisibility(View.VISIBLE);
                 tvLoading.setAnimation(imgAnimationIn);
                 if (isLoggedIn) {
-                    tvLoading.setText(Html.fromHtml(("Thanks for your patience " + "<font color='#4FC1E9'>" + firstName + "</font>" + "we are searing our database to see if there are any registered black owned businesses near you.")));
+                    tvLoading.setText(Html.fromHtml(("Thanks for your patience " + "<font color='#4FC1E9'>" + firstName + "</font>" + "we are searching our database to see if there are any registered black owned businesses near you.")));
                 } else {
                     tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
                 }
@@ -1816,30 +1815,28 @@ public class MainActivity extends AppCompatActivity implements
                     "Welcome to The Sable Business Directory!\n",
 
 
-                    "The Sable Business Directory is designed to help those wanting to support " +
-                            "and frequent black owned businesses and service providers find black owned" +
+                    "The Sable Business Directory is designed to help those wanting users find black owned" +
                             "businesses and service providers.",
 
-                    "We provide a one of a kind online platform that makes it easier to find, rate " +
+                    "We provide a one of a kind online platform that alerts users when they are near a black owned" +
+
+                    "We are combining geo-search, social media and e-commerce technologies to make it easier users to find, rate " +
                             "and review black owned businesses and service providers.",
 
-                    "We have combined geo-search, social media and e-commerce technologies to create an online " +
-                            "platform dedicated to the continued growth and support of black owned businesses.",
-
-                    "To insure high quality services, customers maintain the directory by adding and " +
-                            "reviewing the black owned businesses and service providers they frequent.",
+                    "We promote high quality products and services by encouraging, customers maintain the directory by adding, rating " +
+                            " and reviewing the black owned businesses and service providers they frequent.",
 
                     "Our combined technologies then compile those listings, ratings and reviews to " +
-                            "provide a directory listing of black owned business and service providers " +
-                            "near your current location.",
+                            "provide a directory that alerts users of black owned business and service providers " +
+                            "near their current location.",
 
-                    "88% of people trust online reviews. Online reviews are an important way you can increase " +
-                            "sales for your business. This is especially important for local businesses and service providers.",
+                    "Owners and providers benefit because 88% of people trust online reviews. Online reviews are an important way you can increase " +
+                            "sales. This is especially important for local businesses and service providers.",
 
-                    "Adding and reviewing listings is easy. To protect the privacy of our users and insure high quality feedback " +
-                            "we require users to login before adding or reviewing a listing.",
+                    "Adding and reviewing listings is free and easy. To protect the privacy of our users and insure high quality feedback " +
+                            "we require users to login via a verified social media account before adding or reviewing a listing.",
 
-                    "Tap below to begin adding and reviewing black owned businesses using your Facebook account."
+                    "Simple tap the button below to begin adding and reviewing black owned businesses using your Facebook account."
 
             };
 

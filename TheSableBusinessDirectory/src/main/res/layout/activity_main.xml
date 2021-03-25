@@ -80,19 +80,18 @@
 
                     </com.ramotion.circlemenu.CircleMenuView>
 
-                    <AutoCompleteTextView
+                    <!--AutoCompleteTextView
                         android:id="@+id/search"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
                         android:layout_marginStart="10dp"
-                        android:layout_marginTop="3dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="3dp"
+                        android:layout_marginBottom="10dp"
                         android:layout_toEndOf="@id/ivAlertOn"
-                        android:background="#FFFFFF"
+                        android:background="#80FFFFFF"
                         android:dropDownWidth="match_parent"
                         android:dropDownHeight="wrap_content"
                         android:hint="Enter business name to search"
@@ -102,7 +101,7 @@
                         android:theme="@style/AppSearchView"
                         android:visibility="gone">
 
-                    </AutoCompleteTextView>
+                    </AutoCompleteTextView -->
 
                     <ImageView
                         android:id="@+id/ivLogo"
@@ -246,7 +245,7 @@
 
                     </RelativeLayout>
 
-                    <LinearLayout
+                    <!--LinearLayout
                         android:id="@+id/btnLayout"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
@@ -302,7 +301,7 @@
                             android:textColor="@color/white"
                             android:textSize="14sp"
                             android:textStyle="bold" />
-                    </LinearLayout>
+                    </LinearLayout -->
 
                 </RelativeLayout>
 
@@ -541,6 +540,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="10dp"
                             android:layout_marginBottom="10dp"
+                            android:gravity="center_horizontal"
                             android:orientation="vertical">
 
                             <ImageSwitcher
