@@ -64,7 +64,7 @@ public class GeofenceReceiver extends IntentService {
                 geofenceNotification
                         .displayNotification(sg, transitionType, near);
 
-                if(near > 0 && transitionType != Geofence.GEOFENCE_TRANSITION_DWELL){
+                if(near > 0){
                     /*Animation imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
 
                     ivLoading.setVisibility(View.VISIBLE);
@@ -78,7 +78,7 @@ public class GeofenceReceiver extends IntentService {
                     } else {
                         tvLoading.setText("Thank you for waiting while we search our directory for black owned businesses near you.");
                     } */
-                    Toast.makeText(getApplicationContext(), "There are " +near+ " black owned businesses within 5 miles of you", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "There are " +near+ " black owned businesses near your current location", Toast.LENGTH_LONG).show();
                     //MainActivity.tvLoading.setText("It looks like there are " +near+ " black owned businesses within 5 miles of you");
                 } /*else if (near > 0 && transitionType)
                     Toast.makeText(getApplicationContext(), "There are no black owned businesses near you", Toast.LENGTH_LONG).show();

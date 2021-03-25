@@ -712,8 +712,8 @@ public class MainActivity extends AppCompatActivity implements
                     case 1:
                     case 4: //clear and reload
                         kickItOff = true;
-                        mapLocations.clear();
-                        geofences.clear();
+                        mapLocations = new ArrayList<>();
+                        geofences = new HashMap<String, SimpleGeofence>();
                         Map<String, String> query = new HashMap<>();
 
                         if(pref.getString("lastKnownLat", String.valueOf(location.getLatitude())).isEmpty()
@@ -791,6 +791,9 @@ public class MainActivity extends AppCompatActivity implements
     @SuppressLint("MissingPermission")
     public void onResume() {
         super.onResume();
+        kickItOff = true;
+        mapLocations = new ArrayList<>();
+        geofences = new HashMap<String, SimpleGeofence>();
         /*
             start location listener to get current location minimum alert 30 secs 400M
          */
@@ -806,20 +809,7 @@ public class MainActivity extends AppCompatActivity implements
             pref.edit().putBoolean("alertOn", true).apply();
             pref.edit().putBoolean("firstrun", false).apply();
         }
-        if (pref.getBoolean("alertOn", true)) {
-            //do first run stuff and set first run to false
-            ivAlertOn.setVisibility(View.VISIBLE);
-            ivAlertOff.setVisibility(View.GONE);
-           /* if (!isMyServiceRunning()) {
-                startService(new Intent(MainActivity.this, GeolocationService.class));
-            }*/
-        }
-
-        if (geofences.size() > 0 && mapLocations.size() > 0) {
-          //  setMarkers();
-        //} else {
-            kickItOff = true;
-            Map<String, String> query = new HashMap<>();
+        Map<String, String> query = new HashMap<>();
 
             if(pref.getString("lastKnownLat", String.valueOf(location.getLatitude())).isEmpty()
                     ||  pref.getString("lastKnownLat", String.valueOf(location.getLatitude())).equals(null)
@@ -842,14 +832,20 @@ public class MainActivity extends AppCompatActivity implements
             } else {
                 tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
             }
-
             ivLoading.setAnimation(imgAnimationIn);
             ivLoading.setVisibility(View.VISIBLE);
             tvLoading.setAnimation(imgAnimationIn);
             tvLoading.setVisibility(View.VISIBLE);
 
             getRetrofit(query);
-       }
+
+            if (pref.getBoolean("alertOn", true)) {
+            ivAlertOn.setVisibility(View.VISIBLE);
+            ivAlertOff.setVisibility(View.GONE);
+            if (!isMyServiceRunning()) {
+                startService(new Intent(MainActivity.this, GeolocationService.class));
+            }
+        }
     }
 
     private boolean isMyServiceRunning() {
@@ -1305,7 +1301,7 @@ public class MainActivity extends AppCompatActivity implements
      * @param query
      */
     public void getRetrofit(final Map<String, String> query) {
-
+        //int i;
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
@@ -1327,13 +1323,18 @@ public class MainActivity extends AppCompatActivity implements
                 .client(client)
                 .build();
 
+        retrofit = new Retrofit.Builder()
+                .baseUrl(baseURL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build();
+
         RetrofitArrayApi service = retrofit.create(RetrofitArrayApi.class);
         verticalList = new ArrayList<>();
         locationMatch = new ArrayList<>();
         listingName = new ArrayList<>();
         recentList = new ArrayList<>();
         featuredList = new ArrayList<>();
-        mapLocations = new ArrayList<>();
         recentReviewList = new ArrayList<>();
         // pass JSON data to BusinessListings class for filtering
         Call<List<BusinessListings>> call = service.getPostInfo(query);
@@ -1367,6 +1368,7 @@ public class MainActivity extends AppCompatActivity implements
                         noListingsTextView.setText("This is terrible!!!!\n\nLooks like there aren't any black owned businesses near you in our directory.\n" +
                                 "Tap add (+) to add any black owned business you visit to our directory.");
                     };
+                    return;
                 }
                 if (response.isSuccessful()) {
                     for (int i = 0; i < response.body().size(); i++) {

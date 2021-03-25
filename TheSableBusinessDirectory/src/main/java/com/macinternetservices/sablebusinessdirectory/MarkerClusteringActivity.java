@@ -343,8 +343,8 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         noListingsTextView.setVisibility(View.GONE);
         fooListingImageView.setAnimation(imgAnimationOut);
         fooListingImageView.setVisibility(View.GONE);
-        fooListingsTextView.setAnimation(imgAnimationOut);
-        fooListingsTextView.setVisibility(View.GONE);
+        //fooListingsTextView.setAnimation(imgAnimationOut);
+        //fooListingsTextView.setVisibility(View.GONE);
     }
     private void showFooStuff() {
 
@@ -365,14 +365,14 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         noListingsTextView.setVisibility(View.GONE);
         fooListingImageView.setAnimation(imgAnimationIn);
         fooListingImageView.setVisibility(View.VISIBLE);
-        fooListingsTextView.setAnimation(imgAnimationIn);
-        fooListingsTextView.setVisibility(View.VISIBLE);
+        //fooListingsTextView.setAnimation(imgAnimationIn);
+        //fooListingsTextView.setVisibility(View.VISIBLE);
         //noListingsTextView.setTextSize(16);
 
         if(isLoggedIn) {
-            fooListingsTextView.setText("Hello " +firstName+"\n\nWe have your current location. We are searching our database for black owned businesses near you.");
+            //fooListingsTextView.setText("Hello " +firstName+"\n\nWe have your current location. We are searching our database for black owned businesses near you.");
         } else {
-            fooListingsTextView.setText("Hello, We have your current location. We are searching our database for black owned businesses near you.");
+          //  fooListingsTextView.setText("Hello, We have your current location. We are searching our database for black owned businesses near you.");
         }
     }
     private void showOtherStuff() {
