@@ -186,12 +186,15 @@
                             android:layout_alignParentBottom="false"
                             android:layout_centerHorizontal="false"
                             android:layout_centerVertical="true"
-                            android:layout_margin="10dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp"
                             android:background="@drawable/whitebackgroud_with_rounded_corners"
                             android:gravity="start"
                             android:padding="5dp"
                             android:text="loadingText"
-                            android:textColor="@color/colorAccent2"
+                            android:textColor="@color/black"
                             android:textSize="18sp"
                             tools:text="loadingText" />
 
@@ -240,7 +243,7 @@
                             android:fontFamily="@font/open_sans"
                             android:padding="5dp"
                             android:text="loadingText"
-                            android:textColor="@color/colorAccent2"
+                            android:textColor="@color/black"
                             android:textSize="18sp" />
 
                     </RelativeLayout>

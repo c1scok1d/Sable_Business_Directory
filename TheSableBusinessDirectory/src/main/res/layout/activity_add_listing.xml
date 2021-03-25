@@ -75,9 +75,12 @@
                     <Spinner
                         android:id="@+id/spnCategory"
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:background="@android:drawable/btn_dropdown"
-                        android:spinnerMode="dropdown" />
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/roundedcorner"
+                        android:spinnerMode="dropdown"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="14sp" />
 
                     <AutoCompleteTextView
                         android:id="@+id/tvCategory"
@@ -538,9 +541,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/buttonshape"
                 android:text="Add Listing"
                 android:textColor="@color/white" />

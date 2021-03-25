@@ -156,7 +156,7 @@ public class AddListingActivity extends AppCompatActivity implements
         LinearLayout viewBusinessHoursLayout = findViewById(R.id.viewBusinessHoursLayout);
         viewBusinessHoursLayout.setVisibility(View.GONE);
         //TextView tvAddHours;
-        addListingCategory.add("Select Business Category"); //add heading to category spinner
+        addListingCategory.add("Tap To Select Business Category"); //add heading to category spinner
 
         btn_apply.setOnClickListener(view -> {
 

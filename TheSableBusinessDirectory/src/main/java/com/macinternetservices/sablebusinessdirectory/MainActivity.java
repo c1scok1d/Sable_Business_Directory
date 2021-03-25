@@ -809,6 +809,10 @@ public class MainActivity extends AppCompatActivity implements
             pref.edit().putBoolean("alertOn", true).apply();
             pref.edit().putBoolean("firstrun", false).apply();
         }
+        if (pref.getBoolean("alertOn", true)) {
+            ivAlertOn.setVisibility(View.VISIBLE);
+            ivAlertOff.setVisibility(View.GONE);
+        }
         Map<String, String> query = new HashMap<>();
 
             if(pref.getString("lastKnownLat", String.valueOf(location.getLatitude())).isEmpty()
