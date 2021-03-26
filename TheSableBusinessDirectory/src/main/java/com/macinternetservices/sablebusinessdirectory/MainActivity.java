@@ -589,6 +589,8 @@ public class MainActivity extends AppCompatActivity implements
 
         menu = findViewById(R.id.circle_menu);
         menu.setVisibility(View.GONE);
+        TextView tvTapForOptions = findViewById(R.id.tvTapForOptions);
+        tvTapForOptions.setVisibility(View.GONE);
 
 
         /**
@@ -734,7 +736,14 @@ public class MainActivity extends AppCompatActivity implements
         ivLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                menu.setVisibility(View.VISIBLE);
+                if(!menu.isShown()){
+                    menu.setVisibility(View.VISIBLE);
+                    tvTapForOptions.setVisibility(View.VISIBLE);
+                } else {
+                    menu.setVisibility(View.GONE);
+                    tvTapForOptions.setVisibility(View.GONE);
+                }
+
                 /*
                 circleMenu should be hidden in the center of parent
                 onClick
@@ -780,6 +789,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onMenuCloseAnimationEnd(@NonNull CircleMenuView view) {
                 Log.d("D", "onMenuCloseAnimationEnd");
+                menu.setVisibility(View.GONE);
             }
 
             @Override
@@ -1410,7 +1420,7 @@ public class MainActivity extends AppCompatActivity implements
 
                     if(isLoggedIn) {
                         noListingsTextView.setText("This is terrible " + firstName +"!!!!\nLooks like there aren't any black owned businesses near you in our directory.\n" +
-                                "Tap Add (+) from the menu to add any black owned business you visit to our directory.");
+                                "Tap the logo and select Add (+) from the menu to add any black owned business you visit to our directory.");
                     } else {
                         noListingsTextView.setText("This is terrible!!!!\nLooks like there aren't any black owned businesses near you in our directory.\n" +
                                 "Tap add (+) to add any black owned business you visit to our directory.");

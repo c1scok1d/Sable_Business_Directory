@@ -48,13 +48,32 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp">
 
-                    <ImageView
-                        android:id="@+id/ivLogo"
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/ivLogoImageCardview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_gravity="end"
-                        sothree:srcCompat="@mipmap/sable_logo_black_foreground" />
+                        android:layout_marginTop="5dp"
+                        sothree:cardBackgroundColor="@color/black"
+                        sothree:cardCornerRadius="250dp">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            sothree:cardCornerRadius="250dp">
+
+                            <ImageView
+                                android:id="@+id/ivLogo"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                sothree:srcCompat="@mipmap/sable_logo_black_foreground" />
+
+                        </androidx.cardview.widget.CardView>
+
+                    </androidx.cardview.widget.CardView>
 
                     <com.ramotion.circlemenu.CircleMenuView
                         android:id="@+id/circle_menu"
@@ -69,10 +88,21 @@
 
                     </com.ramotion.circlemenu.CircleMenuView>
 
+                    <TextView
+                        android:id="@+id/tvTapForOptions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="Tap For Options"
+                        android:textSize="10sp" />
+
                     <androidx.cardview.widget.CardView
                         android:id="@+id/ivUserImageCardview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="5dp"
                         app:cardBackgroundColor="@color/black"
                         app:cardCornerRadius="250dp">
 
