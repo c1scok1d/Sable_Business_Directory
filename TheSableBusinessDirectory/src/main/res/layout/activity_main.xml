@@ -48,23 +48,35 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp">
 
-                    <ImageView
-                        android:id="@+id/ivUserImage"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:background="@android:color/transparent"
-                        android:foreground="@drawable/rounded_image"
-                        tools:srcCompat="@tools:sample/avatars" />
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/ivUserImageCardview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:cardBackgroundColor="@color/black"
+                        app:cardCornerRadius="250dp">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            app:cardCornerRadius="250dp">
+
+                            <ImageView
+                                android:id="@+id/ivUserImage"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop" />
+
+                        </androidx.cardview.widget.CardView>
+
+                    </androidx.cardview.widget.CardView>
 
                     <ImageView
                         android:id="@+id/ivAlertOff"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_below="@id/ivUserImage"
+                        android:layout_below="@id/ivUserImageCardview"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="false"
                         android:layout_margin="5dp"
@@ -74,7 +86,7 @@
                         android:id="@+id/ivAlertOn"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_below="@id/ivUserImage"
+                        android:layout_below="@id/ivUserImageCardview"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="false"
                         android:layout_margin="5dp"
@@ -84,13 +96,11 @@
                         android:id="@+id/circle_menu"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"
+                        android:layout_centerInParent="true"
                         app:button_colors="@array/colors"
                         app:button_icons="@array/icons"
-                        app:distance="60dp"
-                        app:icon_color="#FFFFFF"
-                        app:icon_menu="@mipmap/sable_logo_black_foreground">
+                        app:distance="75dp"
+                        app:icon_color="#FFFFFF">
 
                     </com.ramotion.circlemenu.CircleMenuView>
 
@@ -125,9 +135,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_marginEnd="25px"
                         android:layout_marginBottom="15px"
-                        android:visibility="gone"
-                        sothree:srcCompat="@mipmap/sable_logo_black_foreground"
-                        tools:visibility="gone" />
+                        sothree:srcCompat="@mipmap/sable_logo_black_foreground" />
 
                     <RelativeLayout
                         android:id="@+id/fooListingsLayout"

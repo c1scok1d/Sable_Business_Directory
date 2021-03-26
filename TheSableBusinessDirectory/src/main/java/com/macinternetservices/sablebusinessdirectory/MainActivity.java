@@ -42,6 +42,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -197,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements
     public static HashMap<String, SimpleGeofence> geofences = new HashMap<String, SimpleGeofence>();
     ArrayList<String> userActivityArray = new ArrayList<>();
     ImageView ivUserImage, spokesperson, ivLoading, noListingsImageView, fooListingImageView, ivSettings, ivAlertOn, ivAlertOff;
+    CardView ivUserImageCardview;
     ProgressBar spinner;
 
     private static final int FRAME_TIME_MS = 8000;
@@ -544,6 +546,8 @@ public class MainActivity extends AppCompatActivity implements
         recentReviewsRecyclerViewLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         recentReviewsRecyclervView.setLayoutManager(recentReviewsRecyclerViewLayoutManager);
 
+        ivUserImageCardview = findViewById(R.id.ivUserImageCardview);
+        ivUserImageCardview.setVisibility(View.GONE);
         tvUserName = findViewById(R.id.tvUserName);
         ivUserImage = findViewById(R.id.ivUserImage);
         ivUserImage.setVisibility(View.GONE);
@@ -858,10 +862,10 @@ public class MainActivity extends AppCompatActivity implements
         spinner.setVisibility(View.VISIBLE); //hide progressBar
         if (isLoggedIn) {
             tvLoading.setText(Html.fromHtml(("Thanks for your patience "+firstName+ " we are searching our database to see if there are any registered black owned businesses near you.")));
-            ivUserImage.setVisibility(View.VISIBLE);
+            ivUserImageCardview.setVisibility(View.VISIBLE);
         } else {
             tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
-            ivUserImage.setVisibility(View.GONE);
+            ivUserImageCardview.setVisibility(View.GONE);
         }
 
         ivLoading.setAnimation(imgAnimationIn);
