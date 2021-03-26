@@ -539,11 +539,11 @@ public class ReviewActivity extends AppCompatActivity implements
     private void checkGalleryAppAvailability() {
         if (!easyImage.canDeviceHandleGallery()) {
             //Device has no app that handles gallery intent
-            galleryButton.setVisibility(View.GONE);
+            //galleryButton.setVisibility(View.GONE);
         }
     }
 
-    @Override
+    /*@Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
@@ -558,7 +558,7 @@ public class ReviewActivity extends AppCompatActivity implements
         } else if (requestCode == DOCUMENTS_REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             easyImage.openDocuments(ReviewActivity.this);
         }
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

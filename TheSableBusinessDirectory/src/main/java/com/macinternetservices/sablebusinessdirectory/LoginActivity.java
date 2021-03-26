@@ -101,6 +101,32 @@ public class LoginActivity extends AppCompatActivity {
 
         fbLogincallbackManager = CallbackManager.Factory.create();
 
+
+
+        String EMAIL = "email";
+
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions(Arrays.asList(EMAIL));
+        // If you are using in a fragment, call loginButton.setFragment(this);
+
+        // Callback registration
+        loginButton.registerCallback(fbLogincallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+            }
+        });
+
         LoginManager.getInstance().registerCallback(fbLogincallbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
@@ -123,10 +149,6 @@ public class LoginActivity extends AppCompatActivity {
                 R.anim.fade_in);
         tvSecureMsg.setVisibility(View.VISIBLE);
         tvSecureMsg.startAnimation(animFadeIn);
-//        tvGreeting.setVisibility(View.VISIBLE);
-        //tvGreeting.startAnimation(animFadeIn);
-        //ivGreeter.setVisibility(View.VISIBLE);
-        //ivGreeter.startAnimation(animFadeIn);
     }
 
     @Override

@@ -6,7 +6,7 @@
         <item>@drawable/search</item>
         <item>@drawable/add</item>
         <item>@drawable/refresh</item>
-        <!--item>@drawable/logout</item -->
+        <item>@drawable/logout</item>
     </array>
     <array name="colors">
         <item>@android:color/black</item>

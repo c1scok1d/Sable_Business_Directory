@@ -321,7 +321,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
     private void showStuff() {
 
         spinner.setVisibility(View.GONE); //hide progressBar
-        login_button2.setVisibility(View.VISIBLE);
+        loginButton.setVisibility(View.VISIBLE);
         loadingLayout.setAnimation(imgAnimationOut);
         loadingLayout.setVisibility(View.GONE);
         tvMore.setAnimation(imgAnimationIn);
@@ -342,7 +342,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         Animation imgZoomIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in);
 
         spinner.setVisibility(View.GONE); //hide progressBar
-        login_button2.setVisibility(View.VISIBLE);
+        loginButton.setVisibility(View.VISIBLE);
         loadingLayout.setAnimation(imgAnimationOut);
         loadingLayout.setVisibility(View.GONE);
         //searchView.setAnimation(imgAnimationIn);

@@ -116,7 +116,7 @@
                         android:layout_weight="1"
                         android:gravity="start"
                         android:text="business name"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/black"
                         android:textStyle="bold"
                         tools:text="business name" />
 
@@ -148,7 +148,7 @@
                         android:layout_gravity="center_horizontal|center_vertical"
                         android:layout_marginStart="5dp"
                         android:gravity="center_vertical|end"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/black"
                         tools:text="0" />
 
                     <TextView
@@ -158,7 +158,7 @@
                         android:layout_marginStart="3dp"
                         android:gravity="start"
                         android:text="Reviews"
-                        android:textColor="@color/colorAccent" />
+                        android:textColor="@color/black" />
 
                 </LinearLayout>
 
@@ -202,7 +202,7 @@
                         android:layout_weight="1"
                         android:gravity="start"
                         android:text="bldgno"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/black"
                         android:textStyle="bold"
                         android:visibility="gone" />
 
@@ -214,7 +214,7 @@
                         android:layout_weight="1"
                         android:gravity="start"
                         android:text="street"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/black"
                         android:textStyle="bold"
                         android:visibility="gone" />
 
@@ -224,7 +224,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="3dp"
                         android:text="city"
-                        android:textColor="@color/colorAccent" />
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/tvState"
@@ -233,7 +233,7 @@
                         android:layout_marginStart="3dp"
                         android:gravity="start"
                         android:text="state"
-                        android:textColor="@color/colorAccent" />
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/tvZip"
@@ -242,7 +242,7 @@
                         android:layout_marginStart="3dp"
                         android:gravity="start"
                         android:text="zip"
-                        android:textColor="@color/colorAccent" />
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/tvCountry"
@@ -259,7 +259,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/black"
                         android:textSize="12sp"
                         android:textStyle="bold"
                         tools:text="distance" />
@@ -273,7 +273,7 @@
                         android:gravity="start"
                         android:text="Miles away"
                         android:textAllCaps="true"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/black"
                         android:textSize="12sp" />
 
                 </LinearLayout>
@@ -299,7 +299,7 @@
                             android:layout_marginStart="3dp"
                             android:gravity="start"
                             android:text="@string/listingPhone"
-                            android:textColor="@color/colorAccent"
+                            android:textColor="@color/black"
                             android:visibility="gone"
                             tools:visibility="visible" />
 
@@ -315,7 +315,7 @@
                                 android:layout_gravity="center_horizontal|center_vertical"
                                 android:layout_marginStart="3dp"
                                 android:gravity="center_horizontal|center_vertical"
-                                android:textColor="@color/colorAccent"
+                                android:textColor="@color/black"
                                 android:textSize="12sp"
                                 android:visibility="gone"
                                 tools:text="hours" />
@@ -496,14 +496,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Hey"
-                                android:textColor="@color/colorAccent" />
+                                android:textColor="@color/black" />
 
                             <TextView
                                 android:id="@+id/tvUserName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="3dp"
-                                android:textColor="@color/colorAccent"
+                                android:textColor="@color/black"
                                 tools:text="username" />
 
                             <TextView
@@ -512,7 +512,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="!"
-                                android:textColor="@color/colorAccent"
+                                android:textColor="@color/black"
                                 android:textSize="12sp" />
 
                             <TextView
@@ -534,7 +534,7 @@
                                 android:id="@+id/tvSwitcher"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="#e9774f"
+                                android:textColor="@color/colorAccent"
                                 android:textSize="12sp" />
 
                             <TextView
@@ -580,7 +580,7 @@
                         android:lineSpacingExtra="2dp"
                         android:maxLines="3"
                         android:text="About Us"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/black"
                         android:textStyle="bold" />
 
                     <TextView
@@ -671,7 +671,7 @@
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:text="Add some photos to your review"
                     android:textAllCaps="true"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/black"
                     android:textSize="10sp"
                     android:textStyle="bold" />
 
@@ -722,7 +722,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="10dp"
-                    android:background="#4fc1e9"
+                    android:background="@drawable/buttonshape"
                     android:text="Send feedback"
                     android:textColor="@android:color/white" />
             </LinearLayout>

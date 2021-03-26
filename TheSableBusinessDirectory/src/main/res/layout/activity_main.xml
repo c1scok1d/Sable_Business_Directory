@@ -49,21 +49,35 @@
                     android:layout_marginEnd="5dp">
 
                     <ImageView
+                        android:id="@+id/ivUserImage"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@android:color/transparent"
+                        android:foreground="@drawable/rounded_image"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <ImageView
                         android:id="@+id/ivAlertOff"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
+                        android:layout_below="@id/ivUserImage"
                         android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_margin="3dp"
+                        android:layout_alignParentTop="false"
+                        android:layout_margin="5dp"
                         sothree:srcCompat="@mipmap/alert_off_foreground" />
 
                     <ImageView
                         android:id="@+id/ivAlertOn"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
+                        android:layout_below="@id/ivUserImage"
                         android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_margin="3dp"
+                        android:layout_alignParentTop="false"
+                        android:layout_margin="5dp"
                         sothree:srcCompat="@mipmap/alert_on_foreground" />
 
                     <com.ramotion.circlemenu.CircleMenuView
@@ -425,7 +439,8 @@
                             android:id="@+id/login_button2"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_alignParentEnd="false"
+                            android:layout_below="@id/textSwitcher3Layout"
+                            android:layout_alignParentEnd="true"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="false"

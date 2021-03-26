@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -55,6 +57,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -160,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public static TextView tvMore, tvUserName, tvWpUserId, tvCity, tvCategories, tvLoading, noListingsTextView, fooListingsTextView;
     Button  btnShowListings;
-    LoginButton login_button2;
+    LoginButton loginButton;
     RecyclerView verticalRecyclerView, featuredRecyclervView, recentListingsRecyclervView, recentReviewsRecyclervView;
     //ProgressBar progressBar;
     LinearLayoutManager mLayoutManager, featuredRecyclerViewLayoutManager,
@@ -197,6 +200,8 @@ public class MainActivity extends AppCompatActivity implements
     ProgressBar spinner;
 
     private static final int FRAME_TIME_MS = 8000;
+    public AccessTokenTracker accessTokenTracker;
+
 
     Cache cache;
 
@@ -396,15 +401,68 @@ public class MainActivity extends AppCompatActivity implements
         /**
          * ABOUT US
          */
+        /**
+         * facebook login
+         */
+        loginButton = findViewById(R.id.login_button2);
+        loginButton.setVisibility(View.GONE);
 
-        login_button2 = findViewById(R.id.login_button2);
-        login_button2.setVisibility(View.GONE);
 
-        /*login_button3 = findViewById(R.id.login_button3);
-        login_button3.setVisibility(View.GONE); */
+        fbLogincallbackManager = CallbackManager.Factory.create();
 
-        facebookLogin();
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                // currentAccessToken is null if the user is logged out
+                if(accessToken == null || accessToken.isExpired()){
+                    facebookLogin();
+                }
+            }
+        };
 
+        LoginManager.getInstance().registerCallback(fbLogincallbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        accessToken = loginResult.getAccessToken();
+                        isLoggedIn = accessToken != null && !accessToken.isExpired();
+
+                        useLoginInformation(accessToken);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        accessToken = null;
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                       accessToken = null;
+                    }
+                });
+
+        loginButton.setReadPermissions(Arrays.asList("email"));
+        // If you are using in a fragment, call loginButton.setFragment(this);
+
+        // Callback registration
+        loginButton.registerCallback(fbLogincallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                accessToken = loginResult.getAccessToken();
+                isLoggedIn = accessToken != null && !accessToken.isExpired();
+                useLoginInformation(accessToken);
+            }
+
+            @Override
+            public void onCancel() {
+                accessToken = null;
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                accessToken = null;
+            }
+        });
 
         textSwitcher3 = findViewById(R.id.textSwitcher3);
         textSwitcher3.setFactory(() -> {
@@ -488,6 +546,7 @@ public class MainActivity extends AppCompatActivity implements
 
         tvUserName = findViewById(R.id.tvUserName);
         ivUserImage = findViewById(R.id.ivUserImage);
+        ivUserImage.setVisibility(View.GONE);
         tvWpUserId = findViewById(R.id.tvWpUserId);
         textSwitcher = findViewById(R.id.textSwitcher1);
 
@@ -517,24 +576,10 @@ public class MainActivity extends AppCompatActivity implements
         tvCity = findViewById(R.id.tvCity);
         tvMore = findViewById(R.id.tvMore);
 
-       /* btnShowListings = findViewById(R.id.btnShowListings);
-        btnShowListings.setVisibility(View.GONE);
-        searchView = findViewById(R.id.search);
-        searchView.setVisibility(View.GONE); */
-
         ivAlertOn = findViewById(R.id.ivAlertOn);
         ivAlertOn.setVisibility(View.GONE);
         ivAlertOff = findViewById(R.id.ivAlertOff);
         ivAlertOff.setVisibility(View.GONE);
-
-
-        /*btnShowListings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MarkerClusteringActivity.class));
-                finish();
-            }
-        }); */
 
 
         /**
@@ -586,7 +631,7 @@ public class MainActivity extends AppCompatActivity implements
                     @Override
                     public void onResponse(Call<List<BusinessListings>> call, Response<List<BusinessListings>> response) {
 
-                        // loop through JSON response get parse and output to log
+                        loop through JSON response get parse and output to log
                         for (int i = 0; i < response.body().size(); i++) {
                             if (parent.getItemAtPosition(pos).toString().equals(response.body().get(i).getTitle().getRaw())) {
                                 ArrayList<ListingsModel> locationReview = new ArrayList<>();
@@ -713,23 +758,13 @@ public class MainActivity extends AppCompatActivity implements
                     case 4: //clear and reload
                         kickItOff = true;
                         mapLocations = new ArrayList<>();
-                        geofences = new HashMap<String, SimpleGeofence>();
+                        geofences = new HashMap<>();
                         Map<String, String> query = new HashMap<>();
 
-                        if(pref.getString("lastKnownLat", String.valueOf(location.getLatitude())).isEmpty()
-                                ||  pref.getString("lastKnownLat", String.valueOf(location.getLatitude())).equals(null)
-                                ||  pref.getString("lastKnownLng", String.valueOf(location.getLongitude())).isEmpty()
-                                ||  pref.getString("lastKnownLng", String.valueOf(location.getLongitude())).equals(null)){
                             query.put("latitude", String.valueOf(location.getLatitude()));
                             query.put("longitude", String.valueOf(location.getLongitude()));
                             query.put("order", "asc");
                             query.put("orderby", "distance");
-                        } else {
-                            query.put("latitude", pref.getString("lastKnownLat", String.valueOf(location.getLatitude())));
-                            query.put("longitude", pref.getString("lastKnownLng", String.valueOf(location.getLongitude())));
-                            query.put("order", "asc");
-                            query.put("orderby", "distance");
-                        }
 
                         getRetrofit(query);
 
@@ -739,24 +774,17 @@ public class MainActivity extends AppCompatActivity implements
                         break;
                     case 3: //add listing
                         if (!isLoggedIn) {
+                            Toast.makeText(getApplicationContext(), "User must be logged in to add a business listing.", Toast.LENGTH_LONG).show();
                             Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(loginIntent);
                             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-
-                            Toast.makeText(getApplicationContext(), "User must be logged in to add a business listing.", Toast.LENGTH_LONG).show();
                         } else {
                             Intent addListingIntent = new Intent(MainActivity.this, AddListingActivity.class);
                             startActivity(addListingIntent);
                         }
                         break;
                     case 5: //login
-                        if (!isLoggedIn) {
-                            Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                            startActivity(loginIntent);
-                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                        } else {
-                            //logout
-                        }
+                        LoginManager.getInstance().logInWithReadPermissions(MainActivity.this, Arrays.asList("public_profile"));
                         break;
                     default:
                         buildAlertMessageEnableAlerts();
@@ -766,11 +794,19 @@ public class MainActivity extends AppCompatActivity implements
         });
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment)).getMapAsync(this);
 
-       locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-      // location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+       /* locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000,
+                4800, LocationListener);
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+        pref.edit().putString("lastKnownLat", String.valueOf(location.getLatitude())).apply();
+        pref.edit().putString("lastKnownLng", String.valueOf(location.getLongitude())).apply();
+
         spinner.setVisibility(View.VISIBLE); //hide progressBar
         if (isLoggedIn) {
-            tvLoading.setText(Html.fromHtml(("Thanks for your patience " + "<font color='#4FC1E9'>" + firstName + "</font>" + "we are searing our database to see if there are any registered black owned businesses near you.")));
+            tvLoading.setText(Html.fromHtml(("Thanks for your patience "+firstName+ "we are searching our database to see if there are any registered black owned businesses near you.")));
         } else {
             tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
         }
@@ -779,7 +815,7 @@ public class MainActivity extends AppCompatActivity implements
         ivLoading.setVisibility(View.VISIBLE);
         ivLoading.setImageResource(R.mipmap.online_reviews_foreground);
         tvLoading.setAnimation(imgAnimationIn);
-        tvLoading.setVisibility(View.VISIBLE);
+        tvLoading.setVisibility(View.VISIBLE); */
 
     }
 
@@ -794,54 +830,51 @@ public class MainActivity extends AppCompatActivity implements
         kickItOff = true;
         mapLocations = new ArrayList<>();
         geofences = new HashMap<String, SimpleGeofence>();
-        /*
-            start location listener to get current location minimum alert 30 secs 400M
-         */
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000,
-                    4800, LocationListener);
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        } else {
-            buildAlertMessageNoGps();
-        }
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000,
+                4800, LocationListener);
+
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+
+        pref.edit().putString("lastKnownLat", String.valueOf(location.getLatitude())).apply();
+        pref.edit().putString("lastKnownLng", String.valueOf(location.getLongitude())).apply();
+
+        //check user login info
+        accessTokenTracker.startTracking();
+        facebookLogin();
         /* first run check */
         if (pref.getBoolean("firstrun", true)) {
             pref.edit().putBoolean("alertOn", true).apply();
             pref.edit().putBoolean("firstrun", false).apply();
+
         }
         if (pref.getBoolean("alertOn", true)) {
             ivAlertOn.setVisibility(View.VISIBLE);
             ivAlertOff.setVisibility(View.GONE);
         }
+        spinner.setVisibility(View.VISIBLE); //hide progressBar
+        if (isLoggedIn) {
+            tvLoading.setText(Html.fromHtml(("Thanks for your patience "+firstName+ " we are searching our database to see if there are any registered black owned businesses near you.")));
+        } else {
+            tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
+        }
+
+        ivLoading.setAnimation(imgAnimationIn);
+        ivLoading.setVisibility(View.VISIBLE);
+        ivLoading.setImageResource(R.mipmap.online_reviews_foreground);
+        tvLoading.setAnimation(imgAnimationIn);
+        tvLoading.setVisibility(View.VISIBLE);
+
         Map<String, String> query = new HashMap<>();
 
-            if(pref.getString("lastKnownLat", String.valueOf(location.getLatitude())).isEmpty()
-                    ||  pref.getString("lastKnownLat", String.valueOf(location.getLatitude())).equals(null)
-                    ||  pref.getString("lastKnownLng", String.valueOf(location.getLongitude())).isEmpty()
-                    ||  pref.getString("lastKnownLng", String.valueOf(location.getLongitude())).equals(null)){
-                query.put("latitude", String.valueOf(location.getLatitude()));
-                query.put("longitude", String.valueOf(location.getLongitude()));
-                query.put("order", "asc");
-                query.put("orderby", "distance");
-            } else {
-                query.put("latitude", pref.getString("lastKnownLat", String.valueOf(location.getLatitude())));
-                query.put("longitude", pref.getString("lastKnownLng", String.valueOf(location.getLongitude())));
-                query.put("order", "asc");
-                query.put("orderby", "distance");
-            }
-
-            spinner.setVisibility(View.VISIBLE); //hide progressBar
-            if (isLoggedIn) {
-                tvLoading.setText(Html.fromHtml(("Thanks for your patience " + "<font color='#4FC1E9'>" + firstName + "</font>" + "we are searing our database to see if there are any registered black owned businesses near you.")));
-            } else {
-                tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
-            }
-            ivLoading.setAnimation(imgAnimationIn);
-            ivLoading.setVisibility(View.VISIBLE);
-            tvLoading.setAnimation(imgAnimationIn);
-            tvLoading.setVisibility(View.VISIBLE);
-
-            getRetrofit(query);
+        query.put("latitude", String.valueOf(latitude));
+        query.put("longitude", String.valueOf(longitude));
+        query.put("order", "asc");
+        query.put("orderby", "distance");
+        getRetrofit(query);
     }
 
     private boolean isMyServiceRunning() {
@@ -878,7 +911,7 @@ public class MainActivity extends AppCompatActivity implements
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if (pref.getBoolean("alertOn", true)) {
             if (isLoggedIn) {
-                message = "Hello <font color='#4FC1E9'>" + firstName + "!</font> \nWould you like to disable alerts when you are near a black owned business?";
+                message = "Hello "+firstName+"\n Tap 'Yes' to stop receiving alerts when you are near a black owned business?";
 
             } else {
                 message = "Would you like to disable alerts when you are near a black owned business?";
@@ -909,9 +942,9 @@ public class MainActivity extends AppCompatActivity implements
                     });
         } else {
             if (isLoggedIn) {
-                message = "Hello<font color='#4FC1E9'>" + firstName + "!</font> \nWould you like to enable alerts when you are near a black owned business?";
+                message = "Hello "+firstName + "\nTap 'Yes' to receive alerts when you are near a black owned business!";
             } else {
-                message = "Would you like to enable alerts when you are near a black owned business?";
+                message = "Tap 'Yes' to receive alerts when you are near a black owned business!";
             }
             builder.setMessage(message)
                     .setCancelable(false)
@@ -949,15 +982,18 @@ public class MainActivity extends AppCompatActivity implements
         super.onPause();
         pref.edit().putString("lastKnownLat", String.valueOf(location.getLatitude())).apply();
         pref.edit().putString("lastKnownLng", String.valueOf(location.getLongitude())).apply();
+        accessTokenTracker.stopTracking();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        accessTokenTracker.stopTracking();
     }
 
     public void onDestroy() {
         super.onDestroy();
+        accessTokenTracker.stopTracking();
         deleteCache(getApplicationContext());
     }
 
@@ -980,38 +1016,20 @@ public class MainActivity extends AppCompatActivity implements
             };
 
     protected void facebookLogin() {
-        fbLogincallbackManager = CallbackManager.Factory.create();
-
         new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-                accessToken = currentAccessToken;
-                useLoginInformation(accessToken);
+                if(accessToken != null && !accessToken.isExpired()){
+                    isLoggedIn = accessToken != null && !accessToken.isExpired();
+                    useLoginInformation(accessToken);
+                }
             }
         };
-        login_button2.setPermissions(Arrays.asList("email", "public_profile"));
-
-        login_button2.registerCallback(fbLogincallbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        Log.e("tag", " facebook login response " + loginResult.getAccessToken());
-                        userId = loginResult.getAccessToken().getUserId();
-                        useLoginInformation(loginResult.getAccessToken());
-                    }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        Log.e("Facebook Login Error ", " response " + exception);
-                        Toast.makeText(MainActivity.this, "" + exception.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-        isLoggedIn = accessToken != null && !accessToken.isExpired();
+        accessTokenTracker.startTracking();
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        if(accessToken != null && !accessToken.isExpired()){
+            useLoginInformation(accessToken);
+        }
     }
 
     public void useLoginInformation(final AccessToken accessToken) {
@@ -1021,6 +1039,8 @@ public class MainActivity extends AppCompatActivity implements
          1st Param - AccessToken
          2nd Param - Callback (which will be invoked once the request is successful)
          **/
+        Bundle params = new Bundle();
+        params.putString("fields", "id,email,gender,cover,picture.type(large)");
         GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
             //OnCompleted is invoked once the GraphRequest is successful
             @Override
@@ -1028,26 +1048,30 @@ public class MainActivity extends AppCompatActivity implements
 
                 Picasso.Builder facebookImageBuilder = new Picasso.Builder(getApplicationContext());
                 try {
-
-
-                    /*  userId = object.getString("id");*/
-                    Toast.makeText(MainActivity.this, "" + userId, Toast.LENGTH_SHORT).show();
-
-                    userName = object.getString("first_name") + object.getString("last_name");
+                    userName = object.getString("email");
+                    firstName = object.getString("first_name");
+                    lastName = object.getString("last_name");
                     userEmail = object.getString("email");
-                    userImage = object.getJSONObject("picture").getJSONObject("data").getString("url");
+                    //userImage = object.getJSONObject("picture").getJSONObject("data").getString("url");
+                   // if (object.has("picture")) {
+                        //String profilePicUrl = object.getJSONObject("picture").getJSONObject("data").getString("url");
+                     //   facebookImageBuilder.build().load(object.getJSONObject("picture").getJSONObject("data").getString("url")).into(ivUserImage);
+                        facebookImageBuilder.build().load("https://graph.facebook.com/" +object.getString("id")+ "/picture?type=normal").into(ivUserImage);
+                        ivUserImage.setVisibility(View.VISIBLE);
+                        //Log.e("foo", "fore brake");
+                        //Bitmap profilePic= BitmapFactory.decodeStream(profilePicUrl .openConnection().getInputStream());
+                        //mImageView.setBitmap(profilePic);
+                    //}
 
-                    Glide.with(MainActivity.this).load(userImage).into(ivUserImage);
+                    /*Glide.with(MainActivity.this).load(object.getJSONObject("picture").getJSONObject("data").getString("url")).into(ivUserImage);
                     String[] parts = (object.getString("name").split(" "));
                     firstName = parts[0];
-                    lastName = parts[1];
+                    lastName = parts[1];*/
 
-                    facebookImageBuilder.build().load(object.getJSONObject("picture").getJSONObject("data").getString("url")).into(ivUserImage);
-                    facebookImageBuilder.build().load("https://graph.facebook.com/" + userId + "/picture?type=normal").into(ivUserImage);
-
-
-                    RequestOptions requestOptions = new RequestOptions();
-                    requestOptions.dontAnimate();
+                   // facebookImageBuilder.build().load(object.getJSONObject("picture").getJSONObject("data").getString("url")).into(ivUserImage);
+                    //facebookImageBuilder.build().load("https://graph.facebook.com/" +object.getString("id")+ "/picture?type=normal").into(ivUserImage);
+                    //RequestOptions requestOptions = new RequestOptions();
+                    //requestOptions.dontAnimate();
                     Map<String, String> query = new HashMap<>();
                     query.put("access_token", accessToken.getToken());
                     loginUser(query);
@@ -1137,14 +1161,14 @@ public class MainActivity extends AppCompatActivity implements
                         currentMarker.remove();
                     currentMarker = mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                            .title("You are here!").snippet("Double tap\nanywhere on\nthe map to zoom")
+                            .title("You are here!").snippet("Double tap anywhere on the map to zoom")
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                 } else {
                     if (currentMarker != null)
                         currentMarker.remove();
                     currentMarker = mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                            .title("Welcome <font color='#4FC1E9'>" + firstName + "!</font>").snippet("Double tap\nanywhere on\nthe map to zoom")
+                            .title("Welcome "+firstName+"!").snippet("Double tap anywhere on the map to zoom")
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                 }
             }
@@ -1353,7 +1377,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 if (response.body().isEmpty()) {
                     spinner.setVisibility(View.GONE); //hide progressBar
-                    login_button2.setVisibility(View.VISIBLE);
+                    loginButton.setVisibility(View.VISIBLE);
                     loadingLayout.setAnimation(imgAnimationOut);
                     loadingLayout.setVisibility(View.GONE);
                     //searchView.setAnimation(imgAnimationIn);
@@ -1569,7 +1593,7 @@ public class MainActivity extends AppCompatActivity implements
                 tvLoading.setVisibility(View.VISIBLE);
                 tvLoading.setAnimation(imgAnimationIn);
                 if (isLoggedIn) {
-                    tvLoading.setText(Html.fromHtml(("Thanks for your patience " + "<font color='#4FC1E9'>" + firstName + "</font>" + "we are searching our database to see if there are any registered black owned businesses near you.")));
+                    tvLoading.setText(Html.fromHtml(("Thanks for your patience "+firstName+" we are searching our database to see if there are any registered black owned businesses near you.")));
                 } else {
                     tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
                 }
@@ -1689,7 +1713,7 @@ public class MainActivity extends AppCompatActivity implements
             public void onResponse(Call<UserAuthPOJO> call, Response<UserAuthPOJO> response) {
                 if (response.isSuccessful()) {
                     userId = String.valueOf(response.body().getWpUserId());
-                    Toast.makeText(MainActivity.this, "" + userId, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "" + userId, Toast.LENGTH_SHORT).show();
                 } else {
                     // do some stuff
                 }
@@ -1807,42 +1831,74 @@ public class MainActivity extends AppCompatActivity implements
     private Runnable runnableCode = new Runnable() {
         int count = 0;
 
+        String[] text;
 
         // String image;
         @Override
         public void run() {
+           // String[] text = new String[text.length];
             //Animation imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
             //Animation imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
 
 
-            String[] text = {
-                    "Welcome to The Sable Business Directory!\n",
+            if(isLoggedIn){
+                text = new String[]{
+                        "Hello "+firstName+",\nWelcome to The Sable Business Directory!",
 
 
-                    "The Sable Business Directory is designed to help those wanting users find black owned" +
-                            "businesses and service providers.",
+                        "The Sable Business Directory is designed to help users find black owned businesses and service providers.",
 
-                    "We provide a one of a kind online platform that alerts users when they are near a black owned" +
+                        "We provide a one of a kind online platform that alerts users when they are near a black owned business.",
 
-                    "We are combining geo-search, social media and e-commerce technologies to make it easier users to find, rate " +
-                            "and review black owned businesses and service providers.",
+                        "We are combining geo-search, social media and e-commerce technologies to make it easier to find, rate " +
+                                "and review black owned businesses and service providers.",
 
-                    "We promote high quality products and services by encouraging, customers maintain the directory by adding, rating " +
-                            " and reviewing the black owned businesses and service providers they frequent.",
+                        "We promote high quality products and services by encouraging, customers maintain the directory by adding, rating " +
+                                " and reviewing the black owned businesses and service providers they frequent.",
 
-                    "Our combined technologies then compile those listings, ratings and reviews to " +
-                            "provide a directory that alerts users of black owned business and service providers " +
-                            "near their current location.",
+                        "Our combined technologies then compile those listings, ratings and reviews to " +
+                                "provide a directory that alerts users of black owned business and service providers " +
+                                "near their current location.",
 
-                    "Owners and providers benefit because 88% of people trust online reviews. Online reviews are an important way you can increase " +
-                            "sales. This is especially important for local businesses and service providers.",
+                        "Owners and providers benefit because 88% of people trust online reviews. Online reviews are an important way you can increase " +
+                                "sales. This is especially important for local businesses and service providers.",
 
-                    "Adding and reviewing listings is free and easy. To protect the privacy of our users and insure high quality feedback " +
-                            "we require users to login via a verified social media account before adding or reviewing a listing.",
+                        "Adding and reviewing listings is free and easy. To protect the privacy of our users and insure high quality feedback " +
+                                "we require users to login via a verified social media account before adding or reviewing a listing.",
 
-                    "Simple tap the button below to begin adding and reviewing black owned businesses using your Facebook account."
+                        "It appears that you've already identified yourself via your Facebook account, " +firstName+". You are now able to add, rate and review" +
+                                " black owned businesses registered with Sable."
 
-            };
+                };
+            } else {
+                text = new String[]{
+                        "Welcome to The Sable Business Directory!",
+
+
+                        "The Sable Business Directory is designed to help users find black owned businesses and service providers.",
+
+                        "We provide a one of a kind online platform that alerts users when they are near a black owned business.",
+
+                        "We are combining geo-search, social media and e-commerce technologies to make it easier to find, rate " +
+                                "and review black owned businesses and service providers.",
+
+                        "We promote high quality products and services by encouraging, customers maintain the directory by adding, rating " +
+                                " and reviewing the black owned businesses and service providers they frequent.",
+
+                        "Our combined technologies then compile those listings, ratings and reviews to " +
+                                "provide a directory that alerts users of black owned business and service providers " +
+                                "near their current location.",
+
+                        "Owners and providers benefit because 88% of people trust online reviews. Online reviews are an important way you can increase " +
+                                "sales. This is especially important for local businesses and service providers.",
+
+                        "Adding and reviewing listings is free and easy. To protect the privacy of our users and insure high quality feedback " +
+                                "we require users to login via a verified social media account before adding or reviewing a listing.",
+
+                        "Tap the button below to begin adding and reviewing black owned businesses using your Facebook account."
+
+                };
+            }
 
             int[] images = {R.mipmap.hello_foreground, R.mipmap.showing_right_foreground,
                     R.mipmap.one_of_akind_foreground, R.mipmap.showing_tablet_foreground, R.mipmap.holding_phone_foreground, R.mipmap.making_thumbs_up_foreground,
@@ -1854,20 +1910,34 @@ public class MainActivity extends AppCompatActivity implements
             switch (count) {
 
                 case 8:
-                    imageSwitcher3.setImageResource(images[count]);
-                    imageSwitcher3.setAnimation(imgAnimationIn);
-                    imageSwitcher3.setVisibility(View.VISIBLE);
+                    if(isLoggedIn){
+                        imageSwitcher3.setImageResource(images[count]);
+                        imageSwitcher3.setAnimation(imgAnimationIn);
+                        imageSwitcher3.setVisibility(View.VISIBLE);
 
-                    textSwitcher3.setText(text[count]);
-                    textSwitcher3Layout.setAnimation(imgAnimationIn);
-                    textSwitcher3Layout.setVisibility(View.VISIBLE);
+                        textSwitcher3.setText(text[count]);
+                        textSwitcher3Layout.setAnimation(imgAnimationIn);
+                        textSwitcher3Layout.setVisibility(View.VISIBLE);
 
-                    login_button2.setAnimation(imgAnimationIn);
-                    login_button2.setVisibility(View.VISIBLE);
+                        imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
+                        count++;
+                        break;
+                    } else {
+                        imageSwitcher3.setImageResource(images[count]);
+                        imageSwitcher3.setAnimation(imgAnimationIn);
+                        imageSwitcher3.setVisibility(View.VISIBLE);
 
-                    imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
-                    count++;
-                    break;
+                        textSwitcher3.setText(text[count]);
+                        textSwitcher3Layout.setAnimation(imgAnimationIn);
+                        textSwitcher3Layout.setVisibility(View.VISIBLE);
+
+                        loginButton.setAnimation(imgAnimationIn);
+                        loginButton.setVisibility(View.VISIBLE);
+
+                        imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
+                        count++;
+                        break;
+                    }
                 case 2:
                 case 4:
                 case 6:
@@ -1876,8 +1946,8 @@ public class MainActivity extends AppCompatActivity implements
                 case 5:
                 case 7:
                 default:
-                    login_button2.setAnimation(imgAnimationOut);
-                    login_button2.setVisibility(View.GONE);
+                    loginButton.setAnimation(imgAnimationOut);
+                    loginButton.setVisibility(View.GONE);
 
                     imageSwitcher3.setImageResource(images[count]);
                     imageSwitcher3.setAnimation(imgAnimationIn);

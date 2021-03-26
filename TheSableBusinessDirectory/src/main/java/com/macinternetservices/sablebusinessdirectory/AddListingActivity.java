@@ -14,6 +14,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -287,9 +288,9 @@ public class AddListingActivity extends AppCompatActivity implements
 
             if (etName.getText().toString().isEmpty()) {
                 Toast.makeText(AddListingActivity.this, "Please Enter The Business Name...", Toast.LENGTH_LONG).show();
-            } /*else if (tvCategory.getText().toString().isEmpty()) {
+            } else if (catName.equals("Tap To Select Business Category")) {
                 Toast.makeText(AddListingActivity.this, "Please select a Category...", Toast.LENGTH_LONG).show();
-            }*/  else if (!imageUpload){
+            } else if (!imageUpload){
                 Toast.makeText(AddListingActivity.this, "Please add a logo or image of the business product or service...", Toast.LENGTH_LONG).show();
             } else if (etDescription.getText().toString().isEmpty()) {
                 Toast.makeText(AddListingActivity.this, "Please enter a description...", Toast.LENGTH_LONG).show();
@@ -410,7 +411,7 @@ public class AddListingActivity extends AppCompatActivity implements
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 catName = parent.getItemAtPosition(position).toString();
-                ////Log.e("onCategorySelected", "Category selected:" +parent.getItemAtPosition(position).toString());
+                //Log.e("onCategorySelected", "Category selected:" +parent.getItemAtPosition(position).toString());
                 // Toast.makeText(Check.this, view.getItem(position).toString(), Toast.LENGTH_SHORT).show();
 
                 HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -439,7 +440,7 @@ public class AddListingActivity extends AppCompatActivity implements
                         for (int i = 0; i < response.body().size(); i++) {
                             if (parent.getItemAtPosition(position).toString().equals(response.body().get(i).getName())) {
                                 catNum = (response.body().get(i).getId());
-                                ////Log.e("Category Match: ", "Category Number: " +response.body().get(i).getId());
+                                //Log.e("Category Match: ", "Category Number: " +response.body().get(i).getId());
                                 break;
                             }
                         }
@@ -459,11 +460,11 @@ public class AddListingActivity extends AppCompatActivity implements
         });
 
 
-     /*   tvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+       /* tvCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 catName = parent.getItemAtPosition(position).toString();
-                ////Log.e("OnCategoryClick", "Category clicked: " +parent.getItemAtPosition(position).toString());
+                Log.e("OnCategoryClick", "Category clicked: " + parent.getItemAtPosition(position).toString());
                 HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
                 logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -490,7 +491,7 @@ public class AddListingActivity extends AppCompatActivity implements
                         for (int i = 0; i < response.body().size(); i++) {
                             if (parent.getItemAtPosition(position).toString().equals(response.body().get(i).getName())) {
                                 catNum = (response.body().get(i).getId());
-                                ////Log.e("Category Match: ", "Category Number: " +response.body().get(i).getId());
+                                Log.e("Category Match: ", "Category Number: " + response.body().get(i).getId());
                                 break;
                             }
                         }
@@ -501,13 +502,17 @@ public class AddListingActivity extends AppCompatActivity implements
                         ////Log.e("CategoryNumber", " response: " + t);
                     }
                 });
+                @Override
+                public void onNothingSelected (AdapterView < ? > parent){
+                    //Log.d("onNothingSelected", "[AutoCompleteTextView] Nothing here");
+                }
             }
-        });
+        }); */
         tvCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 catName = parent.getItemAtPosition(position).toString();
-                ////Log.e("onCategorySelected", "Category selected:" +parent.getItemAtPosition(position).toString());
+                Log.e("onCategorySelected", "Category selected:" +parent.getItemAtPosition(position).toString());
                // Toast.makeText(Check.this, view.getItem(position).toString(), Toast.LENGTH_SHORT).show();
 
                 HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -536,7 +541,7 @@ public class AddListingActivity extends AppCompatActivity implements
                         for (int i = 0; i < response.body().size(); i++) {
                             if (parent.getItemAtPosition(position).toString().equals(response.body().get(i).getName())) {
                                 catNum = (response.body().get(i).getId());
-                                ////Log.e("Category Match: ", "Category Number: " +response.body().get(i).getId());
+                                Log.e("Category Match: ", "Category Number: " +response.body().get(i).getId());
                                 break;
                             }
                         }
@@ -553,7 +558,7 @@ public class AddListingActivity extends AppCompatActivity implements
             public void onNothingSelected(AdapterView<?> parent) {
                 //Log.d("onNothingSelected", "[AutoCompleteTextView] Nothing here");
             }
-        });*/
+        });
         ivLogo = findViewById(R.id.ivLogo);
         ivLogo.setVisibility(View.GONE);
         //galleryButton = findViewById(R.id.gallery_button);

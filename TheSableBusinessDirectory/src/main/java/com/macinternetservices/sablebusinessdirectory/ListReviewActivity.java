@@ -268,17 +268,13 @@ public class ListReviewActivity extends AppCompatActivity {
                 //accessTokenTracker.startTracking();
                 //Boolean isLoggedIn = accessToken != null;
 
-                if (!MainActivity.isLoggedIn) {
+                if (!isLoggedIn) {
                     Intent loginIntent = new Intent(v.getContext(),LoginActivity.class);
                     startActivity(loginIntent);
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     //Toast.makeText(getApplicationContext(),"User Not Logged In", Toast.LENGTH_SHORT).show();
                 } else {
-
-                    AccessToken accessToken = AccessToken.getCurrentAccessToken();
-                    useLoginInformation(accessToken);
-
-                    Intent LocationReview = new Intent(v.getContext(), ReviewActivity.class);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
                     /**
                      * for each array space if id != skip or else...
@@ -327,6 +323,7 @@ public class ListReviewActivity extends AppCompatActivity {
                             Bundle locationReviewBundle = new Bundle();
                             locationReviewBundle.putParcelableArrayList("locationReview", locationFoo);
 
+                            Intent LocationReview = new Intent(v.getContext(), ReviewActivity.class);
                             LocationReview.putExtra("locationReview", locationFoo);
                             startActivity(LocationReview);
                             break;
