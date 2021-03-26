@@ -858,8 +858,10 @@ public class MainActivity extends AppCompatActivity implements
         spinner.setVisibility(View.VISIBLE); //hide progressBar
         if (isLoggedIn) {
             tvLoading.setText(Html.fromHtml(("Thanks for your patience "+firstName+ " we are searching our database to see if there are any registered black owned businesses near you.")));
+            ivUserImage.setVisibility(View.VISIBLE);
         } else {
             tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
+            ivUserImage.setVisibility(View.GONE);
         }
 
         ivLoading.setAnimation(imgAnimationIn);
@@ -1052,7 +1054,7 @@ public class MainActivity extends AppCompatActivity implements
                     firstName = object.getString("first_name");
                     lastName = object.getString("last_name");
                     userEmail = object.getString("email");
-                    //userImage = object.getJSONObject("picture").getJSONObject("data").getString("url");
+                    userImage = "https://graph.facebook.com/" +object.getString("id")+ "/picture?type=normal";
                    // if (object.has("picture")) {
                         //String profilePicUrl = object.getJSONObject("picture").getJSONObject("data").getString("url");
                      //   facebookImageBuilder.build().load(object.getJSONObject("picture").getJSONObject("data").getString("url")).into(ivUserImage);
