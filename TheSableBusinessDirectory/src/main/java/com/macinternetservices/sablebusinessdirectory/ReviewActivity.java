@@ -716,8 +716,9 @@ public class ReviewActivity extends AppCompatActivity implements
                     userActivityArray.add(response.body().getDateGmt()); // date of review
                     userActivityArray.add(String.valueOf(response.body().getPost())); // listing id for review
                     userActivityArray.add(response.body().getType());  //post type 'comment'
-                        }
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 }
+            }
             @Override
             public void onFailure(Call<ListReviewPOJO> call, Throwable t) {
 //                progressBar.setVisibility(View.GONE); //hide progressBar
