@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public static TextView tvMore, tvUserName, tvWpUserId, tvCity, tvCategories, tvLoading, noListingsTextView, fooListingsTextView;
     Button  btnShowListings;
-    LoginButton loginButton;
+    LoginButton loginButton, loginButton3;
     RecyclerView verticalRecyclerView, featuredRecyclervView, recentListingsRecyclervView, recentReviewsRecyclervView;
     //ProgressBar progressBar;
     LinearLayoutManager mLayoutManager, featuredRecyclerViewLayoutManager,
@@ -410,6 +410,9 @@ public class MainActivity extends AppCompatActivity implements
         loginButton = findViewById(R.id.login_button2);
         loginButton.setVisibility(View.GONE);
 
+        loginButton3 = findViewById(R.id.login_button3);
+        loginButton3.setVisibility(View.GONE);
+
 
         fbLogincallbackManager = CallbackManager.Factory.create();
 
@@ -589,8 +592,7 @@ public class MainActivity extends AppCompatActivity implements
 
         menu = findViewById(R.id.circle_menu);
         menu.setVisibility(View.GONE);
-        TextView tvTapForOptions = findViewById(R.id.tvTapForOptions);
-        tvTapForOptions.setVisibility(View.GONE);
+        //TextView tvTapForOptions = findViewById(R.id.tvTapForOptions);
 
 
         /**
@@ -737,34 +739,22 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 if(!menu.isShown()){
+                    noListingsImageView.setVisibility(View.GONE);
                     menu.setVisibility(View.VISIBLE);
-                    tvTapForOptions.setVisibility(View.VISIBLE);
                 } else {
                     menu.setVisibility(View.GONE);
-                    tvTapForOptions.setVisibility(View.GONE);
                 }
-
-                /*
-                circleMenu should be hidden in the center of parent
-                onClick
-                    make circleMenu visible
-                    same behavior as when menu button is tapped
-                 */
-
             }
         });
 
         ivUserImageCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                menu.setVisibility(View.VISIBLE);
-                /*
-                circleMenu should be hidden in the center of parent
-                onClick
-                    make circleMenu visible
-                    same behavior as when menu button is tapped
-                 */
-
+                if(!menu.isShown()){
+                    menu.setVisibility(View.VISIBLE);
+                } else {
+                    menu.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -840,30 +830,6 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment)).getMapAsync(this);
-
-
-       /* locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000,
-                4800, LocationListener);
-        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        pref.edit().putString("lastKnownLat", String.valueOf(location.getLatitude())).apply();
-        pref.edit().putString("lastKnownLng", String.valueOf(location.getLongitude())).apply();
-
-        spinner.setVisibility(View.VISIBLE); //hide progressBar
-        if (isLoggedIn) {
-            tvLoading.setText(Html.fromHtml(("Thanks for your patience "+firstName+ "we are searching our database to see if there are any registered black owned businesses near you.")));
-        } else {
-            tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
-        }
-
-        ivLoading.setAnimation(imgAnimationIn);
-        ivLoading.setVisibility(View.VISIBLE);
-        ivLoading.setImageResource(R.mipmap.online_reviews_foreground);
-        tvLoading.setAnimation(imgAnimationIn);
-        tvLoading.setVisibility(View.VISIBLE); */
-
     }
 
     @SuppressLint("MissingPermission")
@@ -884,8 +850,6 @@ public class MainActivity extends AppCompatActivity implements
                 4800, LocationListener);
 
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//        latitude = location.getLatitude();
-//        longitude = location.getLongitude();
 
         pref.edit().putString("lastKnownLat", String.valueOf(location.getLatitude())).apply();
         pref.edit().putString("lastKnownLng", String.valueOf(location.getLongitude())).apply();
@@ -922,11 +886,73 @@ public class MainActivity extends AppCompatActivity implements
 
         Map<String, String> query = new HashMap<>();
 
-        query.put("latitude", String.valueOf(latitude));
-        query.put("longitude", String.valueOf(longitude));
+        query.put("latitude", String.valueOf(location.getLatitude()));
+        query.put("longitude", String.valueOf(location.getLongitude()));
         query.put("order", "asc");
         query.put("orderby", "distance");
         getRetrofit(query);
+    }
+    /*
+    begin user authentication via facebook
+     */
+
+    protected void facebookLogin() {
+        new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                if(accessToken != null && !accessToken.isExpired()){
+                    isLoggedIn = accessToken != null && !accessToken.isExpired();
+                    useLoginInformation(accessToken);
+                }
+            }
+        };
+        if(accessToken != null && !accessToken.isExpired()){
+            useLoginInformation(accessToken);
+        }
+        accessTokenTracker.startTracking();
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        isLoggedIn = accessToken != null && !accessToken.isExpired();
+    }
+
+    public void useLoginInformation(final AccessToken accessToken) {
+
+        /**
+         Creating the GraphRequest to fetch user details
+         1st Param - AccessToken
+         2nd Param - Callback (which will be invoked once the request is successful)
+         **/
+        Bundle params = new Bundle();
+        params.putString("fields", "id,email,gender,cover,picture.type(large)");
+        GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+            //OnCompleted is invoked once the GraphRequest is successful
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+
+                Picasso.Builder facebookImageBuilder = new Picasso.Builder(getApplicationContext());
+                try {
+                    userName = object.getString("email");
+                    firstName = object.getString("first_name");
+                    lastName = object.getString("last_name");
+                    userEmail = object.getString("email");
+                    userImage = "https://graph.facebook.com/" +object.getString("id")+ "/picture?type=normal";
+                    facebookImageBuilder.build().load("https://graph.facebook.com/" +object.getString("id")+ "/picture?type=normal").into(ivUserImage);
+                    ivUserImage.setVisibility(View.VISIBLE);
+                    Map<String, String> query = new HashMap<>();
+                    query.put("access_token", accessToken.getToken());
+                    loginUser(query);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        // We set parameters to the GraphRequest using a Bundle.
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "first_name,last_name,email,id");
+        request.setParameters(parameters);
+        // Initiate the GraphRequest
+        request.executeAsync();
     }
 
     private boolean isMyServiceRunning() {
@@ -1067,64 +1093,6 @@ public class MainActivity extends AppCompatActivity implements
                 }
             };
 
-    protected void facebookLogin() {
-        new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-                if(accessToken != null && !accessToken.isExpired()){
-                    isLoggedIn = accessToken != null && !accessToken.isExpired();
-                    useLoginInformation(accessToken);
-                }
-            }
-        };
-        if(accessToken != null && !accessToken.isExpired()){
-            useLoginInformation(accessToken);
-        }
-        accessTokenTracker.startTracking();
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        isLoggedIn = accessToken != null && !accessToken.isExpired();
-    }
-
-    public void useLoginInformation(final AccessToken accessToken) {
-
-        /**
-         Creating the GraphRequest to fetch user details
-         1st Param - AccessToken
-         2nd Param - Callback (which will be invoked once the request is successful)
-         **/
-        Bundle params = new Bundle();
-        params.putString("fields", "id,email,gender,cover,picture.type(large)");
-        GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
-            //OnCompleted is invoked once the GraphRequest is successful
-            @Override
-            public void onCompleted(JSONObject object, GraphResponse response) {
-
-                Picasso.Builder facebookImageBuilder = new Picasso.Builder(getApplicationContext());
-                try {
-                    userName = object.getString("email");
-                    firstName = object.getString("first_name");
-                    lastName = object.getString("last_name");
-                    userEmail = object.getString("email");
-                    userImage = "https://graph.facebook.com/" +object.getString("id")+ "/picture?type=normal";
-                        facebookImageBuilder.build().load("https://graph.facebook.com/" +object.getString("id")+ "/picture?type=normal").into(ivUserImage);
-                        ivUserImage.setVisibility(View.VISIBLE);
-                    Map<String, String> query = new HashMap<>();
-                    query.put("access_token", accessToken.getToken());
-                    loginUser(query);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        // We set parameters to the GraphRequest using a Bundle.
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "first_name,last_name,email,id");
-        request.setParameters(parameters);
-        // Initiate the GraphRequest
-        request.executeAsync();
-    }
 
     // facebook login activity result
     @Override
@@ -1242,33 +1210,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onMapReady(GoogleMap map) {
         mMap = map;
         mMap.setOnMyLocationClickListener(this);
-       /* mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
-            @Override
-            public View getInfoWindow(Marker arg0) {
-                return null;
-            }
-
-            @Override
-            public View getInfoContents(Marker marker) {
-                View view = getLayoutInflater().inflate(R.layout.custom_info_window, null);
-
-                TextView title = view.findViewById(R.id.venue_name);
-                title.setTextColor(Color.BLACK);
-                title.setTypeface(null, Typeface.BOLD);
-                title.setText(marker.getTitle());
-
-                ImageView greeter = (ImageView) view.findViewById(R.id.imageView1);
-                greeter.setImageResource(R.mipmap.hello_foreground);
-                greeter.setScaleType(ImageView.ScaleType.FIT_XY);
-
-                TextView snippet = view.findViewById(R.id.textView2);
-                snippet.setTextColor(Color.GRAY);
-                snippet.setText(marker.getSnippet());
-
-                return view;
-            }
-        }); */
         if (geofences.size() > 0 && mapLocations.size() > 0) {
             if (pref.getBoolean("alertOn", true)) {
                 ivAlertOn.setVisibility(View.VISIBLE);
@@ -1291,14 +1232,11 @@ public class MainActivity extends AppCompatActivity implements
 
         query.put("latitude", String.valueOf(latitude));
         query.put("longitude", String.valueOf(longitude));
-        //query.put("distance", "5");
         query.put("order", "asc");
         query.put("orderby", "distance");
         getRetrofit(query); //api call; pass current lat/lng to check if current location in database
-        ////Log.e("onMyLocationButtonClick", "Listings query executed by onMyLocationButtonClick");
         getReviews();
-        ////Log.e("onMyLocationButtonClick", "Review query executed by onMyLocationButtonClick");
-        //setAddress(latitude, longitude);
+
         return false;
     }
 
@@ -1355,9 +1293,6 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    //Cache cache = new Cache(new File(context.getCacheDir(), "http-cache"), 10 * 1024 * 1024);
-
-
     /**
      * Retrofit API call to get listings
      *
@@ -1407,7 +1342,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 if (response.body().isEmpty()) {
                     spinner.setVisibility(View.GONE); //hide progressBar
-                    loginButton.setVisibility(View.VISIBLE);
+
                     loadingLayout.setAnimation(imgAnimationOut);
                     loadingLayout.setVisibility(View.GONE);
                     //searchView.setAnimation(imgAnimationIn);
@@ -1421,9 +1356,12 @@ public class MainActivity extends AppCompatActivity implements
                     if(isLoggedIn) {
                         noListingsTextView.setText("This is terrible " + firstName +"!!!!\nLooks like there aren't any black owned businesses near you in our directory.\n" +
                                 "Tap the logo and select Add (+) from the menu to add any black owned business you visit to our directory.");
+                        loginButton3.setVisibility(View.GONE);
+                        menu.setVisibility(View.VISIBLE);
                     } else {
+                        loginButton3.setVisibility(View.VISIBLE);
                         noListingsTextView.setText("This is terrible!!!!\nLooks like there aren't any black owned businesses near you in our directory.\n" +
-                                "Tap add (+) to add any black owned business you visit to our directory.");
+                                "Tap the login button to add any black owned business you visit to our directory.");
                     };
                     return;
                 }
