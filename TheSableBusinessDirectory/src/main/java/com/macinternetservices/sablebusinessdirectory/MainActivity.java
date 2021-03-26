@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements
     static public boolean geofencesAlreadyRegistered = false;
     public static HashMap<String, SimpleGeofence> geofences = new HashMap<String, SimpleGeofence>();
     ArrayList<String> userActivityArray = new ArrayList<>();
-    ImageView ivUserImage, spokesperson, ivLoading, noListingsImageView, fooListingImageView, ivSettings, ivAlertOn, ivAlertOff;
+    ImageView ivUserImage, spokesperson, ivLoading, noListingsImageView, fooListingImageView, ivSettings, ivAlertOn, ivAlertOff, ivLogo;
     CardView ivUserImageCardview;
     ProgressBar spinner;
 
@@ -230,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
     public static AccessToken accessToken = AccessToken.getCurrentAccessToken();
+    CircleMenuView menu = null;
 
     TextSwitcher textSwitcher, textSwitcher3;
     private SlidingUpPanelLayout mLayout;
@@ -548,6 +549,7 @@ public class MainActivity extends AppCompatActivity implements
 
         ivUserImageCardview = findViewById(R.id.ivUserImageCardview);
         ivUserImageCardview.setVisibility(View.GONE);
+        ivLogo = findViewById(R.id.ivLogo);
         tvUserName = findViewById(R.id.tvUserName);
         ivUserImage = findViewById(R.id.ivUserImage);
         ivUserImage.setVisibility(View.GONE);
@@ -584,6 +586,9 @@ public class MainActivity extends AppCompatActivity implements
         ivAlertOn.setVisibility(View.GONE);
         ivAlertOff = findViewById(R.id.ivAlertOff);
         ivAlertOff.setVisibility(View.GONE);
+
+        menu = findViewById(R.id.circle_menu);
+        menu.setVisibility(View.GONE);
 
 
         /**
@@ -726,8 +731,36 @@ public class MainActivity extends AppCompatActivity implements
         });
         mLayout.setFadeOnClickListener(view -> mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED));
 
+        ivLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menu.setVisibility(View.VISIBLE);
+                /*
+                circleMenu should be hidden in the center of parent
+                onClick
+                    make circleMenu visible
+                    same behavior as when menu button is tapped
+                 */
 
-        final CircleMenuView menu = findViewById(R.id.circle_menu);
+            }
+        });
+
+        ivUserImageCardview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menu.setVisibility(View.VISIBLE);
+                /*
+                circleMenu should be hidden in the center of parent
+                onClick
+                    make circleMenu visible
+                    same behavior as when menu button is tapped
+                 */
+
+            }
+        });
+
+        //circleMenu hidden in center of parent
+
         menu.setEventListener(new CircleMenuView.EventListener() {
             @Override
             public void onMenuOpenAnimationStart(@NonNull CircleMenuView view) {
@@ -834,14 +867,15 @@ public class MainActivity extends AppCompatActivity implements
         kickItOff = true;
         mapLocations = new ArrayList<>();
         geofences = new HashMap<String, SimpleGeofence>();
+        spinner.setVisibility(View.VISIBLE); //hide progressBar
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000,
                 4800, LocationListener);
 
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
+//        latitude = location.getLatitude();
+//        longitude = location.getLongitude();
 
         pref.edit().putString("lastKnownLat", String.valueOf(location.getLatitude())).apply();
         pref.edit().putString("lastKnownLng", String.valueOf(location.getLongitude())).apply();
@@ -858,13 +892,15 @@ public class MainActivity extends AppCompatActivity implements
         if (pref.getBoolean("alertOn", true)) {
             ivAlertOn.setVisibility(View.VISIBLE);
             ivAlertOff.setVisibility(View.GONE);
+            if (!isMyServiceRunning()) {
+                startService(new Intent(MainActivity.this, GeolocationService.class));
+            }
         }
-        spinner.setVisibility(View.VISIBLE); //hide progressBar
         if (isLoggedIn) {
-            tvLoading.setText(Html.fromHtml(("Thanks for your patience "+firstName+ " we are searching our database to see if there are any registered black owned businesses near you.")));
+            tvLoading.setText(Html.fromHtml(("Welcome "+firstName+ ",\nThanks for your patience while we search for black owned businesses near you.")));
             ivUserImageCardview.setVisibility(View.VISIBLE);
         } else {
-            tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
+            tvLoading.setText("Thanks for your patience while we search for black owned businesses near you.");
             ivUserImageCardview.setVisibility(View.GONE);
         }
 
@@ -1031,11 +1067,12 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
         };
-        accessTokenTracker.startTracking();
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if(accessToken != null && !accessToken.isExpired()){
             useLoginInformation(accessToken);
         }
+        accessTokenTracker.startTracking();
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        isLoggedIn = accessToken != null && !accessToken.isExpired();
     }
 
     public void useLoginInformation(final AccessToken accessToken) {
@@ -1059,25 +1096,8 @@ public class MainActivity extends AppCompatActivity implements
                     lastName = object.getString("last_name");
                     userEmail = object.getString("email");
                     userImage = "https://graph.facebook.com/" +object.getString("id")+ "/picture?type=normal";
-                   // if (object.has("picture")) {
-                        //String profilePicUrl = object.getJSONObject("picture").getJSONObject("data").getString("url");
-                     //   facebookImageBuilder.build().load(object.getJSONObject("picture").getJSONObject("data").getString("url")).into(ivUserImage);
                         facebookImageBuilder.build().load("https://graph.facebook.com/" +object.getString("id")+ "/picture?type=normal").into(ivUserImage);
                         ivUserImage.setVisibility(View.VISIBLE);
-                        //Log.e("foo", "fore brake");
-                        //Bitmap profilePic= BitmapFactory.decodeStream(profilePicUrl .openConnection().getInputStream());
-                        //mImageView.setBitmap(profilePic);
-                    //}
-
-                    /*Glide.with(MainActivity.this).load(object.getJSONObject("picture").getJSONObject("data").getString("url")).into(ivUserImage);
-                    String[] parts = (object.getString("name").split(" "));
-                    firstName = parts[0];
-                    lastName = parts[1];*/
-
-                   // facebookImageBuilder.build().load(object.getJSONObject("picture").getJSONObject("data").getString("url")).into(ivUserImage);
-                    //facebookImageBuilder.build().load("https://graph.facebook.com/" +object.getString("id")+ "/picture?type=normal").into(ivUserImage);
-                    //RequestOptions requestOptions = new RequestOptions();
-                    //requestOptions.dontAnimate();
                     Map<String, String> query = new HashMap<>();
                     query.put("access_token", accessToken.getToken());
                     loginUser(query);
@@ -1356,12 +1376,6 @@ public class MainActivity extends AppCompatActivity implements
                 .client(client)
                 .build();
 
-        retrofit = new Retrofit.Builder()
-                .baseUrl(baseURL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build();
-
         RetrofitArrayApi service = retrofit.create(RetrofitArrayApi.class);
         verticalList = new ArrayList<>();
         locationMatch = new ArrayList<>();
@@ -1395,10 +1409,10 @@ public class MainActivity extends AppCompatActivity implements
                     //noListingsTextView.setTextSize(16);
 
                     if(isLoggedIn) {
-                        noListingsTextView.setText("This is terrible " + firstName +"!!!!\n\nLooks like there aren't any black owned businesses near you in our directory.\n" +
+                        noListingsTextView.setText("This is terrible " + firstName +"!!!!\nLooks like there aren't any black owned businesses near you in our directory.\n" +
                                 "Tap Add (+) from the menu to add any black owned business you visit to our directory.");
                     } else {
-                        noListingsTextView.setText("This is terrible!!!!\n\nLooks like there aren't any black owned businesses near you in our directory.\n" +
+                        noListingsTextView.setText("This is terrible!!!!\nLooks like there aren't any black owned businesses near you in our directory.\n" +
                                 "Tap add (+) to add any black owned business you visit to our directory.");
                     };
                     return;
@@ -1407,7 +1421,8 @@ public class MainActivity extends AppCompatActivity implements
                     for (int i = 0; i < response.body().size(); i++) {
                         BusinessListings.BusinessHours businessHours = response.body().get(i).getBusinessHours();
                         if (businessHours == null) {
-                            String today = "null";
+                            todayRange = "null";
+                            isOpen = "null";
                         } else {
                             todayRange = response.body().get(i).getBusinessHours().getRendered().getExtra().getTodayRange();
                             isOpen = response.body().get(i).getBusinessHours().getRendered().getExtra().getCurrentLabel();
@@ -1593,17 +1608,19 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public void onFailure(Call<List<BusinessListings>> call, Throwable t) {
+                Log.e("getRetrofitFailure: ", "foo: "+t);
                 spinner.setVisibility(View.GONE);
                 ivLoading.setVisibility(View.VISIBLE);
                 ivLoading.setAnimation(imgAnimationIn);
                 tvLoading.setVisibility(View.VISIBLE);
                 tvLoading.setAnimation(imgAnimationIn);
                 if (isLoggedIn) {
-                    tvLoading.setText(Html.fromHtml(("Thanks for your patience "+firstName+" we are searching our database to see if there are any registered black owned businesses near you.")));
+                    tvLoading.setText("Welcome "+firstName+",\nThanks for your patience while we locate black owned businesses near you.");
                 } else {
-                    tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
+                    tvLoading.setText("Thanks for your patience while we search for black owned businesses near you.");
                 }
-                getRetrofit(query);
+                return;
+                //getRetrofit(query);
             }
         });
     }
