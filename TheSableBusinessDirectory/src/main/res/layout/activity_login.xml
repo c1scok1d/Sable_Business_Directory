@@ -27,7 +27,7 @@
         android:layout_below="@id/tvSecureMsg"
         android:layout_alignParentTop="false"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="3dp"
+        android:layout_margin="5dp"
         android:background="@drawable/buttonshape"
         android:padding="5dp"
         android:shadowDx="0"
@@ -61,6 +61,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal|top"
+            android:layout_margin="5dp"
             android:background="@color/black"
             app:srcCompat="@drawable/logo" />
 

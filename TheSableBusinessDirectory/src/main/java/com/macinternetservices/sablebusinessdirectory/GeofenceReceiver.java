@@ -65,25 +65,8 @@ public class GeofenceReceiver extends IntentService {
                         .displayNotification(sg, transitionType, near);
 
                 if(near > 0){
-                    /*Animation imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-
-                    ivLoading.setVisibility(View.VISIBLE);
-                    ivLoading.setAnimation(imgAnimationIn);
-                    tvLoading.setVisibility(View.VISIBLE);
-                    tvLoading.setAnimation(imgAnimationIn);
-                    isLoggedIn = accessToken != null && !accessToken.isExpired();
-                    if(isLoggedIn && firstName != null) {
-                        String name = "<font color='#4FC1E9'>" +firstName+"</font>";
-                        tvLoading.setText(Html.fromHtml(("Thanks for your patience " + name + "<br>There are " +near+ " black owned businesses within 5 miles of you")));
-                    } else {
-                        tvLoading.setText("Thank you for waiting while we search our directory for black owned businesses near you.");
-                    } */
                     Toast.makeText(getApplicationContext(), "There are " +near+ " black owned businesses near your current location", Toast.LENGTH_LONG).show();
-                    //MainActivity.tvLoading.setText("It looks like there are " +near+ " black owned businesses within 5 miles of you");
-                } /*else if (near > 0 && transitionType)
-                    Toast.makeText(getApplicationContext(), "There are no black owned businesses near you", Toast.LENGTH_LONG).show();
-
-                } */
+                }
             }
         }
     }

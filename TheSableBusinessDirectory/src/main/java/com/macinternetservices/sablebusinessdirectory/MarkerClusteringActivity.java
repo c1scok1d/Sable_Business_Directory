@@ -226,7 +226,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
                 Picasso.get().load(clickedVenueMarker.getFeaturedImage()).into(featuredImage);
 
                 if(clickedVenueMarker.getRating() == 0){
-                    firstReview.setText("BE THE FIRST TO REVIEW "+clickedVenueMarker.getTitle());
+                    firstReview.setText("REVIEW FIRST");
                     firstReview.setVisibility(View.VISIBLE);
                 }
                 return view;

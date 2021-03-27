@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public static Double latitude, longitude;
 
-    public static TextView tvMore, tvUserName, tvWpUserId, tvCity, tvCategories, tvLoading, noListingsTextView, fooListingsTextView;
+    public static TextView tvMore, tvUserName, tvWpUserId, tvCity, tvCategories, tvLoading, noListingsTextView, textViewFoo, fooListingsTextView;
     Button  btnShowListings;
     LoginButton loginButton, loginButton3;
     RecyclerView verticalRecyclerView, featuredRecyclervView, recentListingsRecyclervView, recentReviewsRecyclervView;
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements
     public static LatLngBounds.Builder latLngBoundsBuilder = new LatLngBounds.Builder();
 
     public static GoogleMap mMap;
-    //private boolean isRestore;
+    public boolean alertOn = true;
 
     protected int getLayoutId() {
         return R.layout.activity_main;
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements
     boolean kickItOff = true;
 
 
-    public static AccessToken accessToken = AccessToken.getCurrentAccessToken();
+    public static AccessToken accessToken = null;
     CircleMenuView menu = null;
 
     TextSwitcher textSwitcher, textSwitcher3;
@@ -802,8 +802,6 @@ public class MainActivity extends AppCompatActivity implements
                     case 1:
                     case 4: //clear and reload
                         kickItOff = true;
-                        mapLocations = new ArrayList<>();
-                        geofences = new HashMap<>();
                         Map<String, String> query = new HashMap<>();
 
                             query.put("latitude", String.valueOf(location.getLatitude()));
@@ -871,8 +869,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onResume() {
         super.onResume();
         kickItOff = true;
-        mapLocations = new ArrayList<>();
-        geofences = new HashMap<String, SimpleGeofence>();
         spinner.setVisibility(View.VISIBLE); //hide progressBar
 
         latitude = location.getLatitude();
@@ -886,13 +882,6 @@ public class MainActivity extends AppCompatActivity implements
             pref.edit().putBoolean("alertOn", true).apply();
             pref.edit().putBoolean("firstrun", false).apply();
 
-        }
-        if (pref.getBoolean("alertOn", true)) {
-            ivAlertOn.setVisibility(View.VISIBLE);
-            ivAlertOff.setVisibility(View.GONE);
-            if (!isMyServiceRunning()) {
-                startService(new Intent(MainActivity.this, GeolocationService.class));
-            }
         }
         if (isLoggedIn) {
             tvLoading.setText(Html.fromHtml(("Welcome "+firstName+ ",\nThanks for your patience while we search for black owned businesses near you.")));
@@ -915,6 +904,13 @@ public class MainActivity extends AppCompatActivity implements
         query.put("order", "asc");
         query.put("orderby", "distance");
         getRetrofit(query);
+
+        if (pref.getBoolean("alertOn", true)) {
+            ivAlertOn.setVisibility(View.VISIBLE);
+            ivAlertOff.setVisibility(View.GONE);
+            alertOn = true;
+            //startService(new Intent(MainActivity.this, GeolocationService.class));
+        }
     }
     /*
     begin user authentication via facebook
@@ -1011,7 +1007,7 @@ public class MainActivity extends AppCompatActivity implements
     private void buildAlertMessageEnableAlerts() {
         String message;
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        if (pref.getBoolean("alertOn", true)) {
+        if (alertOn) {
             if (isLoggedIn) {
                 message = "Hello "+firstName+"\n Tap 'Yes' to stop receiving alerts when you are near a black owned business?";
 
@@ -1025,10 +1021,12 @@ public class MainActivity extends AppCompatActivity implements
                             pref.edit().putBoolean("alertOn", false).apply();
                             ivAlertOff.setVisibility(View.VISIBLE);
                             ivAlertOn.setVisibility(View.GONE);
-                            if (isMyServiceRunning()) {
+                            alertOn = false;
+                            //if (isMyServiceRunning()) {
+
                                 stopService(new Intent(MainActivity.this, GeolocationService.class));
                                 Toast.makeText(MainActivity.this, "You will not be alerted by Sable when near a black owned business", Toast.LENGTH_SHORT).show();
-                            }
+                            //}
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -1037,9 +1035,10 @@ public class MainActivity extends AppCompatActivity implements
                             pref.edit().putBoolean("alertOn", true).apply();
                             ivAlertOff.setVisibility(View.GONE);
                             ivAlertOn.setVisibility(View.VISIBLE);
-                            if (!isMyServiceRunning()) {
+                            alertOn = true;
+                            //if (!isMyServiceRunning()) {
                                 startService(new Intent(MainActivity.this, GeolocationService.class));
-                            }
+                            //}
                         }
                     });
         } else {
@@ -1055,10 +1054,11 @@ public class MainActivity extends AppCompatActivity implements
                             pref.edit().putBoolean("alertOn", true).apply();
                             ivAlertOn.setVisibility(View.VISIBLE);
                             ivAlertOff.setVisibility(View.GONE);
+                            alertOn = true;
                             startService(new Intent(MainActivity.this, GeolocationService.class));
-                            if (!isMyServiceRunning()) {
+                            //if (!isMyServiceRunning()) {
                                 startService(new Intent(MainActivity.this, GeolocationService.class));
-                            }
+                            //}
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -1067,10 +1067,11 @@ public class MainActivity extends AppCompatActivity implements
                             pref.edit().putBoolean("alertOn", false).apply();
                             ivAlertOff.setVisibility(View.VISIBLE);
                             ivAlertOn.setVisibility(View.GONE);
-                            if (isMyServiceRunning()) {
+                            alertOn = false;
+                            //if (isMyServiceRunning()) {
                                 stopService(new Intent(MainActivity.this, GeolocationService.class));
                                 Toast.makeText(MainActivity.this, "You will not be alerted by Sable when near a black owned business", Toast.LENGTH_SHORT).show();
-                            }
+                            //}
                         }
                     });
         }
@@ -1153,17 +1154,14 @@ public class MainActivity extends AppCompatActivity implements
          */
         @Override
         public void onLocationChanged(Location location) {
-           /* latitude = location.getLatitude();
-            longitude = location.getLongitude(); */
-            if (geofences.size() == 0 || mapLocations.size() == 0) {
-                Map<String, String> query = new HashMap<>();
-                query.put("latitude", String.valueOf(location.getLatitude()));
-                query.put("longitude", String.valueOf(location.getLongitude()));
-                query.put("order", "asc");
-                query.put("orderby", "distance");
+            /*Map<String, String> query = new HashMap<>();
+            query.put("latitude", String.valueOf(location.getLatitude()));
+            query.put("longitude", String.valueOf(location.getLongitude()));
+            query.put("order", "asc");
+            query.put("orderby", "distance");
 
-                getRetrofit(query);
-            } else{
+            getRetrofit(query);*/
+            if (geofences.size() > 0 || mapLocations.size() > 0) {
                 double lat2 = location.getLatitude();
                 double lng2 = location.getLongitude();
                 double lat1 = Double.valueOf(pref.getString("lastKnownLat", String.valueOf(location.getLatitude())));
@@ -1172,17 +1170,12 @@ public class MainActivity extends AppCompatActivity implements
                 // lat1 and lng1 are the values of a previously stored location
                 if (distance(lat1, lng1, lat2, lng2) > 3 || kickItOff) { // if distance < 0.1 miles we take locations as equal
                     kickItOff = false;
-                    if (pref.getBoolean("alertOn", true)) {
-                        if (!isMyServiceRunning()) {
+                    if (alertOn) {
+                        //if (!isMyServiceRunning()) {
                             startService(new Intent(MainActivity.this, GeolocationService.class));
-                        }
+                        //}
                     }
                     setMarkers();
-                }
-                if (pref.getBoolean("alertOn", true)) {
-                    if (!isMyServiceRunning()) {
-                        startService(new Intent(MainActivity.this, GeolocationService.class));
-                    }
                 }
                 if (isLoggedIn) {
                     if (currentMarker != null)
@@ -1235,7 +1228,7 @@ public class MainActivity extends AppCompatActivity implements
         mMap = map;
         mMap.setOnMyLocationClickListener(this);
         if (geofences.size() > 0 && mapLocations.size() > 0) {
-            if (pref.getBoolean("alertOn", true)) {
+            if (alertOn) {
                 ivAlertOn.setVisibility(View.VISIBLE);
                 ivAlertOff.setVisibility(View.GONE);
                 if (!isMyServiceRunning()) {
@@ -1565,10 +1558,10 @@ public class MainActivity extends AppCompatActivity implements
                     // lat1 and lng1 are the values of a previously stored location
                     if (distance(lat1, lng1, lat2, lng2) > 3 || kickItOff) { // if distance < 0.1 miles we take locations as equal
                         kickItOff = false;
-                        if (pref.getBoolean("alertOn", true)) {
-                            if (!isMyServiceRunning()) {
+                        if (alertOn) {
+                            //if (!isMyServiceRunning()) {
                                 startService(new Intent(MainActivity.this, GeolocationService.class));
-                            }
+                           // }
                         }
                         setMarkers();
                     }
