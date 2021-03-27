@@ -54,7 +54,7 @@ public class RecentReviewListingsAdapter extends RecyclerView.Adapter {
                     //String fooId = tvId.getText().toString();
                     //Integer fooId2 = MainActivity.verticalList.get(i).id;
 
-                    if (tvId.getText().toString().equals(MainActivity.verticalList.get(i).id)) {
+                    /*if (tvId.getText().toString().equals(MainActivity.verticalList.get(i).id)) {
                         ArrayList<ListingsModel> locationReviewShow = new ArrayList<>();
 
                         locationReviewShow.add((new ListingsModel(ListingsModel.IMAGE_TYPE,
@@ -101,7 +101,7 @@ public class RecentReviewListingsAdapter extends RecyclerView.Adapter {
                         itemView.getContext().startActivity(showReviews);
                         //startActivity(showReviews);
                         break;
-                    }
+                    } */
                 }
             });
         }

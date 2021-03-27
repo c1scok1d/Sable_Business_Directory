@@ -19,7 +19,7 @@ public class ListingsModel extends ArrayList<Parcelable> implements Parcelable {
     String geofence;
 
 
-    public ListingsModel(int imageType, Integer id, String raw, String link, String status, String name, Boolean featured, String src, String bldgNo, String street, String city, String region, String country, String zip, Double latitude, Double longitude, Float rating, Integer ratingCount, String phone, String email, String website, String twitter, String facebook, String video, String todayRange, String isOpen, String logo, String raw1, String thumbnail, String raw2, SimpleGeofence geofence) {
+    public ListingsModel(int imageType, Integer id, String raw, String link, String status, String name, Boolean featured, String src, String bldgNo, String street, String city, String region, String country, String zip, Double latitude, Double longitude, Float rating, Integer ratingCount, String phone, String email, String website, String twitter, String facebook, String video, /*String todayRange, String isOpen, */String logo, String raw1, String thumbnail, String raw2, SimpleGeofence geofence) {
         this.id = id;
         this.title = raw;
         this.link = link;
@@ -43,8 +43,8 @@ public class ListingsModel extends ArrayList<Parcelable> implements Parcelable {
         this.twitter = twitter;
         this.facebook = facebook;
         this.video = video;
-        this.hours = todayRange;
-        this.isOpen = isOpen;
+        //this.hours = todayRange;
+        //this.isOpen = isOpen;
         this.logo = logo;
         this.content = raw1;
         this.image = thumbnail;

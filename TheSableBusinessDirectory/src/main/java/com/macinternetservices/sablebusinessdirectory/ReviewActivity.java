@@ -338,7 +338,7 @@ public class ReviewActivity extends AppCompatActivity implements
 
             double distance = (locationA.distanceTo(locationB) * 0.000621371192); //convert meters to miles
             tvDistance.setText(String.format(Locale.US, "%10.2f", distance));
-            if(locationReview.get(0).isOpen.equals("Closed now")){
+            /*if(locationReview.get(0).isOpen.equals("Closed now")){
                 tvIsOpen.setTextColor(Color.rgb(255, 0, 0 )); //red
             }
            /* if(locationReview.get(0).featured.equals("null")){
@@ -355,7 +355,7 @@ public class ReviewActivity extends AppCompatActivity implements
                 tvFirstRate.setText(FirstRate);
                 //tvFirstRate.setTextColor(Color.rgb(22, 53, 64)); //green
             }
-            if (locationReview.get(0).hours.equals("null") || locationReview.get(0).isOpen.equals("null") || locationReview.get(0).hours == null || locationReview.get(0).isOpen == null) {
+            /*if (locationReview.get(0).hours.equals("null") || locationReview.get(0).isOpen.equals("null") || locationReview.get(0).hours == null || locationReview.get(0).isOpen == null) {
                 tvIsOpen.setVisibility(View.GONE);
                 tvHours.setVisibility(View.GONE);
             } else if (locationReview.get(0).hours.equals("Closed") || locationReview.get(0).isOpen.equals("Closed now")) {
@@ -368,7 +368,7 @@ public class ReviewActivity extends AppCompatActivity implements
                 String open = "Open";
                 tvIsOpen.setText(open);
                 tvIsOpen.setTextColor(Color.rgb(51, 165, 50)); //green
-            }
+            } */
         }
 
         findViewById(R.id.tvName).setOnClickListener(new View.OnClickListener() {

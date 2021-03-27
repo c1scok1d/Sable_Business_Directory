@@ -170,10 +170,10 @@ public class MainActivity extends AppCompatActivity implements
     LinearLayoutManager mLayoutManager, featuredRecyclerViewLayoutManager,
             recentListingsRecyclerViewLayoutManager, recentReviewsRecyclerViewLayoutManager;
     LinearLayout recentReviewsLayout, recentReviewsRecyclerLayout;
-    RelativeLayout loadingLayout, noListingsAnimationLayout;
+    RelativeLayout loadingLayout, noListingsLayout;
 
 
-    VerticalAdapter verticalAdapter;
+    //VerticalAdapter verticalAdapter;
     FeaturedListAdapter featuredListAdapter;
     RecentListingsAdapter recentListingsAdapter;
     RecentReviewListingsAdapter recentReviewListingsAdapter;
@@ -375,6 +375,7 @@ public class MainActivity extends AppCompatActivity implements
         //isRestore = savedInstanceState != null;
         ivSettings = findViewById(R.id.btnSettings);
         loadingLayout = findViewById(R.id.loadingLayout);
+        noListingsLayout = findViewById(R.id.noListingsLayout);
         tvLoading = findViewById(R.id.tvLoading);
         tvLoading.setVisibility(View.GONE);
         tvMore = findViewById(R.id.tvMore);
@@ -562,14 +563,14 @@ public class MainActivity extends AppCompatActivity implements
         /*
             BEGIN vertical Recycler View
          */
-        verticalRecyclerView = findViewById(R.id.verticalRecyclerView);
-        mLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
-        verticalRecyclerView.setLayoutManager(mLayoutManager);
-        verticalList = new ArrayList<>();
-        locationMatch = new ArrayList<>();
+        //verticalRecyclerView = findViewById(R.id.verticalRecyclerView);
+        //mLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
+        //verticalRecyclerView.setLayoutManager(mLayoutManager);
+        //verticalList = new ArrayList<>();
+        //locationMatch = new ArrayList<>();
 
 
-        verticalAdapter = new VerticalAdapter(verticalList, userName, userEmail, userImage, userId, MainActivity.this);
+        /*verticalAdapter = new VerticalAdapter(verticalList, userName, userEmail, userImage, userId, MainActivity.this);
         featuredListAdapter = new FeaturedListAdapter(featuredList, MainActivity.this);
         recentListingsAdapter = new RecentListingsAdapter(recentList, MainActivity.this);
         verticalRecyclerView.setAdapter(verticalAdapter);
@@ -579,7 +580,7 @@ public class MainActivity extends AppCompatActivity implements
         featuredRecyclervView.setNestedScrollingEnabled(false);
 
         recentListingsRecyclervView.setAdapter(recentListingsAdapter);
-        recentListingsRecyclervView.setNestedScrollingEnabled(false);
+        recentListingsRecyclervView.setNestedScrollingEnabled(false); */
 
         spokesperson = findViewById(R.id.spokesperson);
         tvCity = findViewById(R.id.tvCity);
@@ -739,7 +740,10 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 if(!menu.isShown()){
-                    noListingsImageView.setVisibility(View.GONE);
+                    loadingLayout.setAnimation(imgAnimationOut);
+                    loadingLayout.setVisibility(View.GONE);
+                    noListingsLayout.setAnimation(imgAnimationOut);
+                    noListingsLayout.setVisibility(View.GONE);
                     menu.setVisibility(View.VISIBLE);
                 } else {
                     menu.setVisibility(View.GONE);
@@ -751,6 +755,10 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 if(!menu.isShown()){
+                    loadingLayout.setAnimation(imgAnimationOut);
+                    loadingLayout.setVisibility(View.GONE);
+                    noListingsLayout.setAnimation(imgAnimationOut);
+                    noListingsLayout.setVisibility(View.GONE);
                     menu.setVisibility(View.VISIBLE);
                 } else {
                     menu.setVisibility(View.GONE);
@@ -830,6 +838,28 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment)).getMapAsync(this);
+
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000,
+                4800, LocationListener);
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        latitude = location.getLatitude();
+//        longitude = location.getLongitude();
+/*
+        spinner.setVisibility(View.VISIBLE); //hide progressBar
+        if (isLoggedIn) {
+            tvLoading.setText(Html.fromHtml(("Thanks for your patience "+firstName+ "we are searching our database to see if there are any registered black owned businesses near you.")));
+        } else {
+            tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
+        }
+
+        ivLoading.setAnimation(imgAnimationIn);
+        ivLoading.setVisibility(View.VISIBLE);
+        ivLoading.setImageResource(R.mipmap.online_reviews_foreground);
+        tvLoading.setAnimation(imgAnimationIn);
+        tvLoading.setVisibility(View.VISIBLE); */
+
     }
 
     @SuppressLint("MissingPermission")
@@ -845,14 +875,8 @@ public class MainActivity extends AppCompatActivity implements
         geofences = new HashMap<String, SimpleGeofence>();
         spinner.setVisibility(View.VISIBLE); //hide progressBar
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000,
-                4800, LocationListener);
-
-        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        pref.edit().putString("lastKnownLat", String.valueOf(location.getLatitude())).apply();
-        pref.edit().putString("lastKnownLng", String.valueOf(location.getLongitude())).apply();
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
 
         //check user login info
         accessTokenTracker.startTracking();
@@ -886,8 +910,8 @@ public class MainActivity extends AppCompatActivity implements
 
         Map<String, String> query = new HashMap<>();
 
-        query.put("latitude", String.valueOf(location.getLatitude()));
-        query.put("longitude", String.valueOf(location.getLongitude()));
+        query.put("latitude", String.valueOf(latitude));
+        query.put("longitude", String.valueOf(longitude));
         query.put("order", "asc");
         query.put("orderby", "distance");
         getRetrofit(query);
@@ -1367,19 +1391,16 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 if (response.isSuccessful()) {
                     for (int i = 0; i < response.body().size(); i++) {
-                        BusinessListings.BusinessHours businessHours = response.body().get(i).getBusinessHours();
+                       /* BusinessListings.BusinessHours businessHours = response.body().get(i).getBusinessHours();
                         if (businessHours == null) {
                             todayRange = "null";
                             isOpen = "null";
                         } else {
                             todayRange = response.body().get(i).getBusinessHours().getRendered().getExtra().getTodayRange();
                             isOpen = response.body().get(i).getBusinessHours().getRendered().getExtra().getCurrentLabel();
-                        }
+                        } */
                         /**
-                         * onLocationMatch
-                         * if device lat/lng equals stored listing lat/lng locationMatch = true
-                         * add all matching data to array and launch Review Activity
-                         *
+                         * populate listings array
                          */
 
                         /**
@@ -1409,8 +1430,8 @@ public class MainActivity extends AppCompatActivity implements
                                 response.body().get(i).getTwitter(),
                                 response.body().get(i).getFacebook(),
                                 response.body().get(i).getVideo(),
-                                todayRange,
-                                isOpen,
+                                //todayRange,
+                                //isOpen,
                                 response.body().get(i).getLogo(),
                                 response.body().get(i).getContent().getRaw(),
                                 response.body().get(i).getFeaturedImage().getThumbnail(),
@@ -1424,7 +1445,7 @@ public class MainActivity extends AppCompatActivity implements
                                 Geofence.GEOFENCE_TRANSITION_ENTER
                                         | Geofence.GEOFENCE_TRANSITION_DWELL
                                         | Geofence.GEOFENCE_TRANSITION_EXIT));
-                        verticalAdapter.notifyDataSetChanged();
+                        //verticalAdapter.notifyDataSetChanged();
 
                         listingName.add(response.body().get(i).getTitle().getRaw());
                            /* try {
@@ -1558,14 +1579,17 @@ public class MainActivity extends AppCompatActivity implements
             public void onFailure(Call<List<BusinessListings>> call, Throwable t) {
                 Log.e("getRetrofitFailure: ", "foo: "+t);
                 spinner.setVisibility(View.GONE);
+                ivLoading.setImageResource(R.mipmap.sorry_foreground);
                 ivLoading.setVisibility(View.VISIBLE);
                 ivLoading.setAnimation(imgAnimationIn);
                 tvLoading.setVisibility(View.VISIBLE);
                 tvLoading.setAnimation(imgAnimationIn);
                 if (isLoggedIn) {
-                    tvLoading.setText("Welcome "+firstName+",\nThanks for your patience while we locate black owned businesses near you.");
+                    tvLoading.setText("Apologies "+firstName+",\nWe're having trouble communicating with our servers, please try back later.");
+                    menu.setVisibility(View.GONE);
                 } else {
-                    tvLoading.setText("Thanks for your patience while we search for black owned businesses near you.");
+                    menu.setVisibility(View.GONE);
+                    tvLoading.setText("Apologies, We're having trouble communicating with our servers, please try back later.");
                 }
                 return;
                 //getRetrofit(query);

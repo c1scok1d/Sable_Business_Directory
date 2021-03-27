@@ -30,9 +30,9 @@ import static com.macinternetservices.sablebusinessdirectory.MainActivity.GEOFEN
 
 public class VerticalAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<ListingsModel> dataset;
+    private ArrayList<BusinessListingsModel> dataset;
     private ArrayList<ListingsModel> locationReview = new ArrayList<>();
-    private  ArrayList<ListingsModel> locationFoo = new ArrayList<>();
+    private ArrayList<ListingsModel> locationFoo = new ArrayList<>();
     private ArrayList<ListingsModel> locationReviewShow = new ArrayList<>();
     String userName, userEmail, userImage, userId, baseURL = "https://www.thesablebusinessdirectory.com";
     AccessToken accessToken;
@@ -40,7 +40,7 @@ public class VerticalAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
 
-    public VerticalAdapter(ArrayList<ListingsModel> mlist, String wpUserName, String wpUserEmail, String wpUserImage, String wpUserId, Context context) {
+    public VerticalAdapter(ArrayList<BusinessListingsModel> mlist, String wpUserName, String wpUserEmail, String wpUserImage, String wpUserId, Context context) {
         this.dataset = mlist;
         this.mContext = context;
         this.userName = wpUserName;
@@ -61,9 +61,7 @@ public class VerticalAdapter extends RecyclerView.Adapter {
         ImageView image;
         RatingBar simpleRatingBar;
         ImageButton btnCall, btnDirections, btnEmail, btnTwitter, btnFacebook, btnReview;
-       // private LoginButton loginButton;
-
-
+        // private LoginButton loginButton;
 
 
         public ImageTypeViewHolder(final View itemView) {
@@ -96,7 +94,7 @@ public class VerticalAdapter extends RecyclerView.Adapter {
             tvEmail = itemView.findViewById(R.id.tvEmail);
             tvTwitter = itemView.findViewById(R.id.tvTwitter);
             tvFacebook = itemView.findViewById(R.id.tvFacebook);
-           // btnEmail = itemView.findViewById(R.id.btnEmail);
+            // btnEmail = itemView.findViewById(R.id.btnEmail);
             //btnTwitter = itemView.findViewById(R.id.btnTwitter);
             //btnFacebook = itemView.findViewById(R.id.btnFacebook);
             tvFeatured = itemView.findViewById(R.id.tvFeatured);
@@ -144,17 +142,17 @@ public class VerticalAdapter extends RecyclerView.Adapter {
                                 locationReview.get(i).twitter,
                                 locationReview.get(i).facebook,
                                 locationReview.get(i).video,
-                                locationReview.get(i).hours,
-                                locationReview.get(i).isOpen,
+                                //locationReview.get(i).hours,
+                                //locationReview.get(i).isOpen,
                                 locationReview.get(i).logo,
                                 locationReview.get(i).content,
                                 locationReview.get(i).featured_image,
                                 locationReview.get(i).content,
                                 new SimpleGeofence(locationReview.get(i).title, locationReview.get(i).latitude, locationReview.get(i).longitude,
-                                100, GEOFENCE_EXPIRATION_IN_MILLISECONDS, locationReview.get(i).featured_image,
-                                Geofence.GEOFENCE_TRANSITION_ENTER
-                                        | Geofence.GEOFENCE_TRANSITION_DWELL
-                                        | Geofence.GEOFENCE_TRANSITION_EXIT))));
+                                        100, GEOFENCE_EXPIRATION_IN_MILLISECONDS, locationReview.get(i).featured_image,
+                                        Geofence.GEOFENCE_TRANSITION_ENTER
+                                                | Geofence.GEOFENCE_TRANSITION_DWELL
+                                                | Geofence.GEOFENCE_TRANSITION_EXIT))));
 
                         Bundle locationReviewBundle = new Bundle();
                         locationReviewBundle.putParcelableArrayList("locationReviewBundle", locationReviewShow);
@@ -179,11 +177,11 @@ public class VerticalAdapter extends RecyclerView.Adapter {
                     //boolean isLoggedIn = accessToken != null;
 
                     if (!MainActivity.isLoggedIn) {
-                        Intent loginIntent = new Intent(v.getContext(),LoginActivity.class);
+                        Intent loginIntent = new Intent(v.getContext(), LoginActivity.class);
                         itemView.getContext().startActivity(loginIntent);
                         //goto login activity get username and email via facebook create account, return here to check again and proceed
 
-                        Toast.makeText(getApplicationContext(),"User must be logged in to leave a listing review.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "User must be logged in to leave a listing review.", Toast.LENGTH_SHORT).show();
                     } else {
 
                         /**
@@ -218,8 +216,8 @@ public class VerticalAdapter extends RecyclerView.Adapter {
                                         locationReview.get(i).twitter,
                                         locationReview.get(i).facebook,
                                         locationReview.get(i).video,
-                                        locationReview.get(i).hours,
-                                        locationReview.get(i).isOpen,
+                                        //locationReview.get(i).hours,
+                                        //locationReview.get(i).isOpen,
                                         locationReview.get(i).logo,
                                         locationReview.get(i).content,
                                         locationReview.get(i).featured_image,
@@ -324,11 +322,11 @@ public class VerticalAdapter extends RecyclerView.Adapter {
 
         Picasso.Builder builder = new Picasso.Builder(mContext);
 
-        final ListingsModel object = dataset.get(position);
+        final BusinessListingsModel object = dataset.get(position);
 
         Location locationA = new Location("point A");
-        locationA.setLatitude(object.latitude); //listing lat
-        locationA.setLongitude(object.longitude); //listing lng
+        locationA.setLatitude(Double.parseDouble(object.getLatitude())); //listing lat
+        locationA.setLongitude(Double.parseDouble(object.getLongitude())); //listing lng
 
 
         Location locationB = new Location("point B");
@@ -337,35 +335,35 @@ public class VerticalAdapter extends RecyclerView.Adapter {
 
         double distance = (locationA.distanceTo(locationB) * 0.000621371192); //convert meters to miles
 
-        ((ImageTypeViewHolder) holder).tvTitle.setText(object.title);
-        ((ImageTypeViewHolder) holder).tvHours.setText(object.hours);
-        ((ImageTypeViewHolder) holder).tvCity.setText(object.city);
-        ((ImageTypeViewHolder) holder).tvState.setText(object.state);
-        ((ImageTypeViewHolder) holder).tvZipcode.setText(object.zipcode);
-        ((ImageTypeViewHolder) holder).tvisOpen.setText(object.isOpen);
-        ((ImageTypeViewHolder) holder).tvContent.setText(object.content);
-        ((ImageTypeViewHolder) holder).simpleRatingBar.setRating(object.rating);
+        ((ImageTypeViewHolder) holder).tvTitle.setText(object.getTitle().toString());
+        //((ImageTypeViewHolder) holder).tvHours.setText(object.getBusinessHours().toString());
+        ((ImageTypeViewHolder) holder).tvCity.setText(object.getCity());
+        ((ImageTypeViewHolder) holder).tvState.setText(object.getRegion());
+        ((ImageTypeViewHolder) holder).tvZipcode.setText(object.getZip());
+        //((ImageTypeViewHolder) holder).tvisOpen.setText(object.getBusinessHours().toString());
+        ((ImageTypeViewHolder) holder).tvContent.setText(object.getContent().toString());
+        ((ImageTypeViewHolder) holder).simpleRatingBar.setRating(object.getRating());
         ((ImageTypeViewHolder) holder).tvDistance.setText(String.format(Locale.US, "%.2f", distance));
-        ((ImageTypeViewHolder) holder).tvWebsite.setText(object.website);
-        ((ImageTypeViewHolder) holder).tvPhone.setText(object.phone);
+        ((ImageTypeViewHolder) holder).tvWebsite.setText(object.getWebsite());
+        ((ImageTypeViewHolder) holder).tvPhone.setText(object.getPhone());
         //((ImageTypeViewHolder) holder).simpleRatingBar.setNumStars(object.rating);
-        ((ImageTypeViewHolder) holder).tvRatingCount.setText(String.valueOf(object.ratingCount));
-        ((ImageTypeViewHolder) holder).tvId.setText(String.valueOf(object.id));
-        ((ImageTypeViewHolder) holder).tvLatitude.setText(String.valueOf(object.latitude));
-        ((ImageTypeViewHolder) holder).tvLongitude.setText(String.valueOf(object.longitude));
-        ((ImageTypeViewHolder) holder).tvEmail.setText(object.email);
-        ((ImageTypeViewHolder) holder).tvTwitter.setText(object.twitter);
-        ((ImageTypeViewHolder) holder).tvFacebook.setText(object.facebook);
-        ((ImageTypeViewHolder) holder).tvId.setText(String.valueOf(object.id));
-        ((ImageTypeViewHolder) holder).tvLink.setText(object.link);
-        ((ImageTypeViewHolder) holder).tvStatus.setText(object.status);
-        ((ImageTypeViewHolder) holder).tvCategory.setText(object.category);
-        ((ImageTypeViewHolder) holder).tvFeatured.setText(String.valueOf(object.featured));
-        ((ImageTypeViewHolder) holder).tvBldNo.setText(object.bldgno);
-        ((ImageTypeViewHolder) holder).tvStreet.setText(object.street);
-        ((ImageTypeViewHolder) holder).tvCountry.setText(object.country);
-        ((ImageTypeViewHolder) holder).tvTwitter.setText(object.twitter);
-        builder.build().load(dataset.get(position).featured_image).into(((ImageTypeViewHolder) holder).image);
+        ((ImageTypeViewHolder) holder).tvRatingCount.setText(String.valueOf(object.getRatingCount()));
+        ((ImageTypeViewHolder) holder).tvId.setText(String.valueOf(object.getId()));
+        ((ImageTypeViewHolder) holder).tvLatitude.setText(String.valueOf(object.getLatitude()));
+        ((ImageTypeViewHolder) holder).tvLongitude.setText(String.valueOf(object.getLatitude()));
+        ((ImageTypeViewHolder) holder).tvEmail.setText(object.getEmail());
+        ((ImageTypeViewHolder) holder).tvTwitter.setText(object.getTwitter());
+        ((ImageTypeViewHolder) holder).tvFacebook.setText(object.getFacebook());
+        //((ImageTypeViewHolder) holder).tvId.setText(String.valueOf(object.get));
+        ((ImageTypeViewHolder) holder).tvLink.setText(object.getLink());
+        ((ImageTypeViewHolder) holder).tvStatus.setText(object.getStatus());
+        ((ImageTypeViewHolder) holder).tvCategory.setText(object.getDefaultCategory());
+        ((ImageTypeViewHolder) holder).tvFeatured.setText(String.valueOf(object.getFeatured()));
+        ((ImageTypeViewHolder) holder).tvBldNo.setText(object.getStreet());
+        ((ImageTypeViewHolder) holder).tvStreet.setText(object.getStreet());
+        ((ImageTypeViewHolder) holder).tvCountry.setText(object.getCountry());
+        //((ImageTypeViewHolder) holder).tvTwitter.setText(object.getTw);
+        /*builder.build().load(dataset.get(position).featured_image).into(((ImageTypeViewHolder) holder).image);
 
         locationReview.add(new ListingsModel(ListingsModel.IMAGE_TYPE,
                 object.id,
@@ -418,7 +416,7 @@ public class VerticalAdapter extends RecyclerView.Adapter {
             ((ImageTypeViewHolder) holder).btnEmail.setColorFilter(Color.argb(211, 211, 211, 211)); //grey
             //} else {
             //    ((ImageTypeViewHolder) holder).tvEmail.setText(object.email);
-        } */
+        }
         if (object.featured.equals(true)) {
             String isFeatured = "Featured";
             ((ImageTypeViewHolder) holder).tvFeatured.setText(isFeatured);
@@ -454,6 +452,9 @@ public class VerticalAdapter extends RecyclerView.Adapter {
         }
     }
 
+
+} */
+    }
     @Override
     public int getItemCount() {
         return dataset.size();

@@ -120,9 +120,9 @@ public class BusinessListings {
     @SerializedName("special_offers")
     @Expose
     private String specialOffers;
-    @SerializedName("business_hours")
+    /*@SerializedName("business_hours")
     @Expose
-    private BusinessHours businessHours;
+    private BusinessHours businessHours;*/
     @SerializedName("claimed")
     @Expose
     private Claimed claimed;
@@ -452,13 +452,13 @@ public class BusinessListings {
         this.specialOffers = specialOffers;
     }
 
-    public BusinessHours getBusinessHours() {
+    /*public BusinessHours getBusinessHours() {
         return businessHours;
     }
 
     public void setBusinessHours(BusinessHours businessHours) {
         this.businessHours = businessHours;
-    }
+    } */
 
     public Claimed getClaimed() {
         return claimed;
