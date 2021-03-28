@@ -89,7 +89,7 @@
             android:id="@+id/tvReviewFirst"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end"
+            android:layout_marginStart="5dp"
             android:text="be first to review"
             android:textAllCaps="true"
             android:textColor="@color/colorAccent"
