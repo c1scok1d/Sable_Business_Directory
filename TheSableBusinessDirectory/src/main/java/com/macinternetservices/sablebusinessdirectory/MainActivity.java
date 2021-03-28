@@ -8,6 +8,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -19,6 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.text.format.DateUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +34,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -89,6 +94,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -170,7 +177,8 @@ public class MainActivity extends AppCompatActivity implements
     LinearLayoutManager mLayoutManager, featuredRecyclerViewLayoutManager,
             recentListingsRecyclerViewLayoutManager, recentReviewsRecyclerViewLayoutManager;
     LinearLayout recentReviewsLayout, recentReviewsRecyclerLayout;
-    RelativeLayout loadingLayout, noListingsLayout;
+    //FrameLayout mapLayout;
+    RelativeLayout loadingLayout, noListingsLayout, container;
 
 
     //VerticalAdapter verticalAdapter;
@@ -399,7 +407,7 @@ public class MainActivity extends AppCompatActivity implements
         spinner = findViewById(R.id.progressBar1);
         imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
         imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
-
+        container = findViewById(R.id.container);
 
         /**
          * ABOUT US
@@ -473,7 +481,8 @@ public class MainActivity extends AppCompatActivity implements
         textSwitcher3.setFactory(() -> {
             TextView textView = new TextView(getApplicationContext());
             textView.setLayoutParams(new TextSwitcher.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            textView.setTextSize(22);
+            textView.setTextSize(18);
+            textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
             textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
             return textView;
         });
@@ -743,8 +752,11 @@ public class MainActivity extends AppCompatActivity implements
                     noListingsLayout.setAnimation(imgAnimationOut);
                     noListingsLayout.setVisibility(View.GONE);
                     menu.setVisibility(View.VISIBLE);
+                    container.setBackgroundColor(Color.WHITE);
+                    container.getBackground().setAlpha(204); //80% transparency
                 } else {
                     menu.setVisibility(View.GONE);
+                    container.setBackgroundColor(Color.TRANSPARENT);
                 }
             }
         });
@@ -770,7 +782,9 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onMenuCloseAnimationEnd(@NonNull CircleMenuView view) {
                 Log.d("D", "onMenuCloseAnimationEnd");
+                //menu.setAnimation(imgAnimationOut);
                 menu.setVisibility(View.GONE);
+                container.setBackgroundColor(Color.TRANSPARENT);
             }
 
             @Override
@@ -794,6 +808,7 @@ public class MainActivity extends AppCompatActivity implements
 
                         getRetrofit(query);
                         menu.setVisibility(View.GONE);
+                        container.setBackgroundColor(Color.TRANSPARENT);
 
                         break;
                     case 2: //search popup
@@ -810,6 +825,7 @@ public class MainActivity extends AppCompatActivity implements
                             startActivity(addListingIntent);
                         }
                         menu.setVisibility(View.GONE);
+                        container.setBackgroundColor(Color.TRANSPARENT);
                         break;
                     case 5: //login
                         if(isLoggedIn){
@@ -826,10 +842,12 @@ public class MainActivity extends AppCompatActivity implements
                             }
                         }
                         menu.setVisibility(View.GONE);
+                        container.setBackgroundColor(Color.TRANSPARENT);
                         break;
                     default:
                         buildAlertMessageEnableAlerts();
                         menu.setVisibility(View.GONE);
+                        container.setBackgroundColor(Color.TRANSPARENT);
                         break;
                 }
             }
@@ -837,10 +855,27 @@ public class MainActivity extends AppCompatActivity implements
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment)).getMapAsync(this);
 
 
+        printHashKey(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000,
                 4800, LocationListener);
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+    }
+
+    public static void printHashKey(Context pContext) {
+        try {
+            PackageInfo info = pContext.getPackageManager().getPackageInfo(pContext.getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String hashKey = new String(Base64.encode(md.digest(), 0));
+                Log.i("HASH", "printHashKey() Hash Key: " + hashKey);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("HASH", "printHashKey()", e);
+        } catch (Exception e) {
+            Log.e("HASH", "printHashKey()", e);
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -1761,7 +1796,7 @@ public class MainActivity extends AppCompatActivity implements
                 };
             } else {
                 text = new String[]{
-                        "Welcome to The Sable Business Directory!",
+                        "Hello,\nWelcome to The Sable Business Directory!",
 
 
                         "The Sable Business Directory is designed to help users find black owned businesses and service providers.",
