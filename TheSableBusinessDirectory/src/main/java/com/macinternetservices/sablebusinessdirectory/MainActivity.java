@@ -1385,19 +1385,9 @@ public class MainActivity extends AppCompatActivity implements
                     return;
                 }
                 if (response.isSuccessful()) {
+                    pref.edit().putString("lastQuery", String.valueOf(response.raw())).apply();
                     mapLocations.removeAll(mapLocations);
                     for (int i = 0; i < response.body().size(); i++) {
-                       /* BusinessListings.BusinessHours businessHours = response.body().get(i).getBusinessHours();
-                        if (businessHours == null) {
-                            todayRange = "null";
-                            isOpen = "null";
-                        } else {
-                            todayRange = response.body().get(i).getBusinessHours().getRendered().getExtra().getTodayRange();
-                            isOpen = response.body().get(i).getBusinessHours().getRendered().getExtra().getCurrentLabel();
-                        } */
-                        /**
-                         * populate listings array
-                         */
 
                         /**
                          * populate vertical recycler in Main Activity
@@ -1441,7 +1431,6 @@ public class MainActivity extends AppCompatActivity implements
                                 Geofence.GEOFENCE_TRANSITION_ENTER
                                         | Geofence.GEOFENCE_TRANSITION_DWELL
                                         | Geofence.GEOFENCE_TRANSITION_EXIT));
-                        //verticalAdapter.notifyDataSetChanged();
 
                         listingName.add(response.body().get(i).getTitle().getRaw());
 
