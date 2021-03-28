@@ -224,7 +224,6 @@ public class MainActivity extends AppCompatActivity implements
     Location location;
     public static Marker currentMarker;
     CallbackManager fbLogincallbackManager;
-    //private AccessTokenTracker accessTokenTracker;
     public static boolean isLoggedIn = false;
     boolean kickItOff = true;
 
@@ -433,7 +432,6 @@ public class MainActivity extends AppCompatActivity implements
                     public void onSuccess(LoginResult loginResult) {
                         accessToken = loginResult.getAccessToken();
                         isLoggedIn = accessToken != null && !accessToken.isExpired();
-
                         useLoginInformation(accessToken);
                     }
 
@@ -812,7 +810,15 @@ public class MainActivity extends AppCompatActivity implements
                         }
                         break;
                     case 5: //login
-                        LoginManager.getInstance().logInWithReadPermissions(MainActivity.this, Arrays.asList("public_profile"));
+                        if(isLoggedIn){
+                            accessToken = null;
+                        } else {
+                            if (accessToken != null && !accessToken.isExpired()) {
+                                useLoginInformation(accessToken);
+                            } else {
+                                LoginManager.getInstance().logInWithReadPermissions(MainActivity.this, Arrays.asList("public_profile"));
+                            }
+                        }
                         break;
                     default:
                         buildAlertMessageEnableAlerts();
@@ -1101,6 +1107,8 @@ public class MainActivity extends AppCompatActivity implements
     // facebook login activity result
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         fbLogincallbackManager.onActivityResult(requestCode, resultCode, data);{
             Integer requestFoo = requestCode;
             Integer resultFoo = resultCode;
@@ -1112,7 +1120,6 @@ public class MainActivity extends AppCompatActivity implements
                 Log.e("facebook: ", "Logout");
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
 
     }
 
