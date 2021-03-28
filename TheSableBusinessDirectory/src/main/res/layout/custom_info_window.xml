@@ -11,25 +11,6 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tvReviewFirst"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/ratingLayout"
-        android:layout_alignParentStart="false"
-        android:layout_gravity="start"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_toEndOf="@id/featuredImageCardView"
-        android:gravity="end"
-        android:text="be first to review"
-        android:textAllCaps="true"
-        android:textColor="@color/colorAccent"
-        android:textSize="8sp"
-        android:textStyle="bold" />
-
-    <TextView
         android:id="@+id/venue_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -152,6 +133,27 @@
             android:textSize="10sp" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvReviewFirst"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/ratingLayout"
+        android:layout_below="@id/ratingLayout"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="start"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@id/featuredImageCardView"
+        android:gravity="end"
+        android:text="be first to review"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccent"
+        android:textSize="8sp"
+        android:textStyle="bold" />
 
 
 </RelativeLayout>

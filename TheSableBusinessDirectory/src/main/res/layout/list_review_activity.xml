@@ -42,8 +42,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textAllCaps="true"
-                    android:textColor="@color/black"
-                    android:textSize="12sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="10sp"
                     android:textStyle="bold"
                     android:visibility="visible"
                     tools:text="category"
@@ -56,7 +56,7 @@
                     android:layout_weight="1"
                     android:gravity="start"
                     android:text="business name"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
                     tools:text="business name" />
 
@@ -73,7 +73,7 @@
                         android:layout_weight="1"
                         android:gravity="start"
                         android:text="bldgno"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@android:color/darker_gray"
                         android:textStyle="bold"
                         android:visibility="gone" />
 
@@ -85,7 +85,7 @@
                         android:layout_weight="1"
                         android:gravity="start"
                         android:text="street"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@android:color/darker_gray"
                         android:textStyle="bold"
                         android:visibility="gone" />
 
@@ -94,7 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="city"
-                        android:textColor="@color/colorAccent" />
+                        android:textColor="@android:color/darker_gray" />
 
                     <TextView
                         android:id="@+id/tvState"
@@ -103,7 +103,7 @@
                         android:layout_marginStart="3dp"
                         android:gravity="start"
                         android:text="state"
-                        android:textColor="@color/colorAccent" />
+                        android:textColor="@android:color/darker_gray" />
 
                     <TextView
                         android:id="@+id/tvZip"
@@ -112,6 +112,7 @@
                         android:layout_marginStart="3dp"
                         android:gravity="start"
                         android:text="zip"
+                        android:textColor="@android:color/darker_gray"
                         android:visibility="gone"
                         tools:visibility="visible" />
 
@@ -120,6 +121,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textColor="@android:color/darker_gray"
                         android:visibility="gone"
                         tools:text="country"
                         tools:visibility="visible" />

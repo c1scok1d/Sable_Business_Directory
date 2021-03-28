@@ -422,6 +422,7 @@ public class MainActivity extends AppCompatActivity implements
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
                 // currentAccessToken is null if the user is logged out
                 if(accessToken == null || accessToken.isExpired()){
+                    accessToken = currentAccessToken;
                     facebookLogin();
                 }
             }
@@ -873,6 +874,8 @@ public class MainActivity extends AppCompatActivity implements
 
         latitude = location.getLatitude();
         longitude = location.getLongitude();
+        accessToken = AccessToken.getCurrentAccessToken();
+        isLoggedIn = accessToken != null && !accessToken.isExpired();
 
         //check user login info
         accessTokenTracker.startTracking();
@@ -881,14 +884,15 @@ public class MainActivity extends AppCompatActivity implements
         if (pref.getBoolean("firstrun", true)) {
             pref.edit().putBoolean("alertOn", true).apply();
             pref.edit().putBoolean("firstrun", false).apply();
-
         }
         if (isLoggedIn) {
             tvLoading.setText(Html.fromHtml(("Welcome "+firstName+ ",\nThanks for your patience while we search for black owned businesses near you.")));
             ivUserImageCardview.setVisibility(View.VISIBLE);
+            ivLogo.setVisibility(View.GONE);
         } else {
             tvLoading.setText("Thanks for your patience while we search for black owned businesses near you.");
             ivUserImageCardview.setVisibility(View.GONE);
+            ivLogo.setVisibility(View.VISIBLE);
         }
 
         ivLoading.setAnimation(imgAnimationIn);
@@ -909,7 +913,13 @@ public class MainActivity extends AppCompatActivity implements
             ivAlertOn.setVisibility(View.VISIBLE);
             ivAlertOff.setVisibility(View.GONE);
             alertOn = true;
+            pref.edit().putBoolean("alertOn", true).apply();
             //startService(new Intent(MainActivity.this, GeolocationService.class));
+        } else {
+            ivAlertOn.setVisibility(View.GONE);
+            ivAlertOff.setVisibility(View.VISIBLE);
+            alertOn = false;
+            pref.edit().putBoolean("alertOn", false).apply();
         }
     }
     /*
@@ -929,8 +939,8 @@ public class MainActivity extends AppCompatActivity implements
         if(accessToken != null && !accessToken.isExpired()){
             useLoginInformation(accessToken);
         }
-        accessTokenTracker.startTracking();
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        //accessTokenTracker.startTracking();
+        accessToken = AccessToken.getCurrentAccessToken();
         isLoggedIn = accessToken != null && !accessToken.isExpired();
     }
 
@@ -1096,7 +1106,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public void onDestroy() {
         super.onDestroy();
-        accessTokenTracker.stopTracking();
+        //accessTokenTracker.stopTracking();
         deleteCache(getApplicationContext());
     }
 
@@ -1898,34 +1908,17 @@ public class MainActivity extends AppCompatActivity implements
             switch (count) {
 
                 case 8:
-                    if(isLoggedIn){
-                        imageSwitcher3.setImageResource(images[count]);
-                        imageSwitcher3.setAnimation(imgAnimationIn);
-                        imageSwitcher3.setVisibility(View.VISIBLE);
-
-                        textSwitcher3.setText(text[count]);
-                        textSwitcher3Layout.setAnimation(imgAnimationIn);
-                        textSwitcher3Layout.setVisibility(View.VISIBLE);
-
-                        imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
-                        count++;
-                        break;
-                    } else {
-                        imageSwitcher3.setImageResource(images[count]);
-                        imageSwitcher3.setAnimation(imgAnimationIn);
-                        imageSwitcher3.setVisibility(View.VISIBLE);
-
-                        textSwitcher3.setText(text[count]);
-                        textSwitcher3Layout.setAnimation(imgAnimationIn);
-                        textSwitcher3Layout.setVisibility(View.VISIBLE);
-
-                        loginButton.setAnimation(imgAnimationIn);
-                        loginButton.setVisibility(View.VISIBLE);
-
-                        imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
-                        count++;
-                        break;
-                    }
+                    imageSwitcher3.setImageResource(images[count]);
+                    imageSwitcher3.setAnimation(imgAnimationIn);
+                    imageSwitcher3.setVisibility(View.VISIBLE);
+                    textSwitcher3.setText(text[count]);
+                    textSwitcher3Layout.setAnimation(imgAnimationIn);
+                    textSwitcher3Layout.setVisibility(View.VISIBLE);
+                    loginButton.setAnimation(imgAnimationIn);
+                    loginButton.setVisibility(View.VISIBLE);
+                    imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
+                    count++;
+                    break;
                 case 2:
                 case 4:
                 case 6:
