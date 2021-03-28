@@ -793,6 +793,7 @@ public class MainActivity extends AppCompatActivity implements
                         query.put("orderby", "distance");
 
                         getRetrofit(query);
+                        menu.setVisibility(View.GONE);
 
                         break;
                     case 2: //search popup
@@ -808,10 +809,15 @@ public class MainActivity extends AppCompatActivity implements
                             Intent addListingIntent = new Intent(MainActivity.this, AddListingActivity.class);
                             startActivity(addListingIntent);
                         }
+                        menu.setVisibility(View.GONE);
                         break;
                     case 5: //login
                         if(isLoggedIn){
-                            accessToken = null;
+                            LoginManager.getInstance().logOut();
+                            isLoggedIn = false;
+                            startActivity(getIntent());
+                            finish();
+                            overridePendingTransition(0, 0);
                         } else {
                             if (accessToken != null && !accessToken.isExpired()) {
                                 useLoginInformation(accessToken);
@@ -819,9 +825,11 @@ public class MainActivity extends AppCompatActivity implements
                                 LoginManager.getInstance().logInWithReadPermissions(MainActivity.this, Arrays.asList("public_profile"));
                             }
                         }
+                        menu.setVisibility(View.GONE);
                         break;
                     default:
                         buildAlertMessageEnableAlerts();
+                        menu.setVisibility(View.GONE);
                         break;
                 }
             }
@@ -1110,9 +1118,9 @@ public class MainActivity extends AppCompatActivity implements
         super.onActivityResult(requestCode, resultCode, data);
 
         fbLogincallbackManager.onActivityResult(requestCode, resultCode, data);{
-            Integer requestFoo = requestCode;
+           /* Integer requestFoo = requestCode;
             Integer resultFoo = resultCode;
-            String dataFoo= data.toString();
+            String dataFoo= data.toString(); */
 
             if(resultCode == -1){
                 Log.e("facebook:", "Login");
