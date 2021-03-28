@@ -420,11 +420,10 @@ public class MainActivity extends AppCompatActivity implements
         accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-                // currentAccessToken is null if the user is logged out
-                if(accessToken == null || accessToken.isExpired()){
-                    accessToken = currentAccessToken;
-                    facebookLogin();
-                }
+                accessToken = currentAccessToken;
+                startActivity(getIntent());
+                finish();
+                overridePendingTransition(0, 0);
             }
         };
 
@@ -859,12 +858,10 @@ public class MainActivity extends AppCompatActivity implements
             tvLoading.setText(Html.fromHtml(("Welcome "+firstName+ ",\nThanks for your patience while we search for black owned businesses near you.")));
             ivUserImage.setVisibility(View.VISIBLE);
             ivLogo.setVisibility(View.GONE);
-            //ivLogoImageCardview.setVisibility(View.GONE);
         } else {
             tvLoading.setText("Thanks for your patience while we search for black owned businesses near you.");
             ivUserImage.setVisibility(View.GONE);
             ivLogo.setVisibility(View.VISIBLE);
-            //ivLogoImageCardview.setVisibility(View.VISIBLE);
         }
 
         ivLoading.setAnimation(imgAnimationIn);
@@ -1104,7 +1101,17 @@ public class MainActivity extends AppCompatActivity implements
     // facebook login activity result
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        fbLogincallbackManager.onActivityResult(requestCode, resultCode, data);
+        fbLogincallbackManager.onActivityResult(requestCode, resultCode, data);{
+            Integer requestFoo = requestCode;
+            Integer resultFoo = resultCode;
+            String dataFoo= data.toString();
+
+            if(resultCode == -1){
+                Log.e("facebook:", "Login");
+            } else {
+                Log.e("facebook: ", "Logout");
+            }
+        }
         super.onActivityResult(requestCode, resultCode, data);
 
     }
