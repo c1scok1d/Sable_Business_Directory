@@ -8,6 +8,7 @@
     android:layout_marginStart="5dp"
     android:layout_marginTop="5dp"
     android:layout_marginEnd="5dp"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
@@ -25,6 +26,7 @@
                 android:id="@+id/ivFeaturedImage"
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
+                android:layout_margin="5dp"
                 android:scaleType="fitXY"
                 app:srcCompat="@mipmap/ic_launcher" />
 
@@ -57,13 +59,13 @@
                     android:gravity="start"
                     android:text="business name"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
                     tools:text="business name" />
 
                 <LinearLayout
                     android:id="@+id/addressLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="horizontal">
 
                     <TextView
@@ -94,7 +96,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="city"
-                        android:textColor="@android:color/darker_gray" />
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="10sp" />
 
                     <TextView
                         android:id="@+id/tvState"
@@ -103,7 +106,8 @@
                         android:layout_marginStart="3dp"
                         android:gravity="start"
                         android:text="state"
-                        android:textColor="@android:color/darker_gray" />
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="10sp" />
 
                     <TextView
                         android:id="@+id/tvZip"
@@ -113,6 +117,7 @@
                         android:gravity="start"
                         android:text="zip"
                         android:textColor="@android:color/darker_gray"
+                        android:textSize="10sp"
                         android:visibility="gone"
                         tools:visibility="visible" />
 
@@ -121,6 +126,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textSize="10sp"
                         android:visibility="gone"
                         tools:text="country"
                         tools:visibility="visible" />
@@ -134,12 +140,13 @@
                     android:gravity="start"
                     android:visibility="gone"
                     tools:text="id"
-                    tools:visibility="visible" />
+                    tools:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/busHoursLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="horizontal">
 
                     <TextView
@@ -174,12 +181,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="start|end"
+                    android:gravity="start"
                     android:textAllCaps="true"
                     android:textColor="@color/colorAccent2"
                     android:textSize="10sp"
                     android:textStyle="bold"
-                    tools:text="be the first to rate" />
+                    tools:text="be first to rate" />
 
                 <TextView
                     android:id="@+id/tvFeatured"
@@ -197,6 +204,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:gravity="end"
                     android:orientation="horizontal">
 
                     <RatingBar
@@ -209,7 +217,8 @@
                         android:numStars="5"
                         android:progressTint="#e9be06"
                         android:secondaryProgressTint="#e9be06"
-                        android:stepSize=".5" />
+                        android:stepSize=".5"
+                        android:theme="@style/RatingBar" />
 
                     <TextView
                         android:id="@+id/tvRatingCount"
@@ -236,7 +245,9 @@
                 <LinearLayout
                     android:id="@+id/distanceLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="end"
                     android:orientation="horizontal">
 
                     <TextView
@@ -244,7 +255,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorAccent"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:textStyle="bold"
                         tools:text="0.00" />
 
@@ -253,11 +264,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="3dp"
-                        android:gravity="start"
-                        android:text="Miles away"
+                        android:text="Miles"
                         android:textAllCaps="true"
                         android:textColor="@color/colorAccent"
-                        android:textSize="12sp" />
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -320,7 +331,7 @@
                         android:layout_marginStart="3dp"
                         android:gravity="start"
                         android:text="@string/listingPhone"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@android:color/darker_gray"
                         android:visibility="gone"
                         tools:visibility="visible" />
 
@@ -337,6 +348,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="3dp"
                             android:layout_weight="1"
+                            android:textColor="@android:color/darker_gray"
                             tools:text="email" />
 
                         <TextView
@@ -345,6 +357,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="3dp"
                             android:layout_weight="1"
+                            android:textColor="@android:color/darker_gray"
                             tools:text="twitter" />
 
                         <TextView
@@ -353,6 +366,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="3dp"
                             android:layout_weight="1"
+                            android:textColor="@android:color/darker_gray"
                             tools:text="facebook" />
 
                         <TextView
@@ -361,6 +375,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="3dp"
                             android:layout_weight="1"
+                            android:textColor="@android:color/darker_gray"
                             tools:text="link" />
 
                         <TextView
@@ -369,6 +384,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="3dp"
                             android:layout_weight="1"
+                            android:textColor="@android:color/darker_gray"
                             tools:text="status" />
 
                         <TextView
@@ -377,6 +393,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="3dp"
                             android:layout_weight="1"
+                            android:textColor="@android:color/darker_gray"
                             tools:text="video" />
 
                         <TextView
@@ -384,6 +401,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:clickable="true"
+                            android:textColor="@android:color/darker_gray"
                             android:textSize="10sp"
                             android:visibility="gone"
                             tools:text="http://www.companywebsite.com"
@@ -399,7 +417,7 @@
                 android:id="@+id/btnLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal|center_vertical"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <LinearLayout

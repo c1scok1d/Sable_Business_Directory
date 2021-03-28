@@ -187,7 +187,7 @@ public class ReviewActivity extends AppCompatActivity implements
                         mRatingScale.setText("Great");
                         break;
                     case 5:
-                        mRatingScale.setText("Awesome. I love it");
+                        mRatingScale.setText("Awesome! I love it");
                         break;
                     default:
                         mRatingScale.setText("");
@@ -507,17 +507,15 @@ public class ReviewActivity extends AppCompatActivity implements
                             switch (randomInt) {
 
                                 case 1:
-                                    textSwitcher.setText("Online reviews are an important reference point for customers. " +
-                                            "89% of consumers trust online reviews as much as personal recommendations.");
+                                    textSwitcher.setText("Online reviews are an important reference point for customers.");
                                     break;
 
                                 case 2:
-                                    textSwitcher.setText("Nearly 9 out of 10 consumers check for reviews before making purchasing decisions.");
+                                    textSwitcher.setText("Most consumers check for reviews before making a purchase.");
                                     break;
 
                                 default:
-                                    textSwitcher.setText("To leave a review for "+tvName.getText().toString()+", fill in the information " +
-                                            "below to provide details and photos of your experience.");
+                                    textSwitcher.setText("Leave a review for "+tvName.getText().toString()+", provide details and photos of your experience.");
                                     break;
                             }
                         });

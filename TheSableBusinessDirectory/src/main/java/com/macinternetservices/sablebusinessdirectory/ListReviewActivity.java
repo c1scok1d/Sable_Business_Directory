@@ -52,7 +52,7 @@ import static com.macinternetservices.sablebusinessdirectory.MainActivity.GEOFEN
 
 public class ListReviewActivity extends AppCompatActivity {
 
-    ImageButton btnCall, btnDirections, btnEmail, btnTwitter, btnFacebook, btnReview;
+    ImageButton btnEmail, btnTwitter, btnFacebook, btnReview;
     TextView tvFeatured, tvStatus, tvState, tvNoReviews,
             tvStreet, tvCity, tvZip, tvCountry, tvRating, tvId, tvWebsite, tvImages, tvOurReviews, tvBldNo,
             tvVideo, tvHours, tvIsOpen, tvLink, tvContent, tvPhone, tvBldgno, tvLatitude, tvLongitude, tvRatingCount, tvCategory, tvName, tvFirstRate, tvDistance;
@@ -82,7 +82,7 @@ public class ListReviewActivity extends AppCompatActivity {
     private static final int TOTAL_RETRIES = 3;
     //private static final String TAG = CallbackWithRetry.class.getSimpleName();
     private int retryCount = 0;
-    LinearLayout reviewImagesRecyclerLayout, reviewRecyclerLayout;
+    LinearLayout reviewImagesRecyclerLayout, reviewRecyclerLayout, reviewBtnLayout, callBtnLayout, dirBtnLayout, websiteBtnLayout;
     RelativeLayout notLoggedInLayout;
     boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
 
@@ -151,9 +151,9 @@ public class ListReviewActivity extends AppCompatActivity {
         tvContent = findViewById(R.id.tvDescription);
         tvPhone = findViewById(R.id.tvPhone);
         //image = findViewById(R.id.ivImage);
-        btnCall = findViewById(R.id.btnCall);
+        callBtnLayout = findViewById(R.id.callBtnLayout);
         //tvCall = findViewById(R.id.tvCall);
-        btnDirections = findViewById(R.id.btnDirections);
+        dirBtnLayout = findViewById(R.id.dirBtnLayout);
         //tvLatitude = findViewById(R.id.tvLat);
         //tvLongitude = findViewById(R.id.tvLng);
         ivFeaturedImage = findViewById(R.id.ivFeaturedImage);
@@ -166,7 +166,7 @@ public class ListReviewActivity extends AppCompatActivity {
         //btnFacebook = findViewById(R.id.btnFacebook);
         tvFeatured = findViewById(R.id.tvFeatured);
         tvDistance = findViewById(R.id.tvDistance);
-        btnReview = findViewById(R.id.btnReview);
+        reviewBtnLayout = findViewById(R.id.reviewBtnLayout);
         tvLongitude = findViewById(R.id.tvLatitude);
         tvLatitude = findViewById(R.id.tvLongitude);
         tvLink = findViewById(R.id.tvLink);
@@ -258,7 +258,7 @@ public class ListReviewActivity extends AppCompatActivity {
                 tvIsOpen.setTextColor(Color.rgb(51, 165, 50)); //green
             }
 
-        btnReview.setOnClickListener(new View.OnClickListener() {
+        reviewBtnLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -336,7 +336,7 @@ public class ListReviewActivity extends AppCompatActivity {
         });
 
         if (!tvPhone.getText().toString().isEmpty() || tvPhone.getText().toString().equals("null") ) {
-            btnCall.setOnClickListener(new View.OnClickListener() {
+            callBtnLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent callIntent = new Intent(Intent.ACTION_DIAL);
@@ -346,7 +346,7 @@ public class ListReviewActivity extends AppCompatActivity {
             });
         }
         if (!tvLatitude.getText().toString().isEmpty() || tvLongitude.getText().toString().isEmpty()) {
-            btnDirections.setOnClickListener(new View.OnClickListener() {
+            dirBtnLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Uri gmmIntentUri = Uri.parse("google.navigation:q=" + tvLatitude.getText().toString() + "," + tvLongitude.getText().toString());

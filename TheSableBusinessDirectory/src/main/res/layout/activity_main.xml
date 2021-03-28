@@ -42,6 +42,7 @@
                     android:layout_height="match_parent" />
 
                 <RelativeLayout
+                    android:id="@+id/container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -54,7 +55,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
-                        app:srcCompat="@mipmap/sable_logo_black_foreground"/>
+                        app:srcCompat="@mipmap/sable_logo_black_foreground" />
 
                     <com.ramotion.circlemenu.CircleMenuView
                         android:id="@+id/circle_menu"
@@ -64,7 +65,6 @@
                         android:layout_gravity="center_horizontal|center_vertical"
                         app:button_colors="@array/colors"
                         app:button_icons="@array/icons"
-                        app:distance="75dp"
                         app:icon_color="#FFFFFF">
 
                     </com.ramotion.circlemenu.CircleMenuView>
@@ -79,10 +79,10 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
-                        android:text="Options"
+                        android:text="tap for\nOptions"
                         android:textAllCaps="true"
                         android:textColor="@color/black"
-                        android:textSize="10sp"
+                        android:textSize="8sp"
                         android:textStyle="bold" />
 
                     <androidx.cardview.widget.CardView
@@ -92,7 +92,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginTop="5dp"
-                        app:cardBackgroundColor="@color/black"
+                        app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="250dp">
 
                         <androidx.cardview.widget.CardView
@@ -105,14 +105,14 @@
                                 android:id="@+id/ivLogo"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:scaleType="centerCrop"
+                                android:scaleType="fitCenter"
                                 sothree:srcCompat="@mipmap/sable_logo_black_foreground" />
 
                             <ImageView
                                 android:id="@+id/ivUserImage"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:scaleType="centerCrop" />
+                                android:scaleType="fitCenter" />
 
                         </androidx.cardview.widget.CardView>
 
@@ -202,7 +202,7 @@
                             android:padding="5dp"
                             android:text="loadingText"
                             android:textColor="@color/white"
-                            android:textSize="16sp"  />
+                            android:textSize="16sp" />
 
 
                     </RelativeLayout>
@@ -292,7 +292,7 @@
                             android:padding="5dp"
                             android:text="loadingText"
                             android:textColor="@color/white"
-                            android:textSize="16sp"  />
+                            android:textSize="16sp" />
 
                         <ProgressBar
                             android:id="@+id/progressBar1"
@@ -473,9 +473,12 @@
                             android:id="@+id/logo_wht"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentStart="false"
-                            android:layout_centerVertical="true"
-                            android:layout_margin="5dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="false"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginBottom="5dp"
                             app:srcCompat="@mipmap/ic_launcher_foreground" />
 
                         <com.facebook.login.widget.LoginButton

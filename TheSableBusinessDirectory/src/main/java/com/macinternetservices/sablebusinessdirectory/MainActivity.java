@@ -839,6 +839,9 @@ public class MainActivity extends AppCompatActivity implements
                                 useLoginInformation(accessToken);
                             } else {
                                 LoginManager.getInstance().logInWithReadPermissions(MainActivity.this, Arrays.asList("public_profile"));
+                                startActivity(getIntent());
+                                finish();
+                                overridePendingTransition(0, 0);
                             }
                         }
                         menu.setVisibility(View.GONE);

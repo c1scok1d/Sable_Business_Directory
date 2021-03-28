@@ -217,7 +217,8 @@
                         android:layout_height="match_parent"
                         android:numStars="5"
                         android:progressTint="#e9be06"
-                        android:secondaryProgressTint="#e9be06" />
+                        android:secondaryProgressTint="#e9be06"
+                        android:theme="@style/RatingBar"/>
 
                     <TextView
                         android:id="@+id/tvRatingCount"
