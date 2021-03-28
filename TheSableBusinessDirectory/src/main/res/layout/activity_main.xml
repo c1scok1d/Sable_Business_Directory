@@ -56,34 +56,6 @@
                         android:layout_alignParentBottom="true"
                         app:srcCompat="@mipmap/sable_logo_black_foreground"/>
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/ivLogoImageCardview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="false"
-                        android:layout_marginTop="5dp"
-                        app:cardBackgroundColor="@android:color/transparent"
-                        sothree:cardCornerRadius="250dp">
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="center"
-                            sothree:cardCornerRadius="250dp">
-
-                            <ImageView
-                                android:id="@+id/ivLogo"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:scaleType="centerCrop"
-                                sothree:srcCompat="@mipmap/sable_logo_black_foreground" />
-
-                        </androidx.cardview.widget.CardView>
-
-                    </androidx.cardview.widget.CardView>
-
                     <com.ramotion.circlemenu.CircleMenuView
                         android:id="@+id/circle_menu"
                         android:layout_width="wrap_content"
@@ -101,7 +73,7 @@
                         android:id="@+id/tvTapForOptions"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/ivLogoImageCardview"
+                        android:layout_below="@id/ivUserImageCardview"
                         android:layout_alignParentEnd="false"
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="5dp"
@@ -128,6 +100,13 @@
                             android:layout_height="50dp"
                             android:layout_gravity="center"
                             app:cardCornerRadius="250dp">
+
+                            <ImageView
+                                android:id="@+id/ivLogo"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                sothree:srcCompat="@mipmap/sable_logo_black_foreground" />
 
                             <ImageView
                                 android:id="@+id/ivUserImage"
@@ -213,13 +192,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/fooListingsImageView"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="false"
                             android:layout_centerVertical="true"
                             android:background="#80000000"
-                            android:gravity="start"
+                            android:fontFamily="@font/open_sans"
+                            android:gravity="center_horizontal"
+                            android:padding="5dp"
                             android:text="loadingText"
                             android:textColor="@color/white"
-                            android:textSize="18sp"
-                            tools:text="loadingText" />
+                            android:textSize="16sp"  />
 
 
                     </RelativeLayout>
@@ -301,12 +284,15 @@
                             android:layout_below="@id/ivLoading"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="false"
+                            android:layout_centerVertical="true"
                             android:background="#80000000"
                             android:fontFamily="@font/open_sans"
                             android:gravity="center_horizontal"
+                            android:padding="5dp"
                             android:text="loadingText"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"  />
 
                         <ProgressBar
                             android:id="@+id/progressBar1"

@@ -291,6 +291,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
    @Override
     public void setMarkers() {
         mClusterManager = new ClusterManager<>(this, getMap());
+        mClusterManager.clearItems();
         mClusterManager.setRenderer(new PersonRenderer());
         getMap().setOnCameraIdleListener(mClusterManager);
         getMap().setOnMarkerClickListener(mClusterManager);
@@ -311,7 +312,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
                         .build();                   // Creates a CameraPosition from the builder
                 getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         } else {
-        mClusterManager.addItems(mapLocations);
+        mClusterManager.addItems(MainActivity.mapLocations);
         mClusterManager.cluster();
         LatLngBounds bounds = MainActivity.latLngBoundsBuilder.build();
         getMap().setOnMapLoadedCallback(() -> getMap().animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200)));

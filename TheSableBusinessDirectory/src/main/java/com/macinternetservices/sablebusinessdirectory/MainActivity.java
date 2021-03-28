@@ -553,8 +553,8 @@ public class MainActivity extends AppCompatActivity implements
         recentReviewsRecyclervView.setLayoutManager(recentReviewsRecyclerViewLayoutManager);
 
         ivUserImageCardview = findViewById(R.id.ivUserImageCardview);
-        ivUserImageCardview.setVisibility(View.GONE);
         ivLogo = findViewById(R.id.ivLogo);
+        ivLogo.setVisibility(View.GONE);
         tvUserName = findViewById(R.id.tvUserName);
         ivUserImage = findViewById(R.id.ivUserImage);
         ivUserImage.setVisibility(View.GONE);
@@ -737,21 +737,6 @@ public class MainActivity extends AppCompatActivity implements
         });
         mLayout.setFadeOnClickListener(view -> mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED));
 
-        ivLogo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!menu.isShown()){
-                    loadingLayout.setAnimation(imgAnimationOut);
-                    loadingLayout.setVisibility(View.GONE);
-                    noListingsLayout.setAnimation(imgAnimationOut);
-                    noListingsLayout.setVisibility(View.GONE);
-                    menu.setVisibility(View.VISIBLE);
-                } else {
-                    menu.setVisibility(View.GONE);
-                }
-            }
-        });
-
         ivUserImageCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -805,10 +790,10 @@ public class MainActivity extends AppCompatActivity implements
                         kickItOff = true;
                         Map<String, String> query = new HashMap<>();
 
-                            query.put("latitude", String.valueOf(location.getLatitude()));
-                            query.put("longitude", String.valueOf(location.getLongitude()));
-                            query.put("order", "asc");
-                            query.put("orderby", "distance");
+                        query.put("latitude", String.valueOf(location.getLatitude()));
+                        query.put("longitude", String.valueOf(location.getLongitude()));
+                        query.put("order", "asc");
+                        query.put("orderby", "distance");
 
                         getRetrofit(query);
 
@@ -843,22 +828,6 @@ public class MainActivity extends AppCompatActivity implements
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000,
                 4800, LocationListener);
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//        latitude = location.getLatitude();
-//        longitude = location.getLongitude();
-/*
-        spinner.setVisibility(View.VISIBLE); //hide progressBar
-        if (isLoggedIn) {
-            tvLoading.setText(Html.fromHtml(("Thanks for your patience "+firstName+ "we are searching our database to see if there are any registered black owned businesses near you.")));
-        } else {
-            tvLoading.setText("Thanks for your patience we are searching our database to see if there are any registered black owned businesses near you.");
-        }
-
-        ivLoading.setAnimation(imgAnimationIn);
-        ivLoading.setVisibility(View.VISIBLE);
-        ivLoading.setImageResource(R.mipmap.online_reviews_foreground);
-        tvLoading.setAnimation(imgAnimationIn);
-        tvLoading.setVisibility(View.VISIBLE); */
-
     }
 
     @SuppressLint("MissingPermission")
@@ -869,6 +838,7 @@ public class MainActivity extends AppCompatActivity implements
     @SuppressLint("MissingPermission")
     public void onResume() {
         super.onResume();
+        //mapLocations.removeAll(mapLocations);
         kickItOff = true;
         spinner.setVisibility(View.VISIBLE); //hide progressBar
 
@@ -887,12 +857,14 @@ public class MainActivity extends AppCompatActivity implements
         }
         if (isLoggedIn) {
             tvLoading.setText(Html.fromHtml(("Welcome "+firstName+ ",\nThanks for your patience while we search for black owned businesses near you.")));
-            ivUserImageCardview.setVisibility(View.VISIBLE);
+            ivUserImage.setVisibility(View.VISIBLE);
             ivLogo.setVisibility(View.GONE);
+            //ivLogoImageCardview.setVisibility(View.GONE);
         } else {
             tvLoading.setText("Thanks for your patience while we search for black owned businesses near you.");
-            ivUserImageCardview.setVisibility(View.GONE);
+            ivUserImage.setVisibility(View.GONE);
             ivLogo.setVisibility(View.VISIBLE);
+            //ivLogoImageCardview.setVisibility(View.VISIBLE);
         }
 
         ivLoading.setAnimation(imgAnimationIn);
@@ -1254,6 +1226,8 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public boolean onMyLocationButtonClick() {
+        //mapLocations.removeAll(mapLocations);
+
         Toast.makeText(this, "Getting current location...", Toast.LENGTH_SHORT).show();
         Map<String, String> query = new HashMap<>();
 
@@ -1273,6 +1247,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onMyLocationClick(Location location) {
         Toast.makeText(this, "Getting current location...", Toast.LENGTH_SHORT).show();
+        //mapLocations.removeAll(mapLocations);
+
         Map<String, String> query = new HashMap<>();
 
         query.put("latitude", String.valueOf(latitude));
@@ -1326,7 +1302,7 @@ public class MainActivity extends AppCompatActivity implements
      * @param query
      */
     public void getRetrofit(final Map<String, String> query) {
-        //int i;
+
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
@@ -1349,13 +1325,7 @@ public class MainActivity extends AppCompatActivity implements
                 .build();
 
         RetrofitArrayApi service = retrofit.create(RetrofitArrayApi.class);
-        verticalList = new ArrayList<>();
-        locationMatch = new ArrayList<>();
-        listingName = new ArrayList<>();
-        recentList = new ArrayList<>();
-        featuredList = new ArrayList<>();
-        recentReviewList = new ArrayList<>();
-        // pass JSON data to BusinessListings class for filtering
+
         Call<List<BusinessListings>> call = service.getPostInfo(query);
 
         call.enqueue(new Callback<List<BusinessListings>>() {
@@ -1393,6 +1363,7 @@ public class MainActivity extends AppCompatActivity implements
                     return;
                 }
                 if (response.isSuccessful()) {
+                    mapLocations.removeAll(mapLocations);
                     for (int i = 0; i < response.body().size(); i++) {
                        /* BusinessListings.BusinessHours businessHours = response.body().get(i).getBusinessHours();
                         if (businessHours == null) {
@@ -1451,96 +1422,6 @@ public class MainActivity extends AppCompatActivity implements
                         //verticalAdapter.notifyDataSetChanged();
 
                         listingName.add(response.body().get(i).getTitle().getRaw());
-                           /* try {
-                                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD'T'hh:mm:ss", Locale.US);
-                                Date created = sdf.parse(response.body().get(i).getDateGmt());
-                                Date currentTime = Calendar.getInstance().getTime();
-                                date1 = String.valueOf(created);
-                                date2 = String.valueOf(currentTime);
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            boolean isRecent = date1 != null && date2 != null && date1.compareTo(date2) < 30;
-                            if (isRecent) {
-                                recentList.add(new ListingsModel(ListingsModel.IMAGE_TYPE,
-                                        response.body().get(i).getId(),
-                                        response.body().get(i).getTitle().getRaw(),
-                                        response.body().get(i).getLink(),
-                                        response.body().get(i).getStatus(),
-                                        response.body().get(i).getPostCategory().get(0).getName(),
-                                        response.body().get(i).getFeatured(),
-                                        response.body().get(i).getFeaturedImage().getSrc(),
-                                        response.body().get(i).getBldgNo(),
-                                        response.body().get(i).getStreet(),
-                                        response.body().get(i).getCity(),
-                                        response.body().get(i).getRegion(),
-                                        response.body().get(i).getCountry(),
-                                        response.body().get(i).getZip(),
-                                        response.body().get(i).getLatitude(),
-                                        response.body().get(i).getLongitude(),
-                                        response.body().get(i).getRating(),
-                                        response.body().get(i).getRatingCount(),
-                                        response.body().get(i).getPhone(),
-                                        response.body().get(i).getEmail(),
-                                        response.body().get(i).getWebsite(),
-                                        response.body().get(i).getTwitter(),
-                                        response.body().get(i).getFacebook(),
-                                        response.body().get(i).getVideo(),
-                                        todayRange,
-                                        isOpen,
-                                        response.body().get(i).getLogo(),
-                                        response.body().get(i).getContent().getRaw(),
-                                        response.body().get(i).getFeaturedImage().getThumbnail(),
-                                        response.body().get(i).getTitle().getRaw(), new SimpleGeofence(response.body().get(i).getTitle().getRaw(), response.body().get(i).getLatitude(), response.body().get(i).getLongitude(),
-                                        8046, GEOFENCE_EXPIRATION_IN_MILLISECONDS, response.body().get(i).getFeaturedImage().getThumbnail(),
-                                        Geofence.GEOFENCE_TRANSITION_ENTER
-                                                | Geofence.GEOFENCE_TRANSITION_DWELL
-                                                | Geofence.GEOFENCE_TRANSITION_EXIT)));
-                                recentListingsAdapter.notifyDataSetChanged();
-                            }
-                            boolean isFeatured = response.body().get(i).getFeatured();
-                            if (isFeatured) {
-                                featuredList.add(new ListingsModel(ListingsModel.IMAGE_TYPE,
-                                        response.body().get(i).getId(),
-                                        response.body().get(i).getTitle().getRaw(),
-                                        response.body().get(i).getLink(),
-                                        response.body().get(i).getStatus(),
-                                        response.body().get(i).getPostCategory().get(0).getName(),
-                                        response.body().get(i).getFeatured(),
-                                        response.body().get(i).getFeaturedImage().getSrc(),
-                                        response.body().get(i).getBldgNo(),
-                                        response.body().get(i).getStreet(),
-                                        response.body().get(i).getCity(),
-                                        response.body().get(i).getRegion(),
-                                        response.body().get(i).getCountry(),
-                                        response.body().get(i).getZip(),
-                                        response.body().get(i).getLatitude(),
-                                        response.body().get(i).getLongitude(),
-                                        response.body().get(i).getRating(),
-                                        response.body().get(i).getRatingCount(),
-                                        response.body().get(i).getPhone(),
-                                        response.body().get(i).getEmail(),
-                                        response.body().get(i).getWebsite(),
-                                        response.body().get(i).getTwitter(),
-                                        response.body().get(i).getFacebook(),
-                                        response.body().get(i).getVideo(),
-                                        todayRange,
-                                        isOpen,
-                                        response.body().get(i).getLogo(),
-                                        response.body().get(i).getContent().getRaw(),
-                                        response.body().get(i).getFeaturedImage().getThumbnail(),
-                                        response.body().get(i).getTitle().getRaw(), new SimpleGeofence(response.body().get(i).getTitle().getRaw(), response.body().get(i).getLatitude(), response.body().get(i).getLongitude(),
-                                        8046, GEOFENCE_EXPIRATION_IN_MILLISECONDS, response.body().get(i).getFeaturedImage().getThumbnail(),
-                                        Geofence.GEOFENCE_TRANSITION_ENTER
-                                                | Geofence.GEOFENCE_TRANSITION_DWELL
-                                                | Geofence.GEOFENCE_TRANSITION_EXIT)));
-                                featuredListAdapter.notifyDataSetChanged();
-                            }
-
-                            /**
-                             * categories on top of the map
-                             */
 
                         LatLng latlng = new LatLng(response.body().get(i).getLatitude(), response.body().get(i).getLongitude());
                         latLngBoundsBuilder.include(latlng);
@@ -1595,7 +1476,6 @@ public class MainActivity extends AppCompatActivity implements
                     tvLoading.setText("Apologies, We're having trouble communicating with our servers, please try back later.");
                 }
                 return;
-                //getRetrofit(query);
             }
         });
     }
