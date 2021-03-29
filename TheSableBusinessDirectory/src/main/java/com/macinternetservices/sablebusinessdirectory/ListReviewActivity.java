@@ -238,8 +238,9 @@ public class ListReviewActivity extends AppCompatActivity {
         if (locationReview.get(0).ratingCount == 0) {
                 String FirstRate = "Be the first to rate";
                 tvFirstRate.setText(FirstRate);
-                //tvFirstRate.setTextColor(Color.rgb(22, 53, 64)); //green
-            }
+            } else {
+            tvFirstRate.setVisibility(View.GONE);
+        }
 
         if (locationReview.get(0).hours == "null" || locationReview.get(0).isOpen == "null" || locationReview.get(0).hours == null || locationReview.get(0).isOpen == null) {
                 tvIsOpen.setVisibility(View.GONE);
