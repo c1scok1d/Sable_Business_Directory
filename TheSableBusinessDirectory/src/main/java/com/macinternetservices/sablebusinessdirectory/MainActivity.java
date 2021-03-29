@@ -66,6 +66,11 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -78,6 +83,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.macinternetservices.sablebusinessdirectory.model.Person;
 import com.ramotion.circlemenu.CircleMenuView;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -100,6 +107,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -208,6 +216,8 @@ public class MainActivity extends AppCompatActivity implements
     ImageView ivUserImage, spokesperson, ivLoading, noListingsImageView, fooListingImageView, ivSettings, ivAlertOn, ivAlertOff, ivLogo;
     CardView ivUserImageCardview;
     ProgressBar spinner;
+    GoogleSignInClient mGoogleSignInClient;
+
 
     private static final int FRAME_TIME_MS = 8000;
     public AccessTokenTracker accessTokenTracker;
@@ -237,6 +247,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
     public static AccessToken accessToken = null;
+    public static String googleAccessToken;
     CircleMenuView menu = null;
 
     TextSwitcher textSwitcher, textSwitcher3;
@@ -863,6 +874,17 @@ public class MainActivity extends AppCompatActivity implements
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000,
                 4800, LocationListener);
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        // Request only the user's ID token, which can be used to identify the
+        // user securely to your backend. This will contain the user's basic
+        // profile (name, profile picture URL, etc) so you should not need to
+        // make an additional call to personalize your application.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("743643161501-bev9bim8g129polrljp92f8e6r3eff58.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
     public static void printHashKey(Context pContext) {
@@ -895,6 +917,18 @@ public class MainActivity extends AppCompatActivity implements
 
         latitude = location.getLatitude();
         longitude = location.getLongitude();
+
+        //check google login info
+        mGoogleSignInClient.silentSignIn()
+                .addOnCompleteListener(
+                        this,
+                        new OnCompleteListener<GoogleSignInAccount>() {
+                            @Override
+                            public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+                                handleSignInResult(task);
+                            }
+                        });
+
         accessToken = AccessToken.getCurrentAccessToken();
         isLoggedIn = accessToken != null && !accessToken.isExpired();
 
@@ -943,6 +977,63 @@ public class MainActivity extends AppCompatActivity implements
             pref.edit().putBoolean("alertOn", false).apply();
         }
     }
+
+    //begin user auth for google
+    private void handleSignInResult(@NonNull Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            userName = (account.getDisplayName());
+            userEmail = (account.getEmail());
+            userImage = (account.getPhotoUrl().toString());
+            googleAccessToken = account.getIdToken();
+            useGoogleLoginInformation(googleAccessToken);
+        } catch (ApiException e) {
+            Log.w("GoolgeSignInResult", "handleSignInResult:error", e);
+        }
+    }
+
+
+
+    private void useGoogleLoginInformation(final String accessToken) {
+        Map<String, String> query = new HashMap<>();
+        query.put("access_token", accessToken);
+        loginUser(query);
+    }
+
+
+ /*   private void verifyGoogeLoginToken(){
+        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
+                // Specify the CLIENT_ID of the app that accesses the backend:
+                .setAudience(Collections.singletonList("743643161501-b8c75pcrnqpj7psvtd0nppdgqnhjt9ae.apps.googleusercontent.com))
+                        // Or, if multiple clients access the backend:
+                        //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
+                        .build();
+// (Receive idTokenString by HTTPS POST)
+
+        GoogleIdToken idToken = verifier.verify(idTokenString);
+        if (idToken != null) {
+            Payload payload = idToken.getPayload();
+
+            // Print user identifier
+            String userId = payload.getSubject();
+            System.out.println("User ID: " + userId);
+
+            // Get profile information from payload
+            String email = payload.getEmail();
+            boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
+            String name = (String) payload.get("name");
+            String pictureUrl = (String) payload.get("picture");
+            String locale = (String) payload.get("locale");
+            String familyName = (String) payload.get("family_name");
+            String givenName = (String) payload.get("given_name");
+
+            // Use or store profile information
+            // ...
+
+        }
+    } */
+
     /*
     begin user authentication via facebook
      */

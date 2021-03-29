@@ -60,10 +60,9 @@
             android:id="@+id/ivLogo"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_gravity="center_horizontal|top"
+            android:layout_gravity="top"
             android:layout_margin="5dp"
-            android:background="@color/black"
-            app:srcCompat="@drawable/logo" />
+            app:srcCompat="@mipmap/sable_logo_black_foreground" />
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/login_button"

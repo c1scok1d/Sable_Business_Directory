@@ -9,9 +9,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -22,12 +25,16 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
@@ -56,15 +63,17 @@ public class LoginActivity extends AppCompatActivity {
 
     private AccessTokenTracker accessTokenTracker;
     private LoginButton loginButton;
-    private TextView tvSecureMsg, tvGreeting, textView6, textView7 ;
+    private TextView tvSecureMsg, tvGreeting, textView6, textView7;
     private ImageView ivGreeter, ivLogo;
     CallbackManager fbLogincallbackManager;
-   // Map<Object, Object> query = new HashMap<>();
+    // Map<Object, Object> query = new HashMap<>();
     ArrayList<UserAuthModel> userinfo = new ArrayList<>();
     String baseURL = "https://www.thesablebusinessdirectory.com", userImage, userName, userEmail;
     AccessToken accessToken = AccessToken.getCurrentAccessToken();
     Button btnBack;
-    SignInButton signInButton;
+    SignInButton googleSignInButton;
+    private GoogleApiClient googleApiClient;
+    private static final int RC_SIGN_IN = 1;
     GoogleSignInClient mGoogleSignInClient;
 
     Animation animFadeIn;
@@ -74,17 +83,17 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-       tvSecureMsg = findViewById(R.id.tvSecureMsg);
-       btnBack = findViewById(R.id.btnBack);
-       //tvGreeting = findViewById(R.id.tvGreeting);
-       //textView6 = findViewById(R.id.textView6);
-       //textView7 = findViewById(R.id.textView7);
-       ivGreeter = findViewById(R.id.ivGreeter);
-       ivLogo = findViewById(R.id.ivLogo);
-       loginButton = findViewById(R.id.login_button);
-       loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
-       signInButton = findViewById(R.id.google_login_button);
-       signInButton.setSize(SignInButton.SIZE_STANDARD);
+        tvSecureMsg = findViewById(R.id.tvSecureMsg);
+        btnBack = findViewById(R.id.btnBack);
+        //tvGreeting = findViewById(R.id.tvGreeting);
+        //textView6 = findViewById(R.id.textView6);
+        //textView7 = findViewById(R.id.textView7);
+        ivGreeter = findViewById(R.id.ivGreeter);
+        ivLogo = findViewById(R.id.ivLogo);
+        loginButton = findViewById(R.id.login_button);
+        loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
+        googleSignInButton = findViewById(R.id.google_login_button);
+        googleSignInButton.setSize(SignInButton.SIZE_STANDARD);
 
 
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -94,12 +103,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        signInButton.setOnClickListener(new View.OnClickListener() {
+        googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn();            }
+                signIn();
+            }
         });
-
 
 
         // Defining the AccessTokenTracker
@@ -109,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                 // currentAccessToken is null if the user is logged out
                 if (currentAccessToken != null) {
                     useLoginInformation(currentAccessToken);
-                    Intent loginIntent = new Intent(LoginActivity.this,MainActivity.class);
+                    Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(loginIntent);
 
                 } else {
@@ -119,7 +128,6 @@ public class LoginActivity extends AppCompatActivity {
         };
 
         fbLogincallbackManager = CallbackManager.Factory.create();
-
 
 
         String EMAIL = "email";
@@ -172,40 +180,24 @@ public class LoginActivity extends AppCompatActivity {
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("743643161501-bev9bim8g129polrljp92f8e6r3eff58.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
-        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
-    Integer googleSignIn = 101;
-    //Starting the intent prompts the user to select a Google account to sign in with.
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, googleSignIn);
-    }
-
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            String idToken = account.getIdToken();
-
-            // Signed in successfully, show authenticated UI.
-            //updateUI(account);
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("GoogleSignIn:", "signInResult:failed code=" + e.getStatusCode());
-            //updateUI(null);
-        }
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         fbLogincallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == googleSignIn) {
+        if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -213,6 +205,29 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            userName = (account.getDisplayName());
+            userEmail = (account.getEmail());
+            userImage = (account.getPhotoUrl().toString());
+            MainActivity.googleAccessToken = account.getIdToken();
+            //String GoogleAccessToken = account.getIdToken();
+            //useGoogleLoginInformation(GoogleAccessToken);
+
+            Map<String, String> query = new HashMap<>();
+            query.put("access_token", account.getIdToken());
+            getRetrofit(query);
+            // Signed in successfully, show authenticated UI.
+            //updateUI(account);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w("GoogleSignInStatus: ", "signInResult:failed code=" + e.getStatusCode());
+            //updateUI(null);
+        }
+    }
     public void onStart() {
         super.onStart();
         //This starts the access token tracking
@@ -222,7 +237,7 @@ public class LoginActivity extends AppCompatActivity {
             useLoginInformation(accessToken);
         }
         // Check for existing Google Sign In account, if the user is already signed in
-    // the GoogleSignInAccount will be non-null.
+        // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         //updateUI(account);
     }
@@ -233,7 +248,13 @@ public class LoginActivity extends AppCompatActivity {
         accessTokenTracker.stopTracking();
     }
 
-        private void useLoginInformation(final AccessToken accessToken) {
+    private void useGoogleLoginInformation(final String accessToken) {
+        Map<String, String> query = new HashMap<>();
+        query.put("access_token", accessToken);
+        getRetrofit(query);
+    }
+
+    private void useLoginInformation(final AccessToken accessToken) {
 
             //String mAccessToken = accessToken;
             //query.put("access_token", String.valueOf(accessToken));
