@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -59,6 +60,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.macinternetservices.sablebusinessdirectory.MainActivity.firstName;
+
 public class LoginActivity extends AppCompatActivity {
 
     private AccessTokenTracker accessTokenTracker;
@@ -72,11 +75,11 @@ public class LoginActivity extends AppCompatActivity {
     AccessToken accessToken = AccessToken.getCurrentAccessToken();
     Button btnBack;
     SignInButton googleSignInButton;
-    private GoogleApiClient googleApiClient;
+    //private GoogleApiClient googleApiClient;
     private static final int RC_SIGN_IN = 1;
     GoogleSignInClient mGoogleSignInClient;
 
-    Animation animFadeIn;
+    Animation imgAnimationIn, imgAnimationOut = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,12 +97,14 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
         googleSignInButton = findViewById(R.id.google_login_button);
         googleSignInButton.setSize(SignInButton.SIZE_STANDARD);
+        imgAnimationIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), MarkerClusteringActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
 
@@ -120,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                     useLoginInformation(currentAccessToken);
                     Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(loginIntent);
-
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 } else {
                     //displayName.setText("Please try again...");
                 }
@@ -150,7 +155,16 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException exception) {
-                // App code
+                // The ApiException status code indicates the detailed failure reason.
+                // Please refer to the GoogleSignInStatusCodes class reference for more information.
+                ivGreeter.setAnimation(imgAnimationIn);
+                //fooListingsLayout.setVisibility(View.VISIBLE);
+                ivGreeter.setImageResource(R.mipmap.under_construction_foreground);
+                //tvSecureMsg.setTextSize(16);
+                tvSecureMsg.setAnimation(imgAnimationIn);
+                tvSecureMsg.setText("Apologies looks like there was an error!\nWe're constantly working to improve our service.\nPlease try again later.");
+                Log.w("GoolgeSignInResult", "handleSignInResult:error", exception);
+                Log.w("GoogleSignInStatus: ", "signInResult:failed code=" + exception);
             }
         });
 
@@ -168,19 +182,25 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(FacebookException exception) {
-                        // App code
+                        // The ApiException status code indicates the detailed failure reason.
+                        // Please refer to the GoogleSignInStatusCodes class reference for more information.
+                        ivGreeter.setAnimation(imgAnimationIn);
+                        //fooListingsLayout.setVisibility(View.VISIBLE);
+                        ivGreeter.setImageResource(R.mipmap.under_construction_foreground);
+                        //tvSecureMsg.setTextSize(16);
+                        tvSecureMsg.setAnimation(imgAnimationIn);
+                        tvSecureMsg.setText("Apologies looks like there was an error!\nWe're constantly working to improve our service.\nPlease try again later.");
+                        Log.w("GoolgeSignInResult", "handleSignInResult:error", exception);
+                        Log.w("GoogleSignInStatus: ", "signInResult:failed code=" + exception);
                     }
                 });
-
-        animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.fade_in);
         tvSecureMsg.setVisibility(View.VISIBLE);
-        tvSecureMsg.startAnimation(animFadeIn);
+        tvSecureMsg.startAnimation(imgAnimationIn);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("743643161501-bev9bim8g129polrljp92f8e6r3eff58.apps.googleusercontent.com")
+                //.requestIdToken("743643161501-bev9bim8g129polrljp92f8e6r3eff58.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
@@ -224,22 +244,34 @@ public class LoginActivity extends AppCompatActivity {
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            //ivGreeter.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            ivGreeter.setAnimation(imgAnimationIn);
+            //fooListingsLayout.setVisibility(View.VISIBLE);
+            ivGreeter.setImageResource(R.mipmap.under_construction_foreground);
+            //tvSecureMsg.setTextSize(16);
+            tvSecureMsg.setAnimation(imgAnimationIn);
+            tvSecureMsg.setText("Apologies looks like there was an error!\nWe're constantly working to improve our service. Please try again later.");
+            //Log.w("GoolgeSignInResult", "handleSignInResult:error", e);
             Log.w("GoogleSignInStatus: ", "signInResult:failed code=" + e.getStatusCode());
-            //updateUI(null);
         }
     }
     public void onStart() {
         super.onStart();
-        //This starts the access token tracking
+
+        // check for and start tracker if user is auth'd via facebook
+        // if users is auth'd via facebook login to sable
         accessTokenTracker.startTracking();
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if (accessToken != null) {
             useLoginInformation(accessToken);
         }
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
+
+        // check for and start tracker if user is auth'd via facebook
+        // if users is auth'd via facebook login to sable
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        //updateUI(account);
+        if(account!=null){
+            useGoogleLoginInformation(account.getIdToken());
+        }
     }
 
     public void onDestroy() {
@@ -381,6 +413,7 @@ public class LoginActivity extends AppCompatActivity {
                         locationMatchBundle.putParcelableArrayList("userinfo", userinfo);
                         MainActivity.putExtra("userinfo", userinfo);
                         startActivity(MainActivity);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                    // }
                 }
             }

@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements
     public static Double latitude, longitude;
 
     public static TextView tvMore, tvUserName, tvWpUserId, tvCity, tvCategories, tvLoading, noListingsTextView, textViewFoo, fooListingsTextView;
-    Button  btnShowListings;
+    //Button  btnShowListings;
     LoginButton loginButton, loginButton3;
     RecyclerView verticalRecyclerView, featuredRecyclervView, recentListingsRecyclervView, recentReviewsRecyclervView;
     //ProgressBar progressBar;
@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements
             recentListingsRecyclerViewLayoutManager, recentReviewsRecyclerViewLayoutManager;
     LinearLayout recentReviewsLayout, recentReviewsRecyclerLayout;
     //FrameLayout mapLayout;
-    RelativeLayout loadingLayout, noListingsLayout, container;
+    RelativeLayout loadingLayout, noListingsLayout, container, fooListingsLayout;
 
 
     //VerticalAdapter verticalAdapter;
@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements
     Location location;
     public static Marker currentMarker;
     CallbackManager fbLogincallbackManager;
-    public static boolean isLoggedIn = false;
+    public static boolean isLoggedIn = false, isLoggedInFB = false, isLoggedInGoogle = false;
     boolean kickItOff = true;
 
 
@@ -387,13 +387,13 @@ public class MainActivity extends AppCompatActivity implements
         //This starts the access token tracking
 
 
-        // Animation imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        //Animation imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
+
 
         //isRestore = savedInstanceState != null;
         ivSettings = findViewById(R.id.btnSettings);
         loadingLayout = findViewById(R.id.loadingLayout);
         noListingsLayout = findViewById(R.id.noListingsLayout);
+        fooListingsLayout = findViewById(R.id.fooListingsLayout);
         tvLoading = findViewById(R.id.tvLoading);
         tvLoading.setVisibility(View.GONE);
         tvMore = findViewById(R.id.tvMore);
@@ -450,7 +450,7 @@ public class MainActivity extends AppCompatActivity implements
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         accessToken = loginResult.getAccessToken();
-                        isLoggedIn = accessToken != null && !accessToken.isExpired();
+                        isLoggedInFB = accessToken != null && !accessToken.isExpired();
                         useLoginInformation(accessToken);
                     }
 
@@ -473,7 +473,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onSuccess(LoginResult loginResult) {
                 accessToken = loginResult.getAccessToken();
-                isLoggedIn = accessToken != null && !accessToken.isExpired();
+                isLoggedInFB = accessToken != null && !accessToken.isExpired();
                 useLoginInformation(accessToken);
             }
 
@@ -823,17 +823,33 @@ public class MainActivity extends AppCompatActivity implements
 
                         break;
                     case 2: //search popup
-                        //searchView.setVisibility(View.VISIBLE);
+                        //spinner.setVisibility(View.GONE);
+                        menu.setVisibility(View.GONE);
+                        container.setBackgroundColor(Color.TRANSPARENT);
+                        ivLoading.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        ivLoading.setImageResource(R.mipmap.under_construction_foreground);
+                        ivLoading.setVisibility(View.VISIBLE);
+                        ivLoading.setAnimation(imgAnimationIn);
+                        tvLoading.setVisibility(View.VISIBLE);
+                        tvLoading.setAnimation(imgAnimationIn);
+                        if (isLoggedIn) {
+                            tvLoading.setText("Apologies "+firstName+",\nlooks like there was an error.\nWe're constantly working to improve our service. Please try again later.");
+                            menu.setVisibility(View.GONE);
+                        } else {
+                            menu.setVisibility(View.GONE);
+                            tvLoading.setText("Apologies, looks like there was an error.\nWe're constantly working to improve our service. Please try again later.");
+                        }
                         break;
                     case 3: //add listing
                         if (!isLoggedIn) {
-                            Toast.makeText(getApplicationContext(), "User must be logged in to add a business listing.", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(), "User must be logged in to add a business listing.", Toast.LENGTH_LONG).show();
                             Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(loginIntent);
                             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         } else {
                             Intent addListingIntent = new Intent(MainActivity.this, AddListingActivity.class);
                             startActivity(addListingIntent);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         }
                         menu.setVisibility(View.GONE);
                         container.setBackgroundColor(Color.TRANSPARENT);
@@ -885,6 +901,10 @@ public class MainActivity extends AppCompatActivity implements
                 .build();
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        //url = getIntent().getStringExtra("image_url");
+
+
     }
 
     public static void printHashKey(Context pContext) {
@@ -919,20 +939,23 @@ public class MainActivity extends AppCompatActivity implements
         longitude = location.getLongitude();
 
         //check google login info
-        mGoogleSignInClient.silentSignIn()
-                .addOnCompleteListener(
-                        this,
-                        new OnCompleteListener<GoogleSignInAccount>() {
-                            @Override
-                            public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
-                                handleSignInResult(task);
-                            }
-                        });
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
-        accessToken = AccessToken.getCurrentAccessToken();
-        isLoggedIn = accessToken != null && !accessToken.isExpired();
-
+        if(account != null){
+            isLoggedInGoogle = true;
+            mGoogleSignInClient.silentSignIn()
+                    .addOnCompleteListener(
+                            this,
+                            new OnCompleteListener<GoogleSignInAccount>() {
+                                @Override
+                                public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+                                    handleSignInResult(task);
+                                }
+                            });
+        }
         //check user login info
+        accessToken = AccessToken.getCurrentAccessToken();
+        isLoggedInFB = accessToken != null && !accessToken.isExpired();
         accessTokenTracker.startTracking();
         facebookLogin();
         /* first run check */
@@ -949,13 +972,6 @@ public class MainActivity extends AppCompatActivity implements
             ivUserImage.setVisibility(View.GONE);
             ivLogo.setVisibility(View.VISIBLE);
         }
-
-        ivLoading.setAnimation(imgAnimationIn);
-        ivLoading.setVisibility(View.VISIBLE);
-        ivLoading.setImageResource(R.mipmap.online_reviews_foreground);
-        tvLoading.setAnimation(imgAnimationIn);
-        tvLoading.setVisibility(View.VISIBLE);
-
         Map<String, String> query = new HashMap<>();
 
         query.put("latitude", String.valueOf(latitude));
@@ -986,14 +1002,24 @@ public class MainActivity extends AppCompatActivity implements
             userName = (account.getDisplayName());
             userEmail = (account.getEmail());
             userImage = (account.getPhotoUrl().toString());
-            googleAccessToken = account.getIdToken();
-            useGoogleLoginInformation(googleAccessToken);
+           // googleAccessToken = account.getIdToken();
+            useGoogleLoginInformation(account.getIdToken());
         } catch (ApiException e) {
+            fooListingsLayout.setAnimation(imgAnimationIn);
+            fooListingsLayout.setVisibility(View.VISIBLE);
+            fooListingImageView.setImageResource(R.mipmap.sorry);
+            fooListingsTextView.setTextSize(16);
+
+            if(isLoggedIn) {
+                fooListingsTextView.setText("This is terrible " + firstName +"!!!!\n\nLooks like there aren't any black owned businesses near you in our directory.\n" +
+                        "Tap Add (+) from the menu to add any black owned business you visit to our directory.");
+            } else {
+                fooListingsTextView.setText("This is terrible!!!!\n\nLooks like there aren't any black owned businesses near you in our directory.\n" +
+                        "Tap add (+) to add any black owned business you visit to our directory.");
+            }
             Log.w("GoolgeSignInResult", "handleSignInResult:error", e);
         }
     }
-
-
 
     private void useGoogleLoginInformation(final String accessToken) {
         Map<String, String> query = new HashMap<>();
@@ -1043,7 +1069,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
                 if(accessToken != null && !accessToken.isExpired()){
-                    isLoggedIn = accessToken != null && !accessToken.isExpired();
+                    isLoggedInFB = accessToken != null && !accessToken.isExpired();
                     useLoginInformation(accessToken);
                 }
             }
@@ -1051,9 +1077,8 @@ public class MainActivity extends AppCompatActivity implements
         if(accessToken != null && !accessToken.isExpired()){
             useLoginInformation(accessToken);
         }
-        //accessTokenTracker.startTracking();
         accessToken = AccessToken.getCurrentAccessToken();
-        isLoggedIn = accessToken != null && !accessToken.isExpired();
+        isLoggedInFB = accessToken != null && !accessToken.isExpired();
     }
 
     public void useLoginInformation(final AccessToken accessToken) {
@@ -1603,17 +1628,18 @@ public class MainActivity extends AppCompatActivity implements
             public void onFailure(Call<List<BusinessListings>> call, Throwable t) {
                 Log.e("getRetrofitFailure: ", "foo: "+t);
                 spinner.setVisibility(View.GONE);
-                ivLoading.setImageResource(R.mipmap.sorry_foreground);
+                //ivLoading.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                ivLoading.setImageResource(R.mipmap.under_construction_foreground);
                 ivLoading.setVisibility(View.VISIBLE);
                 ivLoading.setAnimation(imgAnimationIn);
                 tvLoading.setVisibility(View.VISIBLE);
                 tvLoading.setAnimation(imgAnimationIn);
                 if (isLoggedIn) {
-                    tvLoading.setText("Apologies "+firstName+",\nWe're having trouble communicating with our servers, please try back later.");
+                    tvLoading.setText("Apologies "+firstName+",\nlooks like there was an error.\nWe're constantly working to improve our service.\nPlease try again later.");
                     menu.setVisibility(View.GONE);
                 } else {
                     menu.setVisibility(View.GONE);
-                    tvLoading.setText("Apologies, We're having trouble communicating with our servers, please try back later.");
+                    tvLoading.setText("Apologies, looks like there was an error.\nWe're constantly working to improve our service.\nPlease try again later.");
                 }
                 return;
             }
@@ -1731,6 +1757,7 @@ public class MainActivity extends AppCompatActivity implements
             public void onResponse(Call<UserAuthPOJO> call, Response<UserAuthPOJO> response) {
                 if (response.isSuccessful()) {
                     userId = String.valueOf(response.body().getWpUserId());
+                    isLoggedIn = true;
                     //Toast.makeText(MainActivity.this, "" + userId, Toast.LENGTH_SHORT).show();
                 } else {
                     // do some stuff
@@ -1969,6 +1996,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void setMarkers() {
         Intent intent = new Intent(this, MarkerClusteringActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     protected GoogleMap getMap() {

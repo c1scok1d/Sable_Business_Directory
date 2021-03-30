@@ -202,6 +202,7 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
                                     Uri.fromParts("package", getPackageName(), null));
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                             finish();
                         }
                     },
@@ -297,6 +298,7 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
                                     Uri.fromParts("package", getPackageName(), null));
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                             finish();
                         }
                     },
@@ -339,6 +341,7 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
                                 Uri.fromParts("package", getPackageName(), null));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         finish();
                     }
                 },
@@ -380,6 +383,7 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
                     checkPermissionsQ();
             } else {
                 startActivity(new Intent(this, MainActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();            //h.postDelayed(r, 1500);
             }
         } else {
@@ -396,6 +400,7 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
                     checkPermissions();
             } else {
                 startActivity(new Intent(this, MainActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
             }
         }

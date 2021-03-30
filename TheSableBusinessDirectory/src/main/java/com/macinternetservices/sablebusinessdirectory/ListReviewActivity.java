@@ -1,12 +1,23 @@
 package com.macinternetservices.sablebusinessdirectory;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,11 +25,13 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -52,16 +65,17 @@ import static com.macinternetservices.sablebusinessdirectory.MainActivity.GEOFEN
 
 public class ListReviewActivity extends AppCompatActivity {
 
-    ImageButton btnEmail, btnTwitter, btnFacebook, btnReview;
+    //ImageButton btnEmail, btnTwitter, btnFacebook, btnReview;
     TextView tvFeatured, tvStatus, tvState, tvNoReviews,
             tvStreet, tvCity, tvZip, tvCountry, tvRating, tvId, tvWebsite, tvImages, tvOurReviews, tvBldNo,
             tvVideo, tvHours, tvIsOpen, tvLink, tvContent, tvPhone, tvBldgno, tvLatitude, tvLongitude, tvRatingCount, tvCategory, tvName, tvFirstRate, tvDistance;
     ImageView ivFeaturedImage;
     RatingBar simpleRatingBar;
-    String title, content, city, /*state, zipcode, */country, link, baseURL = "https://www.thesablebusinessdirectory.com", username = "android_app",
-            password = "mroK zH6o wOW7 X094 MTKy fwmY", status = "approved";//, post_type = "business", todayRange, isOpen;
-    Double latitude, longitude;
-    Integer category, id, rating;
+    String /*title, content, city, state, zipcode, country, link, */baseURL = "https://www.thesablebusinessdirectory.com", username = "android_app",
+            password = "mroK zH6o wOW7 X094 MTKy fwmY", status = "approved";
+    //, post_type = "business", todayRange, isOpen;
+    //Double latitude, longitude;
+    //Integer category, id, rating;
 
     ProgressBar pDialog;
 
@@ -72,7 +86,7 @@ public class ListReviewActivity extends AppCompatActivity {
     HorizontalImageAdapter horizontalImageAdapter;
     VerticalReviewAdapter verticalReviewAdapter;
     AccessToken accessToken = AccessToken.getCurrentAccessToken();
-    String userName, userEmail, userImage;
+    //String userName, userEmail, userImage;
 
 
 
@@ -85,6 +99,7 @@ public class ListReviewActivity extends AppCompatActivity {
     LinearLayout reviewImagesRecyclerLayout, reviewRecyclerLayout, reviewBtnLayout, callBtnLayout, dirBtnLayout, websiteBtnLayout;
     RelativeLayout notLoggedInLayout;
     boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+    ImageView expanded_image;
 
     //LinearLayoutManager hLayoutManager, vLayoutManager;
 
@@ -105,35 +120,29 @@ public class ListReviewActivity extends AppCompatActivity {
         verticalList = new ArrayList<>();
 
 
-       Picasso.Builder builder = new Picasso.Builder(this);
+       //Picasso.Builder builder = new Picasso.Builder(this);
         pDialog = new ProgressBar(this);
+
+        LinearLayoutManager hLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        horizontalImageAdapter = new HorizontalImageAdapter(horizontalList, horizontalList, this);
 
         horizontalRecyclerView = findViewById(R.id.reviewImagesRecycler);
         horizontalRecyclerView.setHasFixedSize(true);
-
-        LinearLayoutManager hLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         horizontalRecyclerView.setLayoutManager(hLayoutManager);
-        horizontalImageAdapter = new HorizontalImageAdapter(horizontalList, horizontalList, this);
-        // specify an adapter (see also next example)
         horizontalRecyclerView.setAdapter(horizontalImageAdapter);
-//      /* Set Horizontal LinearLayout to RecyclerView */
-        //horizontalRecyclerView.setLayoutManager(hLayoutManager);
 
-
-        /* Veritcal Review Listing Recycler View */
-        verticalRecyclerView =  findViewById(R.id.reviewRecycler);
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        verticalRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
         LinearLayoutManager vLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        verticalRecyclerView.setLayoutManager(vLayoutManager);
         verticalReviewAdapter = new VerticalReviewAdapter(verticalList, getApplicationContext());
-        // specify an adapter (see also next example)
+
+        verticalRecyclerView =  findViewById(R.id.reviewRecycler);
+        verticalRecyclerView.setHasFixedSize(true);
+        verticalRecyclerView.setLayoutManager(vLayoutManager);
         verticalRecyclerView.setAdapter(verticalReviewAdapter);
 
 
+        // Retrieve and cache the system's default "short" animation time.
+        //shortAnimationDuration = getResources().getInteger(
+          //      android.R.integer.config_shortAnimTime);
         simpleRatingBar = findViewById(R.id.simpleRatingBar);
         //simpleRatingBar.setNumStars(5);
         tvId = findViewById(R.id.tvId);
@@ -176,10 +185,10 @@ public class ListReviewActivity extends AppCompatActivity {
         tvFirstRate = findViewById(R.id.tvFirstRate);
         pDialog = findViewById(R.id.progressBar1);
         tvNoReviews = findViewById(R.id.tvNoReviews);
+        expanded_image = findViewById(R.id.expanded_image);
 
 
         locationReview = this.getIntent().getExtras().getParcelableArrayList("locationReview");
-
 
         Map<String, String> query = new HashMap<>();
         String foo = locationReview.get(0).timestamp;
@@ -275,8 +284,6 @@ public class ListReviewActivity extends AppCompatActivity {
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     //Toast.makeText(getApplicationContext(),"User Not Logged In", Toast.LENGTH_SHORT).show();
                 } else {
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-
                     /**
                      * for each array space if id != skip or else...
                      */
@@ -327,6 +334,7 @@ public class ListReviewActivity extends AppCompatActivity {
                             Intent LocationReview = new Intent(v.getContext(), ReviewActivity.class);
                             LocationReview.putExtra("locationReview", locationFoo);
                             startActivity(LocationReview);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                             break;
                         } else {
                             ////Log.e("VerticalAdapter", "no matcon on locationReview");
@@ -343,8 +351,12 @@ public class ListReviewActivity extends AppCompatActivity {
                     Intent callIntent = new Intent(Intent.ACTION_DIAL);
                     callIntent.setData(Uri.parse("tel:" + tvPhone.getText().toString()));
                     startActivity(callIntent);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
                 }
             });
+        } else {
+            callBtnLayout.setVisibility(View.GONE);
         }
         if (!tvLatitude.getText().toString().isEmpty() || tvLongitude.getText().toString().isEmpty()) {
             dirBtnLayout.setOnClickListener(new View.OnClickListener() {
@@ -354,6 +366,7 @@ public class ListReviewActivity extends AppCompatActivity {
                     Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                     mapIntent.setPackage("com.google.android.apps.maps");
                     startActivity(mapIntent);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 }
             });
         }
@@ -365,44 +378,12 @@ public class ListReviewActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent website = new Intent(Intent.ACTION_VIEW, Uri.parse(tvWebsite.getText().toString()));
                     startActivity(website);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 }
             });
+        } else {
+            websiteBtnLayout.setVisibility(View.GONE);
         }
-    }
-
-
-    private void useLoginInformation(AccessToken accessToken) {
-        /**
-         Creating the GraphRequest to fetch user details
-         1st Param - AccessToken
-         2nd Param - Callback (which will be invoked once the request is successful)
-         **/
-        GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
-            //OnCompleted is invoked once the GraphRequest is successful
-            @Override
-            public void onCompleted(JSONObject object, GraphResponse response) {
-                try {
-                    userName = object.getString("name");
-                    userEmail = object.getString("email");
-                    userImage = object.getJSONObject("picture").getJSONObject("data").getString("url");
-                       /* displayName.setText(name);
-                        emailID.setText(email);*/
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        // We set parameters to the GraphRequest using a Bundle.
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,email,picture.width(200)");
-        request.setParameters(parameters);
-        // Initiate the GraphRequest
-        request.executeAsync();
-    }
-
-    public void onBackPressed() {
-        Intent onBack = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(onBack);
     }
 
     /**
@@ -427,8 +408,6 @@ public class ListReviewActivity extends AppCompatActivity {
         }
 
     }
-
-
 
     private static Retrofit retrofit = null;
     public void getPostReview(final Map<String, String> query) {
@@ -458,15 +437,12 @@ public class ListReviewActivity extends AppCompatActivity {
         Call<List<ListReviewPOJO>> call = service.getPostReview(query);
 
 
-
         // get filtered data from BusinessListings class and add to recyclerView adapter for display on screen
         call.enqueue(new Callback<List<ListReviewPOJO>>() {
             @Override
             public void onResponse(Call<List<ListReviewPOJO>> call, Response<List<ListReviewPOJO>> response) {
-                ////Log.e("gePostReview_METHOD_SUCCESS", " response " + response.body());
                 if (response.isSuccessful()) {
 
-                    // mListPost = response.body();
                     pDialog.setVisibility(View.GONE); //hide progressBar
 
                     //if no reviews take user to review activity to be the first to review
@@ -474,9 +450,7 @@ public class ListReviewActivity extends AppCompatActivity {
                         reviewImagesRecyclerLayout.setVisibility(View.GONE);
                         reviewRecyclerLayout.setVisibility(View.GONE);
                         notLoggedInLayout.setVisibility(View.VISIBLE);
-                       // tvName.setTextColor(getResources().getColor(R.color.com_facebook_blue));
                         String listingName = "<font color='#4FC1E9'>" +tvName.getText().toString()+"</font>";
-                       // t.setText(Html.fromHtml(first + next));
                         tvNoReviews.setText(Html.fromHtml("Identify yourself via Facebook and use the rate button to be the first to rate " + listingName + "."));
                         if (isLoggedIn) {
                             tvNoReviews.setText(Html.fromHtml("Use the rate button to be the first to rate " + listingName + "."));
@@ -491,16 +465,10 @@ public class ListReviewActivity extends AppCompatActivity {
                                     response.body().get(i).getId(),
                                     Html.fromHtml(response.body().get(i).getContent().getRendered()).toString(),
                                     response.body().get(i).getLink(),
-                                    //response.body().get(i).getStatus(),
-                                    //response.body().get(i).getImages().getRendered().get(0).getSrc(),
                                     response.body().get(i).getAuthorName(),
                                     response.body().get(i).getCity(),
-                                    /*response.body().get(i).getBldgNo(),
-                                    response.body().get(i).getStreet(),*/
-                                    //response.body().get(i).getRatings().getRendered(),
                                     response.body().get(i).getRegion(),
                                     response.body().get(i).getCountry(),
-                                    // response.body().get(i).getZip(),
                                     response.body().get(i).getLatitude(),
                                     response.body().get(i).getLongitude(),
                                     response.body().get(i).getRating().getLabel(),
@@ -514,11 +482,12 @@ public class ListReviewActivity extends AppCompatActivity {
                         //if reviews have photos display images
                         for (int i = 0; i < response.body().size(); i++) {
                             if (!response.body().get(i).getImages().getRendered().isEmpty()) {
-                             /*   break;
-                            } else { */
-                                // horizontalList.add(response.body().get(i).getImages().getRendered().get(i).getSrc());
                                 for (int n = 0; n < response.body().get(i).getImages().getRendered().size(); n++) {
                                     horizontalList.add(response.body().get(i).getImages().getRendered().get(n).getSrc());
+                                    Glide.with(getApplicationContext()).load(response.body().get(i).getImages().getRendered().get(n).getSrc())
+                                            .placeholder(R.drawable.ic_launcher_background)
+                                            .error(R.drawable.ic_launcher_background)
+                                            .into(expanded_image);
                                 }
                                 horizontalImageAdapter.notifyDataSetChanged();
                                 tvImages.setVisibility(View.VISIBLE);
@@ -526,14 +495,11 @@ public class ListReviewActivity extends AppCompatActivity {
                         }
                     }
                 } else {
-                    ////Log.e("getPostReview_METHOD_noResponse ", " SOMETHING'S FUBAR'd!!! :)");
                 }
             }
             @Override
             public void onFailure(Call<List<ListReviewPOJO>> call, Throwable t) {
                 if (retryCount++ < TOTAL_RETRIES) {
-                    ////Log.e("getRetrofit_METHOD_FAILURE ", "Retrying... (" + retryCount + " out of " + TOTAL_RETRIES + ")");
-
                 }
             }
         });

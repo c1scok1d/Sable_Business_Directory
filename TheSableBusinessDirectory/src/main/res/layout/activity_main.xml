@@ -183,9 +183,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="500dp"
                             android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentBottom="false"
-                            app:srcCompat="@mipmap/noreviews_foreground" />
+                            android:layout_centerVertical="true"
+                            app:srcCompat="@mipmap/under_construction_foreground" />
 
                         <TextView
                             android:id="@+id/fooListingsTextView"
@@ -772,6 +773,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             sothree:srcCompat="@mipmap/sable_logo_black_foreground" />
+
+        <ImageView
+            android:id="@+id/myImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY" />
+
     </LinearLayout>
 
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

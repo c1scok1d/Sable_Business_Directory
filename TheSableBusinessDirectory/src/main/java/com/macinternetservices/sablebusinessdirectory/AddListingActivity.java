@@ -355,6 +355,7 @@ public class AddListingActivity extends AppCompatActivity implements
                 Intent home = new Intent(AddListingActivity.this, MainActivity.class);;
                 home.putExtra("userActivityArray", userActivityArray);
                 startActivity(home);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
 
@@ -941,6 +942,7 @@ public class AddListingActivity extends AppCompatActivity implements
     public void onBackPressed() {
         Intent onBack = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(onBack);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     /**
@@ -1065,7 +1067,7 @@ String type = "gd_business";
                     userActivityArray.add(String.valueOf(response.body().get(0).getId())); //listing id
                     userActivityArray.add(response.body().get(0).getType()); // post type add
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
-
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 }
             }
 

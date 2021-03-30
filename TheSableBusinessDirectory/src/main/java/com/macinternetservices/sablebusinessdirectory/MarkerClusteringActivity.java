@@ -282,6 +282,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
                 locationReviewBundle.putParcelableArrayList("locationReviewBundle", locationReviewShow);
                 showReviews.putExtra("locationReview", locationReviewShow);
                 startActivity(showReviews);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 break;
 
             }

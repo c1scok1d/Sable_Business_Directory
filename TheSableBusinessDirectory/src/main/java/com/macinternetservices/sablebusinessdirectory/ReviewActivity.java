@@ -453,6 +453,7 @@ public class ReviewActivity extends AppCompatActivity implements
                     Intent mainActivity = new Intent(view.getContext(), MainActivity.class);
                     mainActivity.putExtra("userActivityArray", userActivityArray);
                     startActivity(mainActivity);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 }
             }
         });
@@ -660,6 +661,7 @@ public class ReviewActivity extends AppCompatActivity implements
     public void onBackPressed() {
         Intent onBack = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(onBack);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     StringBuilder sb = new StringBuilder();
@@ -715,6 +717,7 @@ public class ReviewActivity extends AppCompatActivity implements
                     userActivityArray.add(String.valueOf(response.body().getPost())); // listing id for review
                     userActivityArray.add(response.body().getType());  //post type 'comment'
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 }
             }
             @Override

@@ -68,6 +68,7 @@ public class SplashScreen extends AppCompatActivity {
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED)){
             startActivity(new Intent(this, PermissionRationaleActivity.class));
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         } else {
             startActivity(new Intent(this, MainActivity.class));
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
