@@ -280,6 +280,12 @@ public class LoginActivity extends AppCompatActivity {
         accessTokenTracker.stopTracking();
     }
 
+    /*public void onBackPressed() {
+        Intent onBack = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(onBack);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    } */
+
     private void useGoogleLoginInformation(final String accessToken) {
         Map<String, String> query = new HashMap<>();
         query.put("access_token", accessToken);
@@ -393,7 +399,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
 
                     // mListPost = response.body();
-                    //progressBar.setVisibility(View.GONE); //hide progressBar
+                     //hide progressBar
                     // loop through JSON response get parse and output to log
 
                    // for (int i = 0; i < response.body().size(); i++) {

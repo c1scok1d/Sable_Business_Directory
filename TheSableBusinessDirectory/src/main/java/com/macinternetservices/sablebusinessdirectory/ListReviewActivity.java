@@ -116,6 +116,7 @@ public class ListReviewActivity extends AppCompatActivity {
         tvImages.setVisibility(View.GONE);
         tvOurReviews = findViewById(R.id.tvOurReviews);
         tvOurReviews.setVisibility(View.GONE);
+        websiteBtnLayout = findViewById(R.id.websiteBtnLayout);
 
         verticalList = new ArrayList<>();
 
@@ -372,8 +373,8 @@ public class ListReviewActivity extends AppCompatActivity {
         }
 
 
-        if (!tvWebsite.getText().toString().isEmpty() || tvWebsite.getText().toString().equals("null")) {
-            tvWebsite.setOnClickListener(new View.OnClickListener() {
+        if (!tvWebsite.getText().toString().isEmpty() || !tvWebsite.getText().toString().equals("")) {
+            websiteBtnLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent website = new Intent(Intent.ACTION_VIEW, Uri.parse(tvWebsite.getText().toString()));
@@ -503,6 +504,10 @@ public class ListReviewActivity extends AppCompatActivity {
                 }
             }
         });
-
+    }
+    public void onBackPressed() {
+        Intent onBack = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(onBack);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 }

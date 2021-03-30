@@ -230,7 +230,7 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
                         + location.getLongitude() + ". "
                         + location.getAccuracy());
         broadcastLocationFound(location);
-        if(!MainActivity.isLoggedIn) {
+        /*if(!MainActivity.isLoggedIn) {
             if (currentMarker!=null)
                 currentMarker.remove();
             currentMarker=mMap.addMarker(new MarkerOptions()
@@ -245,7 +245,7 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
                     .position(new LatLng(location.getLatitude(), location.getLongitude()))
                     .title("Welcome "+ MainActivity.firstName).snippet("Double tap\nanywhere on\nthe map to zoom")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-        }
+        } */
 
         if (!MainActivity.geofencesAlreadyRegistered) {
           /*  if (MainActivity.geofences.size() == 0 || MainActivity.mapLocations.size() == 0) {
