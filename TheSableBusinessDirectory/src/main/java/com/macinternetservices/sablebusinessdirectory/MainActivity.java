@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements
     public static Double latitude, longitude;
 
     public static TextView tvMore, tvUserName, tvWpUserId, tvCity, tvCategories, tvLoading, noListingsTextView, textViewFoo, fooListingsTextView;
-    Button  btnContinue;
+    //Button  btnContinue;
     LoginButton loginButton, loginButton3;
     RecyclerView verticalRecyclerView, featuredRecyclervView, recentListingsRecyclervView, recentReviewsRecyclervView;
     //ProgressBar progressBar;
@@ -213,7 +213,8 @@ public class MainActivity extends AppCompatActivity implements
     static public boolean geofencesAlreadyRegistered = false;
     public static HashMap<String, SimpleGeofence> geofences = new HashMap<String, SimpleGeofence>();
     ArrayList<String> userActivityArray = new ArrayList<>();
-    ImageView ivUserImage, spokesperson, ivLoading, noListingsImageView, fooListingImageView, ivSettings, ivAlertOn, ivAlertOff, ivLogo;
+    ImageView ivUserImage, spokesperson, ivLoading, noListingsImageView, fooListingImageView,
+            ivSettings, ivAlertOn, ivAlertOff, ivLogo, ivHelp, ivClose;
     CardView ivUserImageCardview;
     ProgressBar spinner;
     GoogleSignInClient mGoogleSignInClient;
@@ -432,10 +433,10 @@ public class MainActivity extends AppCompatActivity implements
         loginButton3 = findViewById(R.id.login_button3);
         loginButton3.setVisibility(View.GONE);
 
-        btnContinue = findViewById(R.id.btnContinue);
-        btnContinue.setVisibility(View.GONE);
+        ivClose = findViewById(R.id.ivClose);
+        ivClose.setVisibility(View.GONE);
 
-        btnContinue.setOnClickListener(new View.OnClickListener() {
+        ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadingLayout.setAnimation(imgAnimationOut);
@@ -446,8 +447,8 @@ public class MainActivity extends AppCompatActivity implements
                 tvLoading.setVisibility(View.GONE);
                 loginButton3.setAnimation(imgAnimationOut);
                 loginButton3.setVisibility(View.VISIBLE);
-                btnContinue.setAnimation(imgAnimationOut);
-                btnContinue.setVisibility(View.GONE);
+                ivClose.setAnimation(imgAnimationOut);
+                ivClose.setVisibility(View.GONE);
                 pref.edit().putBoolean("instructed", true).apply();
             }
         });
@@ -592,6 +593,7 @@ public class MainActivity extends AppCompatActivity implements
         ivUserImageCardview = findViewById(R.id.ivUserImageCardview);
         ivLogo = findViewById(R.id.ivLogo);
         ivLogo.setVisibility(View.GONE);
+        ivHelp = findViewById(R.id.ivHelp);
         tvUserName = findViewById(R.id.tvUserName);
         ivUserImage = findViewById(R.id.ivUserImage);
         ivUserImage.setVisibility(View.GONE);
@@ -792,6 +794,22 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
+        ivHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadingLayout.setAnimation(imgAnimationIn);
+                loadingLayout.setVisibility(View.VISIBLE);
+                ivLoading.setImageResource(R.mipmap.holding_phone_foreground);
+                ivLoading.setAnimation(imgAnimationIn);
+                ivLoading.setVisibility(View.VISIBLE);
+                tvLoading.setAnimation(imgAnimationIn);
+                tvLoading.setVisibility(View.VISIBLE);
+                ivClose.setVisibility(View.VISIBLE);
+                tvLoading.setText("Using the app is easy.  Click on a numbered cluster to show all businesses in that cluster. Tap an individual business image "+
+                        "to learn more about that business.  Tap that businesses popup window to find, rate and review that business.");
+            }
+        });
+
         //circleMenu hidden in center of parent
 
         menu.setEventListener(new CircleMenuView.EventListener() {
@@ -984,26 +1002,17 @@ public class MainActivity extends AppCompatActivity implements
             pref.edit().putBoolean("firstrun", false).apply();
         }
         if (isLoggedIn) {
-            ivLoading.setImageResource(R.mipmap.searching_foreground);
+           /* ivLoading.setImageResource(R.mipmap.searching_foreground);
             ivLoading.setAnimation(imgAnimationIn);
             ivLoading.setVisibility(View.VISIBLE);
             tvLoading.setText(Html.fromHtml(("Welcome "+firstName+ ",\nThanks for your patience while we search for black owned businesses near you.")));
+            */
             ivUserImage.setVisibility(View.VISIBLE);
             ivLogo.setVisibility(View.GONE);
         } else {
-            ivLoading.setImageResource(R.mipmap.searching_foreground);
-            ivLoading.setAnimation(imgAnimationIn);
-            ivLoading.setVisibility(View.VISIBLE);
-            tvLoading.setText("Thanks for your patience while we search for black owned businesses near you.");
             ivUserImage.setVisibility(View.GONE);
             ivLogo.setVisibility(View.VISIBLE);
         }
-
-        ivLoading.setAnimation(imgAnimationIn);
-        ivLoading.setVisibility(View.VISIBLE);
-        ivLoading.setImageResource(R.mipmap.online_reviews_foreground);
-        tvLoading.setAnimation(imgAnimationIn);
-        tvLoading.setVisibility(View.VISIBLE);
 
         Map<String, String> query = new HashMap<>();
 
@@ -1344,13 +1353,7 @@ public class MainActivity extends AppCompatActivity implements
          */
         @Override
         public void onLocationChanged(Location location) {
-            /*Map<String, String> query = new HashMap<>();
-            query.put("latitude", String.valueOf(location.getLatitude()));
-            query.put("longitude", String.valueOf(location.getLongitude()));
-            query.put("order", "asc");
-            query.put("orderby", "distance");
 
-            getRetrofit(query);*/
             if (geofences.size() > 0 || mapLocations.size() > 0) {
                 double lat2 = location.getLatitude();
                 double lng2 = location.getLongitude();
@@ -1361,27 +1364,10 @@ public class MainActivity extends AppCompatActivity implements
                 if (distance(lat1, lng1, lat2, lng2) > 3 || kickItOff) { // if distance < 0.1 miles we take locations as equal
                     kickItOff = false;
                     if (alertOn) {
-                        //if (!isMyServiceRunning()) {
                             startService(new Intent(MainActivity.this, GeolocationService.class));
-                        //}
                     }
                     setMarkers();
                 }
-               /* if (isLoggedIn) {
-                    if (currentMarker != null)
-                        currentMarker.remove();
-                    currentMarker = mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                            .title("You are here!").snippet("Double tap anywhere on the map to zoom")
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                } else {
-                    if (currentMarker != null)
-                        currentMarker.remove();
-                    currentMarker = mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                            .title("Welcome "+firstName+"!").snippet("Double tap anywhere on the map to zoom")
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                } */
             }
         }
 
@@ -1444,7 +1430,7 @@ public class MainActivity extends AppCompatActivity implements
         query.put("order", "asc");
         query.put("orderby", "distance");
         getRetrofit(query); //api call; pass current lat/lng to check if current location in database
-        getReviews();
+        //getReviews();
 
         return false;
     }
@@ -1466,7 +1452,7 @@ public class MainActivity extends AppCompatActivity implements
         query.put("orderby", "distance");
         getRetrofit(query); //api call; pass current lat/lng to check if current location in database
         ////Log.e("onMyLocationClick", "Listings query executed by onMyLocationClick");
-        getReviews();
+        //getReviews();
         ////Log.e("onMyLocationClick", "Review query executed by onMyLocationClick");
         //setAddress(latitude, longitude);
     }
@@ -1657,7 +1643,7 @@ public class MainActivity extends AppCompatActivity implements
                         tvLoading.setVisibility(View.VISIBLE);
                         //loginButton3.setLoginText("Login via Facebook");
                         //loginButton3.setVisibility(View.VISIBLE);
-                        btnContinue.setVisibility(View.VISIBLE);
+                        ivClose.setVisibility(View.VISIBLE);
                         tvLoading.setText("Using the app is easy.  Click on a numbered cluster to show all businesses in that cluster. Tap an individual business image "+
                                 "to learn more about that business.  Tap that businesses popup window to find, rate and review that business.");
                     }else {
@@ -1665,7 +1651,7 @@ public class MainActivity extends AppCompatActivity implements
                         spinner.setVisibility(View.GONE);
                         ivLoading.setVisibility(View.GONE);
                         tvLoading.setVisibility(View.GONE);
-                        btnContinue.setVisibility(View.GONE);
+                        ivClose.setVisibility(View.GONE);
                     }
                 }
             }

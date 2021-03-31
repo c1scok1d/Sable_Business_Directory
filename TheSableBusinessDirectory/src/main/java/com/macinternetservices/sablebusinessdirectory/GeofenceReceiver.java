@@ -31,7 +31,7 @@ public class GeofenceReceiver extends IntentService {
         } else {
 
             int transitionType = geoEvent.getGeofenceTransition();
-            //near = 0;
+            near = 0;
             if (transitionType == Geofence.GEOFENCE_TRANSITION_ENTER
                     || transitionType == Geofence.GEOFENCE_TRANSITION_DWELL
                     || transitionType == Geofence.GEOFENCE_TRANSITION_EXIT) {
@@ -45,7 +45,6 @@ public class GeofenceReceiver extends IntentService {
                     switch (transitionType) {
                         case Geofence.GEOFENCE_TRANSITION_DWELL:
                             transitionName = "dwell";
-                            //near++;
                             break;
 
                         case Geofence.GEOFENCE_TRANSITION_ENTER:

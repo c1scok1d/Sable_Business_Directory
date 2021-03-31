@@ -1066,6 +1066,7 @@ String type = "gd_business";
                     userActivityArray.add(response.body().get(0).getDateGmt()); // date of listing add
                     userActivityArray.add(String.valueOf(response.body().get(0).getId())); //listing id
                     userActivityArray.add(response.body().get(0).getType()); // post type add
+                    Toast.makeText(AddListingActivity.this, "Thank you for adding "+name+" to The Sable Business Directory!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 }
@@ -1079,7 +1080,6 @@ String type = "gd_business";
             }
         });
 
-        Toast.makeText(AddListingActivity.this, "Thank you for adding "+name+" to The Sable Business Directory!", Toast.LENGTH_SHORT).show();
 
     }
 }

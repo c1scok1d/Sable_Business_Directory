@@ -50,12 +50,38 @@
                     android:layout_marginEnd="5dp">
 
                     <ImageView
+                        android:id="@+id/ivHelp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="5dp"
+                        sothree:srcCompat="@android:drawable/ic_menu_help" />
+
+                    <ImageView
                         android:id="@+id/logo_blk"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
                         app:srcCompat="@mipmap/sable_logo_black_foreground" />
+
+                    <TextView
+                        android:id="@+id/tvHelp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/ivHelp"
+                        android:layout_alignParentTop="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="3dp"
+                        android:text="HELP"
+                        android:textAllCaps="true"
+                        android:textColor="@color/black"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
 
                     <com.ramotion.circlemenu.CircleMenuView
                         android:id="@+id/circle_menu"
@@ -267,6 +293,15 @@
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="10dp">
 
+                        <ImageView
+                            android:id="@+id/ivClose"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_margin="10dp"
+                            sothree:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
                         <Button
                             android:id="@+id/btnContinue"
                             android:layout_width="wrap_content"
@@ -279,7 +314,9 @@
                             android:layout_marginBottom="5dp"
                             android:background="@drawable/buttonshape"
                             android:text="Continue"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"
+                            android:visibility="gone"
+                            tools:visibility="gone" />
 
                         <ImageView
                             android:id="@+id/ivLoading"

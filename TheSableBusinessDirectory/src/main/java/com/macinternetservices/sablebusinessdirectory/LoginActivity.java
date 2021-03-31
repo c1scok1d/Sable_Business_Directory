@@ -97,6 +97,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
         googleSignInButton = findViewById(R.id.google_login_button);
         googleSignInButton.setSize(SignInButton.SIZE_STANDARD);
+        googleSignInButton.setVisibility(View.GONE);
         imgAnimationIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 
 
