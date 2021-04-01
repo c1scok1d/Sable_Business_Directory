@@ -19,15 +19,15 @@ package com.macinternetservices.sablebusinessdirectory.model;
 import com.google.android.gms.maps.model.LatLng;
 import com.macinternetservices.sablebusinessdirectory.ClusterItem;
 
-public class Person implements ClusterItem, com.macinternetservices.sablebusinessdirectory.clustering.ClusterItem {
+public class Business implements ClusterItem, com.macinternetservices.sablebusinessdirectory.clustering.ClusterItem {
     public final String name, profilePhoto, content, city, state, featuredImage;
     public final Float rating;
     public final LatLng position;
     public final Integer ratingCount;
 
-    public Person(LatLng position, String name, String pictureResource, String content, Float rating, Integer ratingCount, String city, String state, String featuredImage) {
+    public Business(LatLng position, String name, String pictureResource, String content, Float rating, Integer ratingCount, String city, String state, String featuredImage) {
         this.name = name;
-        profilePhoto = pictureResource;
+        this.profilePhoto = pictureResource;
         this.position = position;
         this.content = content;
         this.rating = rating;

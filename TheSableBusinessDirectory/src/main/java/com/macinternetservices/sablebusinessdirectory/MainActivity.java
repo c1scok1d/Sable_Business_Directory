@@ -85,7 +85,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.macinternetservices.sablebusinessdirectory.model.Person;
+import com.macinternetservices.sablebusinessdirectory.model.Business;
 import com.ramotion.circlemenu.CircleMenuView;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements
     public static ArrayList<ListingsModel> recentList = new ArrayList<>();
     public static ArrayList<RecentReviewListingsModel> recentReviewList = new ArrayList<>();
     //public static ArrayList<ListingsModel> locationMatch = new ArrayList<>();
-    public static ArrayList<Person> mapLocations = new ArrayList<>();
+    public static ArrayList<Business> mapLocations = new ArrayList<>();
     private static final long GEOFENCE_EXPIRATION_IN_HOURS = 12;
     public static final long GEOFENCE_EXPIRATION_IN_MILLISECONDS = GEOFENCE_EXPIRATION_IN_HOURS
             * DateUtils.HOUR_IN_MILLIS;
@@ -1608,7 +1608,7 @@ public class MainActivity extends AppCompatActivity implements
 
                         LatLng latlng = new LatLng(response.body().get(i).getLatitude(), response.body().get(i).getLongitude());
                         latLngBoundsBuilder.include(latlng);
-                        mapLocations.add(new Person(latlng,
+                        mapLocations.add(new Business(latlng,
                                 response.body().get(i).getTitle().getRaw(),
                                 response.body().get(i).getFeaturedImage().getThumbnail(),
                                 response.body().get(i).getContent().getRaw(),

@@ -49,7 +49,7 @@ import com.google.maps.android.ui.IconGenerator;
 import com.macinternetservices.sablebusinessdirectory.clustering.Cluster;
 import com.macinternetservices.sablebusinessdirectory.clustering.ClusterManager;
 import com.macinternetservices.sablebusinessdirectory.clustering.view.DefaultClusterRenderer;
-import com.macinternetservices.sablebusinessdirectory.model.Person;
+import com.macinternetservices.sablebusinessdirectory.model.Business;
 import com.macinternetservices.sablebusinessdirectory.clustering.ClusterItem;
 import com.squareup.picasso.Picasso;
 
@@ -60,14 +60,14 @@ import java.util.Random;
 /**
  * Demonstrates heavy customisation of the look of rendered clusters.
  */
-public class MarkerClusteringActivity extends MainActivity implements ClusterManager.OnClusterClickListener<Person>,
-        ClusterManager.OnClusterInfoWindowClickListener<Person>,
-        ClusterManager.OnClusterItemClickListener<Person>,
-        ClusterManager.OnClusterItemInfoWindowClickListener<Person> {
+public class MarkerClusteringActivity extends MainActivity implements ClusterManager.OnClusterClickListener<Business>,
+        ClusterManager.OnClusterInfoWindowClickListener<Business>,
+        ClusterManager.OnClusterItemClickListener<Business>,
+        ClusterManager.OnClusterItemInfoWindowClickListener<Business> {
 
-    ClusterManager<Person> mClusterManager;
+    ClusterManager<Business> mClusterManager;
    // private Random random = new Random(1984);
-    private Person clickedVenueMarker;
+    private Business clickedVenueMarker;
     ArrayList<ListingsModel> locationReviewShow = new ArrayList<>();
     boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
 
@@ -77,14 +77,14 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
      * Draws profile photos inside markers (using IconGenerator).
      * When there are multiple locations in the cluster, draw multiple photos (using MultiDrawable).
      */
-    private class PersonRenderer extends DefaultClusterRenderer<Person> {
+    private class BusinessRenderer extends DefaultClusterRenderer<Business> {
         private final IconGenerator mIconGenerator = new IconGenerator(getApplicationContext());
         private final IconGenerator mClusterIconGenerator = new IconGenerator(getApplicationContext());
         private final ImageView mImageView;
         private final ImageView mClusterImageView;
         private final int mDimension;
 
-        public PersonRenderer() {
+        public BusinessRenderer() {
             super(getApplicationContext(), getMap(), mClusterManager);
 
             View multiProfile = getLayoutInflater().inflate(R.layout.multi_profile, null);
@@ -100,16 +100,16 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         }
 
         @Override
-        protected void onBeforeClusterItemRendered(Person person, MarkerOptions markerOptions) {
-            // Draw a single person.
+        protected void onBeforeClusterItemRendered(Business business, MarkerOptions markerOptions) {
+            // Draw a single business.
             // Set the info window to show their name.
-            Picasso.get().load(person.profilePhoto).into(mImageView);
+            Picasso.get().load(business.profilePhoto).into(mImageView);
             Bitmap icon = mIconGenerator.makeIcon();
-            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon)).title(person.name);
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon)).title(business.name);
         }
 
         @Override
-        protected void onBeforeClusterRendered(Cluster<Person> cluster, MarkerOptions markerOptions) {
+        protected void onBeforeClusterRendered(Cluster<Business> cluster, MarkerOptions markerOptions) {
             // Draw multiple people.
             // Note: this method runs on the UI thread. Don't spend too much time in here (like in this example).
             List<Drawable> profilePhotos = new ArrayList<>(Math.min(4, cluster.getSize()));
@@ -118,7 +118,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
             Bitmap dummyBitmap = null;
             Drawable drawable;
 
-            for (Person p : cluster.getItems()) {
+            for (Business p : cluster.getItems()) {
                 // Draw 4 at most.
                 if (profilePhotos.size() == 4) break;
                 //dummyBitmap = Picasso.get().load(p.profilePhoto);
@@ -154,7 +154,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
     }
 
     @Override
-    public boolean onClusterClick(Cluster<Person> cluster) {
+    public boolean onClusterClick(Cluster<Business> cluster) {
         // Show a toast with some info when the cluster is clicked.
         String firstName = cluster.getItems().iterator().next().name;
         Toast.makeText(this, cluster.getSize() + " (including " + firstName + ")", Toast.LENGTH_SHORT).show();
@@ -179,13 +179,13 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
 
 
     @Override
-    public void onClusterInfoWindowClick(Cluster<Person> cluster) {
+    public void onClusterInfoWindowClick(Cluster<Business> cluster) {
         // Does nothing, but you could go to a list of the users.
         Toast.makeText(this, cluster + " (including " + cluster + ")", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public boolean onClusterItemClick(Person item) {
+    public boolean onClusterItemClick(Business item) {
 
         getMap().setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
@@ -236,7 +236,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
     }
 
     @Override
-    public void onClusterItemInfoWindowClick(Person item) {
+    public void onClusterItemInfoWindowClick(Business item) {
 
        for(int i = 0; i< verticalList.size(); i++) {
             if (item.name.equals(verticalList.get(i).title)){
@@ -303,17 +303,21 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
                         .build();                   // Creates a CameraPosition from the builder
                 getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         } else {
+            getMap().clear();
             mClusterManager = new ClusterManager<>(this, getMap());
-            mClusterManager.addItems(mapLocations);
-            mClusterManager.setRenderer(new PersonRenderer());
-            getMap().setOnCameraIdleListener(mClusterManager);
-            getMap().setOnMarkerClickListener(mClusterManager);
-            getMap().setOnInfoWindowClickListener(mClusterManager);
+            //mClusterManager.clearItems();
+            mClusterManager.setRenderer(new BusinessRenderer());
             mClusterManager.setOnClusterClickListener(this);
             mClusterManager.setOnClusterInfoWindowClickListener(this);
             mClusterManager.setOnClusterItemClickListener(this);
             mClusterManager.setOnClusterItemInfoWindowClickListener(this);
+            mClusterManager.addItems(mapLocations);
             mClusterManager.cluster();
+
+            getMap().setOnCameraIdleListener(mClusterManager);
+            getMap().setOnMarkerClickListener(mClusterManager);
+            getMap().setOnInfoWindowClickListener(mClusterManager);
+
             LatLngBounds bounds = MainActivity.latLngBoundsBuilder.build();
             getMap().setOnMapLoadedCallback(() -> getMap().animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200)));
             showStuff();
