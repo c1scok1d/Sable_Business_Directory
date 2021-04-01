@@ -451,10 +451,10 @@ public class ListReviewActivity extends AppCompatActivity {
                         reviewImagesRecyclerLayout.setVisibility(View.GONE);
                         reviewRecyclerLayout.setVisibility(View.GONE);
                         notLoggedInLayout.setVisibility(View.VISIBLE);
-                        String listingName = "<font color='#4FC1E9'>" +tvName.getText().toString()+"</font>";
-                        tvNoReviews.setText(Html.fromHtml("Identify yourself via Facebook and use the rate button to be the first to rate " + listingName + "."));
+                        //String listingName = "<font color='#4FC1E9'>" +tvName.getText().toString()+"</font>";
+                        tvNoReviews.setText("Identify yourself via Facebook and use the rate button to be the first to rate " + tvName.getText().toString() + ".");
                         if (isLoggedIn) {
-                            tvNoReviews.setText(Html.fromHtml("Use the rate button to be the first to rate " + listingName + "."));
+                            tvNoReviews.setText("Use the rate button to be the first to rate " + tvName.getText().toString() + ".");
                         }
                         } else { //list each review
 

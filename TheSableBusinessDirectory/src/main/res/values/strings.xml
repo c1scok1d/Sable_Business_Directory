@@ -52,7 +52,7 @@
     <string name="action_anchor_disable">Disable Anchor Point</string>
     <string name="acraErrorMesage">Sorry, the application crashed.  Please send a report to Rod so he can fix his shit!</string>
     <string name="acraAddComment">You can add a comment and encourage Rod to fix his shit!</string>
-    <string name="secureMsg">To insure a secure environment and high quality ratings and reviews for our users we request that everyone identify themselves before adding a listing or review. Tap the \'Continue with Facebook\' button below to add your favorite black owned businesses to The Sable Business Directory.</string>
+    <string name="secureMsg">To insure a secure environment and high quality ratings and reviews all users must identify themselves before adding, rating or reviewing a business. Easily identify yourself with your Facebook account.</string>
     <string name="geofence_enter">You are now 5 miles away from %1$s</string>
     <string name="geofence_dwell">You are near %1$s</string>
     <string name="geofence_exit">You are now 5 miles away from %1$s</string>

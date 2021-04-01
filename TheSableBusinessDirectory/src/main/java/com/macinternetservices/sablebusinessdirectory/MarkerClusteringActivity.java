@@ -291,16 +291,6 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
 
    @Override
     public void setMarkers() {
-        mClusterManager = new ClusterManager<>(this, getMap());
-        mClusterManager.clearItems();
-        mClusterManager.setRenderer(new PersonRenderer());
-        getMap().setOnCameraIdleListener(mClusterManager);
-        getMap().setOnMarkerClickListener(mClusterManager);
-        getMap().setOnInfoWindowClickListener(mClusterManager);
-        mClusterManager.setOnClusterClickListener(this);
-        mClusterManager.setOnClusterInfoWindowClickListener(this);
-        mClusterManager.setOnClusterItemClickListener(this);
-        mClusterManager.setOnClusterItemInfoWindowClickListener(this);
         if(mapLocations.size() == 0) {
                 showOtherStuff();
                 getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 200));
@@ -313,11 +303,20 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
                         .build();                   // Creates a CameraPosition from the builder
                 getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         } else {
-        mClusterManager.addItems(MainActivity.mapLocations);
-        mClusterManager.cluster();
-        LatLngBounds bounds = MainActivity.latLngBoundsBuilder.build();
-        getMap().setOnMapLoadedCallback(() -> getMap().animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200)));
-        showStuff();
+            mClusterManager = new ClusterManager<>(this, getMap());
+            mClusterManager.addItems(mapLocations);
+            mClusterManager.setRenderer(new PersonRenderer());
+            getMap().setOnCameraIdleListener(mClusterManager);
+            getMap().setOnMarkerClickListener(mClusterManager);
+            getMap().setOnInfoWindowClickListener(mClusterManager);
+            mClusterManager.setOnClusterClickListener(this);
+            mClusterManager.setOnClusterInfoWindowClickListener(this);
+            mClusterManager.setOnClusterItemClickListener(this);
+            mClusterManager.setOnClusterItemInfoWindowClickListener(this);
+            mClusterManager.cluster();
+            LatLngBounds bounds = MainActivity.latLngBoundsBuilder.build();
+            getMap().setOnMapLoadedCallback(() -> getMap().animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200)));
+            showStuff();
         }
     }
     private void showStuff() {

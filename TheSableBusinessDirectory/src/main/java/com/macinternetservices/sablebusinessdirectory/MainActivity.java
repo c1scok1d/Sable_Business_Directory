@@ -205,14 +205,14 @@ public class MainActivity extends AppCompatActivity implements
     public static ArrayList<ListingsModel> featuredList = new ArrayList<>();
     public static ArrayList<ListingsModel> recentList = new ArrayList<>();
     public static ArrayList<RecentReviewListingsModel> recentReviewList = new ArrayList<>();
-    public static ArrayList<ListingsModel> locationMatch = new ArrayList<>();
+    //public static ArrayList<ListingsModel> locationMatch = new ArrayList<>();
     public static ArrayList<Person> mapLocations = new ArrayList<>();
     private static final long GEOFENCE_EXPIRATION_IN_HOURS = 12;
     public static final long GEOFENCE_EXPIRATION_IN_MILLISECONDS = GEOFENCE_EXPIRATION_IN_HOURS
             * DateUtils.HOUR_IN_MILLIS;
     static public boolean geofencesAlreadyRegistered = false;
     public static HashMap<String, SimpleGeofence> geofences = new HashMap<String, SimpleGeofence>();
-    ArrayList<String> userActivityArray = new ArrayList<>();
+    //ArrayList<String> userActivityArray = new ArrayList<>();
     ImageView ivUserImage, spokesperson, ivLoading, noListingsImageView, fooListingImageView,
             ivSettings, ivAlertOn, ivAlertOff, ivLogo, ivHelp, ivClose;
     CardView ivUserImageCardview;
@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements
 
     Cache cache;
 
-    AutoCompleteTextView searchView;
+    //AutoCompleteTextView searchView;
     public static LatLngBounds.Builder latLngBoundsBuilder = new LatLngBounds.Builder();
 
     public static GoogleMap mMap;
@@ -452,6 +452,8 @@ public class MainActivity extends AppCompatActivity implements
                 ivClose.setVisibility(View.GONE);
                 ivHelp.setAnimation(imgAnimationIn);
                 ivHelp.setVisibility(View.VISIBLE);
+                container.setBackgroundColor(Color.TRANSPARENT);
+
                 pref.edit().putBoolean("instructed", true).apply();
             }
         });
@@ -838,7 +840,6 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onMenuCloseAnimationEnd(@NonNull CircleMenuView view) {
                 Log.d("D", "onMenuCloseAnimationEnd");
-                //menu.setAnimation(imgAnimationOut);
                 menu.setVisibility(View.GONE);
                 container.setBackgroundColor(Color.TRANSPARENT);
             }
@@ -860,7 +861,9 @@ public class MainActivity extends AppCompatActivity implements
                         break;
                     case 2: //search popup
                         menu.setVisibility(View.GONE);
-                        container.setBackgroundColor(Color.TRANSPARENT);
+                        container.setBackgroundColor(Color.WHITE);
+                        container.getBackground().setAlpha(204); //80% transparency
+                        loadingLayout.setAnimation(imgAnimationIn);
                         loadingLayout.setVisibility(View.VISIBLE);
                         ivLoading.setImageResource(R.mipmap.under_construction_foreground);
                         ivLoading.setAnimation(imgAnimationIn);
@@ -869,12 +872,13 @@ public class MainActivity extends AppCompatActivity implements
                         tvLoading.setVisibility(View.VISIBLE);
                         ivClose.setAnimation(imgAnimationIn);
                         ivClose.setVisibility(View.VISIBLE);
+                        ivHelp.setVisibility(View.GONE);
 
                         if (isLoggedIn) {
                             tvLoading.setText("Apologies "+firstName+",\nlooks like there was an error.\nWe're constantly working to improve our service. Please try again later.");
                             menu.setVisibility(View.GONE);
                         } else {
-                            menu.setVisibility(View.GONE);
+                            ivHelp.setAnimation(imgAnimationOut);
                             tvLoading.setText("Apologies, looks like there was an error.\nWe're constantly working to improve our service. Please try again later.");
                         }
                         break;
@@ -895,14 +899,14 @@ public class MainActivity extends AppCompatActivity implements
                             isLoggedIn = false;
                             startActivity(getIntent());
                             finish();
-                            overridePendingTransition(0, 0);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         } else {
                             if (accessToken != null && !accessToken.isExpired()) {
                                 useLoginInformation(accessToken);
                             } else {
                                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                                 finish();
-                                overridePendingTransition(0, 0);
+                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                             }
                         }
                         menu.setVisibility(View.GONE);
@@ -1554,7 +1558,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 if (response.isSuccessful()) {
                     pref.edit().putString("lastQuery", String.valueOf(response.raw())).apply();
-                    mapLocations.removeAll(mapLocations);
+                    mapLocations = new ArrayList<>();
                     for (int i = 0; i < response.body().size(); i++) {
 
                         /**
@@ -1655,19 +1659,26 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onFailure(Call<List<BusinessListings>> call, Throwable t) {
                 Log.e("getRetrofitFailure: ", "foo: "+t);
-                spinner.setVisibility(View.GONE);
-                //ivLoading.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                menu.setVisibility(View.GONE);
+                container.setBackgroundColor(Color.WHITE);
+                container.getBackground().setAlpha(204); //80% transparency
+                loadingLayout.setAnimation(imgAnimationIn);
+                loadingLayout.setVisibility(View.VISIBLE);
                 ivLoading.setImageResource(R.mipmap.under_construction_foreground);
-                ivLoading.setVisibility(View.VISIBLE);
                 ivLoading.setAnimation(imgAnimationIn);
-                tvLoading.setVisibility(View.VISIBLE);
+                ivLoading.setVisibility(View.VISIBLE);
                 tvLoading.setAnimation(imgAnimationIn);
+                tvLoading.setVisibility(View.VISIBLE);
+                ivClose.setAnimation(imgAnimationIn);
+                ivClose.setVisibility(View.VISIBLE);
+                ivHelp.setVisibility(View.GONE);
+
                 if (isLoggedIn) {
-                    tvLoading.setText("Apologies "+firstName+",\nlooks like there was an error.\nWe're constantly working to improve our service.\nPlease try again later.");
+                    tvLoading.setText("Apologies "+firstName+",\nlooks like there was an error.\nWe're constantly working to improve our service. Please try again later.");
                     menu.setVisibility(View.GONE);
                 } else {
-                    menu.setVisibility(View.GONE);
-                    tvLoading.setText("Apologies, looks like there was an error.\nWe're constantly working to improve our service.\nPlease try again later.");
+                    ivHelp.setAnimation(imgAnimationOut);
+                    tvLoading.setText("Apologies, looks like there was an error.\nWe're constantly working to improve our service. Please try again later.");
                 }
                 return;
             }

@@ -46,8 +46,11 @@ public class VerticalReviewAdapter extends RecyclerView.Adapter {
             this.ratingBar = view.findViewById(R.id.ratingBar);
             this.tvAuthor = view.findViewById(R.id.tvAuthor);
             this.tvDays = view.findViewById(R.id.tvDays);
+            tvDays.setVisibility(View.GONE);
             this.tvHours = view.findViewById(R.id.tvHours);
+            tvHours.setVisibility(View.GONE);
             this.tvMinutes = view.findViewById(R.id.tvMinutes);
+            tvMinutes.setVisibility(View.GONE);
             //this.tvSeconds = view.findViewById(R.id.tvSeconds);
             this.textView = view.findViewById(R.id.textView);
             this.textView2 = view.findViewById(R.id.textView2);

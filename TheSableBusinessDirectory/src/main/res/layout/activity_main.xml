@@ -88,7 +88,7 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
-                        android:text="tap for\nOptions"
+                        android:text="Options"
                         android:textAllCaps="true"
                         android:textColor="@color/black"
                         android:textSize="8sp"
@@ -181,7 +181,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
-                        android:layout_centerHorizontal="true"
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="5dp"
@@ -190,7 +189,7 @@
                         <ImageView
                             android:id="@+id/fooListingsImageView"
                             android:layout_width="match_parent"
-                            android:layout_height="500dp"
+                            android:layout_height="match_parent"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
                             android:layout_alignParentEnd="true"
@@ -210,6 +209,7 @@
                             android:background="@drawable/roundedcorner"
                             android:backgroundTint="#80000000"
                             android:fontFamily="@font/open_sans"
+                            android:gravity="center"
                             android:paddingStart="5dp"
                             android:paddingTop="3dp"
                             android:paddingBottom="3dp"
@@ -225,7 +225,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
-                        android:layout_centerHorizontal="true"
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="5dp"
@@ -254,6 +253,7 @@
                             android:background="@drawable/roundedcorner"
                             android:backgroundTint="#80000000"
                             android:fontFamily="@font/open_sans"
+                            android:gravity="center"
                             android:paddingStart="5dp"
                             android:paddingTop="3dp"
                             android:paddingBottom="3dp"
@@ -333,12 +333,13 @@
                             android:background="@drawable/roundedcorner"
                             android:backgroundTint="#80000000"
                             android:fontFamily="@font/open_sans"
+                            android:gravity="center"
                             android:paddingStart="5dp"
                             android:paddingTop="3dp"
+                            android:paddingBottom="3dp"
                             android:text="loadingText"
                             android:textColor="@color/white"
-                            android:textSize="14sp"
-                            android:paddingBottom="3dp" />
+                            android:textSize="14sp" />
 
                         <ProgressBar
                             android:id="@+id/progressBar1"
@@ -349,64 +350,6 @@
                             android:layout_alignParentBottom="true" />
 
                     </RelativeLayout>
-
-                    <!--LinearLayout
-                        android:id="@+id/btnLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_below="@id/search"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="5dp"
-                        android:gravity="center_horizontal"
-                        android:orientation="horizontal"
-                        android:visibility="gone"
-                        tools:visibility="gone">
-
-                        <Button
-                            android:id="@+id/btnAdd"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginEnd="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:background="@drawable/buttonshape"
-                            android:gravity="center_horizontal"
-                            android:padding="5dp"
-                            android:shadowDx="0"
-                            android:shadowDy="0"
-                            android:shadowRadius="5"
-                            android:text="add"
-                            android:textAllCaps="true"
-                            android:textColor="@color/white"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:visibility="gone"
-                            tools:visibility="gone" />
-
-                        <com.facebook.login.widget.LoginButton
-                            android:id="@+id/login_button3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="3dp"
-                            android:layout_marginEnd="3dp"
-                            android:gravity="clip_vertical|center_horizontal" />
-
-                        <Button
-                            android:id="@+id/btnShowListings"
-                            android:layout_width="75dp"
-                            android:layout_height="28dp"
-                            android:background="@drawable/buttonshape"
-                            android:padding="5dp"
-                            android:shadowDx="0"
-                            android:shadowDy="0"
-                            android:shadowRadius="5"
-                            android:text="refresh"
-                            android:textAllCaps="true"
-                            android:textColor="@color/white"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-                    </LinearLayout -->
 
                 </RelativeLayout>
 

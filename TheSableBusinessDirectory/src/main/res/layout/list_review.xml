@@ -3,28 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp"
+    android:layout_margin="5dp"
     android:background="@drawable/customborder"
-    android:orientation="vertical"
-    android:padding="10dp">
-
-    <TextView
-        android:id="@+id/tvCreatedBy"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:text="Created by:"
-        android:textColor="@color/colorAccent"
-        android:textStyle="bold"
-        android:visibility="gone"
-        tools:visibility="gone" />
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tvAuthor"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvCreatedBy"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:textColor="@color/black"
         tools:text="authorName" />
 
     <TextView
@@ -32,9 +21,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvAuthor"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/black"
         android:textSize="12sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:text="Rating Title" />
 
     <RatingBar
         android:id="@+id/ratingBar"
@@ -44,13 +34,14 @@
         android:layout_below="@id/tvRatingTitle"
         android:numStars="5"
         android:stepSize=".5"
-        android:theme="@style/RatingBar"/>
+        android:theme="@style/RatingBar" />
 
     <TextView
         android:id="@+id/tvContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ratingBar"
+        android:textColor="@color/black"
         android:textSize="14sp" />
 
     <LinearLayout
@@ -58,8 +49,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvContent"
-        android:layout_alignParentBottom="false"
-        android:orientation="horizontal">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="gone">
 
         <TextView
             android:id="@+id/tvDays"
@@ -67,7 +61,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="1dp"
             android:text="days"
-            android:textColor="@color/colorAccent" />
+            android:textColor="@color/black"
+            android:textSize="10sp" />
 
         <TextView
             android:id="@+id/textView"
@@ -75,7 +70,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="3dp"
             android:text="days"
-            android:textColor="@color/colorAccent" />
+            android:textColor="@color/black"
+            android:textSize="10sp" />
 
         <TextView
             android:id="@+id/tvHours"
@@ -83,7 +79,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="1dp"
             android:text="hours"
-            android:textColor="@color/colorAccent" />
+            android:textColor="@color/black"
+            android:textSize="10sp" />
 
         <TextView
             android:id="@+id/textView2"
@@ -91,7 +88,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="3dp"
             android:text="hours"
-            android:textColor="@color/colorAccent" />
+            android:textColor="@color/black"
+            android:textSize="10sp" />
 
         <TextView
             android:id="@+id/tvMinutes"
@@ -99,7 +97,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="1dp"
             android:text="minutes"
-            android:textColor="@color/colorAccent" />
+            android:textColor="@color/black"
+            android:textSize="10sp" />
 
         <TextView
             android:id="@+id/textView3"
@@ -107,7 +106,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="3dp"
             android:text="minutes"
-            android:textColor="@color/colorAccent" />
+            android:textColor="@color/black"
+            android:textSize="10sp" />
 
         <TextView
             android:id="@+id/tvAgo"
@@ -115,7 +115,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
             android:text="ago"
-            android:textColor="@color/colorAccent" />
+            android:textColor="@color/black"
+            android:textSize="10sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -130,14 +131,25 @@
             android:id="@+id/tvCity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:textSize="12sp"
             tools:text="city" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="1dp"
+            android:text=","
+            android:textColor="@color/black"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/tvState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
+            android:textColor="@color/black"
             android:textSize="12sp"
             tools:text="state" />
 

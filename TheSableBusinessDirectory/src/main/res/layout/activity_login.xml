@@ -2,12 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginStart="5dp"
     android:layout_marginTop="10dp"
     android:layout_marginEnd="5dp"
+    android:background="#ffffff"
     android:orientation="vertical"
+    android:paddingStart="5dp"
     tools:context=".LoginActivity">
 
     <TextView
@@ -15,26 +18,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="false"
-        android:layout_margin="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/roundedcorner"
+        android:backgroundTint="#80000000"
+        android:gravity="center"
         android:text="@string/secureMsg"
-        android:textColor="#e9774f"
-        android:textSize="18sp" />
+        android:textColor="@color/white"
+        android:textSize="14sp" />
 
     <Button
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvSecureMsg"
         android:layout_alignParentTop="false"
         android:layout_alignParentEnd="true"
-        android:layout_margin="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/buttonshape"
-        android:padding="5dp"
         android:shadowDx="0"
         android:shadowDy="0"
         android:shadowRadius="5"
-        android:text="Back to map"
-        android:textAllCaps="false"
+        android:text="Back"
+        android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -44,8 +55,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/tvSecureMsg"
-        app:srcCompat="@mipmap/smiling_peace_foreground"
-        android:contentDescription="TODO" />
+        android:contentDescription="TODO"
+        app:srcCompat="@mipmap/smiling_peace_foreground" />
 
     <LinearLayout
         android:layout_width="wrap_content"

@@ -181,7 +181,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="start"
+                    android:gravity="end"
                     android:textAllCaps="true"
                     android:textColor="@color/colorAccent2"
                     android:textSize="10sp"
@@ -642,7 +642,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat"
                 android:textAllCaps="false"
-                android:textColor="@color/colorAccent2"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <ImageView
