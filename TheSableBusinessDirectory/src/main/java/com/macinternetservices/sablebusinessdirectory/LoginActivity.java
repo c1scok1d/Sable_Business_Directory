@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
         googleSignInButton = findViewById(R.id.google_login_button);
         googleSignInButton.setSize(SignInButton.SIZE_STANDARD);
-        googleSignInButton.setVisibility(View.GONE);
+        //googleSignInButton.setVisibility(View.GONE);
         imgAnimationIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 
 
@@ -201,7 +201,7 @@ public class LoginActivity extends AppCompatActivity {
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                //.requestIdToken("743643161501-bev9bim8g129polrljp92f8e6r3eff58.apps.googleusercontent.com")
+                .requestIdToken("743643161501-82ipjidlk7bul4gl7ggdcf0stv789736.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
@@ -221,24 +221,25 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
+            Task<GoogleSignInAccount> googleSignInTask = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(googleSignInTask);
         }
     }
+    GoogleSignInAccount googleSignIn;
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            googleSignIn = completedTask.getResult(ApiException.class);
 
-            userName = (account.getDisplayName());
-            userEmail = (account.getEmail());
-            userImage = (account.getPhotoUrl().toString());
-            MainActivity.googleAccessToken = account.getIdToken();
+            userName = (googleSignIn.getDisplayName());
+            userEmail = (googleSignIn.getEmail());
+            userImage = (googleSignIn.getPhotoUrl().toString());
+            MainActivity.googleAccessToken = googleSignIn.getIdToken();
             //String GoogleAccessToken = account.getIdToken();
             //useGoogleLoginInformation(GoogleAccessToken);
 
             Map<String, String> query = new HashMap<>();
-            query.put("access_token", account.getIdToken());
+            query.put("access_token", googleSignIn.getIdToken());
             getRetrofit(query);
             // Signed in successfully, show authenticated UI.
             //updateUI(account);
@@ -261,7 +262,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // check for and start tracker if user is auth'd via facebook
         // if users is auth'd via facebook login to sable
-        accessTokenTracker.startTracking();
+        /*accessTokenTracker.startTracking();
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if (accessToken != null) {
             useLoginInformation(accessToken);
@@ -272,7 +273,7 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if(account!=null){
             useGoogleLoginInformation(account.getIdToken());
-        }
+        } */
     }
 
     public void onDestroy() {

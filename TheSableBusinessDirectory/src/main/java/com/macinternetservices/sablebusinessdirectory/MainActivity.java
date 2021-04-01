@@ -253,6 +253,8 @@ public class MainActivity extends AppCompatActivity implements
 
     TextSwitcher textSwitcher, textSwitcher3;
     private SlidingUpPanelLayout mLayout;
+    GoogleSignInAccount googleSignIn;
+
 
 
     //HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -977,9 +979,9 @@ public class MainActivity extends AppCompatActivity implements
        longitude = location.getLongitude();
 
         //check google login info
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        googleSignIn = GoogleSignIn.getLastSignedInAccount(this);
 
-        if(account != null){
+        if(googleSignIn != null){
             isLoggedInGoogle = true;
             mGoogleSignInClient.silentSignIn()
                     .addOnCompleteListener(
@@ -1038,13 +1040,13 @@ public class MainActivity extends AppCompatActivity implements
     //begin user auth for google
     private void handleSignInResult(@NonNull Task<GoogleSignInAccount> completedTask) {
         try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            googleSignIn = completedTask.getResult(ApiException.class);
 
-            userName = (account.getDisplayName());
-            userEmail = (account.getEmail());
-            userImage = (account.getPhotoUrl().toString());
+            userName = (googleSignIn.getDisplayName());
+            userEmail = (googleSignIn.getEmail());
+            userImage = (googleSignIn.getPhotoUrl().toString());
            // googleAccessToken = account.getIdToken();
-            useGoogleLoginInformation(account.getIdToken());
+            useGoogleLoginInformation(googleSignIn.getIdToken());
         } catch (ApiException e) {
             fooListingsLayout.setAnimation(imgAnimationIn);
             fooListingsLayout.setVisibility(View.VISIBLE);
@@ -1368,6 +1370,21 @@ public class MainActivity extends AppCompatActivity implements
                     }
                     setMarkers();
                 }
+            }
+            if(!MainActivity.isLoggedIn) {
+                if (currentMarker!=null)
+                    currentMarker.remove();
+                currentMarker=mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                        .title("You are here!").snippet("Double tap\nanywhere on\nthe map to zoom")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            } else {
+                if (currentMarker!=null)
+                    currentMarker.remove();
+                currentMarker= mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                        .title("Welcome "+ MainActivity.firstName).snippet("Double tap\nanywhere on\nthe map to zoom")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
             }
         }
 
