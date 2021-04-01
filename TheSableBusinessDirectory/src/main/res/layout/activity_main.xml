@@ -56,7 +56,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="5dp"
-                        sothree:srcCompat="@android:drawable/ic_menu_help" />
+                        app:srcCompat="@mipmap/help_foreground" />
 
                     <ImageView
                         android:id="@+id/logo_blk"
@@ -65,23 +65,6 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
                         app:srcCompat="@mipmap/sable_logo_black_foreground" />
-
-                    <TextView
-                        android:id="@+id/tvHelp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/ivHelp"
-                        android:layout_alignParentTop="false"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginStart="3dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginBottom="3dp"
-                        android:text="HELP"
-                        android:textAllCaps="true"
-                        android:textColor="@color/black"
-                        android:textSize="8sp"
-                        android:textStyle="bold" />
 
                     <com.ramotion.circlemenu.CircleMenuView
                         android:id="@+id/circle_menu"
@@ -222,14 +205,17 @@
                             android:layout_alignParentStart="true"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentBottom="false"
-                            android:layout_centerVertical="true"
-                            android:background="#80000000"
+                            android:layout_centerVertical="false"
+                            android:layout_marginBottom="15dp"
+                            android:background="@drawable/roundedcorner"
+                            android:backgroundTint="#80000000"
                             android:fontFamily="@font/open_sans"
-                            android:gravity="center_horizontal"
-                            android:padding="5dp"
+                            android:paddingStart="5dp"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp"
                             android:text="loadingText"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
 
                     </RelativeLayout>
@@ -263,14 +249,17 @@
                             android:layout_alignParentStart="true"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentBottom="false"
-                            android:layout_centerVertical="true"
-                            android:background="#80000000"
+                            android:layout_centerVertical="false"
+                            android:layout_marginBottom="15dp"
+                            android:background="@drawable/roundedcorner"
+                            android:backgroundTint="#80000000"
                             android:fontFamily="@font/open_sans"
-                            android:gravity="center_horizontal"
-                            android:padding="5dp"
+                            android:paddingStart="5dp"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp"
                             android:text="loadingText"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <com.facebook.login.widget.LoginButton
                             android:id="@+id/login_button3"
@@ -299,7 +288,10 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_alignParentEnd="true"
-                            android:layout_margin="10dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="25dp"
+                            android:layout_marginBottom="10dp"
                             sothree:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
                         <Button
@@ -336,14 +328,17 @@
                             android:layout_alignParentStart="true"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentBottom="false"
-                            android:layout_centerVertical="true"
-                            android:background="#80000000"
+                            android:layout_centerVertical="false"
+                            android:layout_marginBottom="15dp"
+                            android:background="@drawable/roundedcorner"
+                            android:backgroundTint="#80000000"
                             android:fontFamily="@font/open_sans"
-                            android:gravity="center_horizontal"
-                            android:padding="5dp"
+                            android:paddingStart="5dp"
+                            android:paddingTop="3dp"
                             android:text="loadingText"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="14sp"
+                            android:paddingBottom="3dp" />
 
                         <ProgressBar
                             android:id="@+id/progressBar1"

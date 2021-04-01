@@ -328,6 +328,7 @@ public class MainActivity extends AppCompatActivity implements
         /******* Create SharedPreferences *******/
 
         pref = getApplicationContext().getSharedPreferences("com.example.sable.PREFERENCE_FILE_KEY", MODE_PRIVATE);
+        //starterIntent = getIntent();
         //SharedPreferences.Editor editor = pref.edit();
 
 /*
@@ -446,9 +447,11 @@ public class MainActivity extends AppCompatActivity implements
                 tvLoading.setAnimation(imgAnimationOut);
                 tvLoading.setVisibility(View.GONE);
                 loginButton3.setAnimation(imgAnimationOut);
-                loginButton3.setVisibility(View.VISIBLE);
+                loginButton3.setVisibility(View.GONE);
                 ivClose.setAnimation(imgAnimationOut);
                 ivClose.setVisibility(View.GONE);
+                ivHelp.setAnimation(imgAnimationIn);
+                ivHelp.setVisibility(View.VISIBLE);
                 pref.edit().putBoolean("instructed", true).apply();
             }
         });
@@ -797,6 +800,8 @@ public class MainActivity extends AppCompatActivity implements
         ivHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                noListingsLayout.setAnimation(imgAnimationOut);
+                noListingsLayout.setVisibility(View.GONE);
                 loadingLayout.setAnimation(imgAnimationIn);
                 loadingLayout.setVisibility(View.VISIBLE);
                 ivLoading.setImageResource(R.mipmap.holding_phone_foreground);
@@ -804,9 +809,11 @@ public class MainActivity extends AppCompatActivity implements
                 ivLoading.setVisibility(View.VISIBLE);
                 tvLoading.setAnimation(imgAnimationIn);
                 tvLoading.setVisibility(View.VISIBLE);
+                ivClose.setAnimation(imgAnimationIn);
                 ivClose.setVisibility(View.VISIBLE);
-                tvLoading.setText("Using the app is easy.  Click on a numbered cluster to show all businesses in that cluster. Tap an individual business image "+
-                        "to learn more about that business.  Tap that businesses popup window to find, rate and review that business.");
+                ivHelp.setAnimation(imgAnimationOut);
+                ivHelp.setVisibility(View.GONE);
+                tvLoading.setText("Using the app is easy. Tap a numbered cluster or image to find, rate and review businesses.\nTap in the upper left corner for more options.");
             }
         });
 
@@ -847,29 +854,22 @@ public class MainActivity extends AppCompatActivity implements
                 switch(index){
                     case 1:
                     case 4: //clear and reload
-                        kickItOff = true;
-                        Map<String, String> query = new HashMap<>();
-
-                        query.put("latitude", String.valueOf(location.getLatitude()));
-                        query.put("longitude", String.valueOf(location.getLongitude()));
-                        query.put("order", "asc");
-                        query.put("orderby", "distance");
-
-                        getRetrofit(query);
-                        menu.setVisibility(View.GONE);
-                        container.setBackgroundColor(Color.TRANSPARENT);
-
+                        startActivity(getIntent());
+                        finish();
+                        overridePendingTransition(0, 0);
                         break;
                     case 2: //search popup
-                        //spinner.setVisibility(View.GONE);
                         menu.setVisibility(View.GONE);
                         container.setBackgroundColor(Color.TRANSPARENT);
-                        ivLoading.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        loadingLayout.setVisibility(View.VISIBLE);
                         ivLoading.setImageResource(R.mipmap.under_construction_foreground);
-                        ivLoading.setVisibility(View.VISIBLE);
                         ivLoading.setAnimation(imgAnimationIn);
-                        tvLoading.setVisibility(View.VISIBLE);
+                        ivLoading.setVisibility(View.VISIBLE);
                         tvLoading.setAnimation(imgAnimationIn);
+                        tvLoading.setVisibility(View.VISIBLE);
+                        ivClose.setAnimation(imgAnimationIn);
+                        ivClose.setVisibility(View.VISIBLE);
+
                         if (isLoggedIn) {
                             tvLoading.setText("Apologies "+firstName+",\nlooks like there was an error.\nWe're constantly working to improve our service. Please try again later.");
                             menu.setVisibility(View.GONE);
@@ -880,15 +880,12 @@ public class MainActivity extends AppCompatActivity implements
                         break;
                     case 3: //add listing
                         if (!isLoggedIn) {
-                            //Toast.makeText(getApplicationContext(), "User must be logged in to add a business listing.", Toast.LENGTH_LONG).show();
-                            Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                            startActivity(loginIntent);
-                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                         } else {
-                            Intent addListingIntent = new Intent(MainActivity.this, AddListingActivity.class);
-                            startActivity(addListingIntent);
-                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                            startActivity(new Intent(getApplicationContext(), AddListingActivity.class));
                         }
+                        finish();
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         menu.setVisibility(View.GONE);
                         container.setBackgroundColor(Color.TRANSPARENT);
                         break;
@@ -903,8 +900,7 @@ public class MainActivity extends AppCompatActivity implements
                             if (accessToken != null && !accessToken.isExpired()) {
                                 useLoginInformation(accessToken);
                             } else {
-                                LoginManager.getInstance().logInWithReadPermissions(MainActivity.this, Arrays.asList("public_profile"));
-                                startActivity(getIntent());
+                                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                                 finish();
                                 overridePendingTransition(0, 0);
                             }
@@ -973,8 +969,8 @@ public class MainActivity extends AppCompatActivity implements
         kickItOff = true;
         spinner.setVisibility(View.VISIBLE); //hide progressBar
 
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
+       latitude = location.getLatitude();
+       longitude = location.getLongitude();
 
         //check google login info
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
@@ -2026,8 +2022,7 @@ public class MainActivity extends AppCompatActivity implements
 
     //create map markers and begin geofence monitoring
     protected void setMarkers() {
-        Intent intent = new Intent(this, MarkerClusteringActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(getApplicationContext(), MarkerClusteringActivity.class));
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
