@@ -61,6 +61,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.macinternetservices.sablebusinessdirectory.MainActivity.firstName;
+import static com.macinternetservices.sablebusinessdirectory.MainActivity.googleSignIn;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -97,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
         googleSignInButton = findViewById(R.id.google_login_button);
         googleSignInButton.setSize(SignInButton.SIZE_STANDARD);
+        googleSignInButton.setColorScheme(googleSignInButton.COLOR_DARK);
         //googleSignInButton.setVisibility(View.GONE);
         imgAnimationIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 
@@ -225,7 +227,7 @@ public class LoginActivity extends AppCompatActivity {
             handleSignInResult(googleSignInTask);
         }
     }
-    GoogleSignInAccount googleSignIn;
+    //GoogleSignInAccount googleSignIn;
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {

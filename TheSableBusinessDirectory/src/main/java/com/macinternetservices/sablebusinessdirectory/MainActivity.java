@@ -49,13 +49,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -254,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements
 
     TextSwitcher textSwitcher, textSwitcher3;
     private SlidingUpPanelLayout mLayout;
-    GoogleSignInAccount googleSignIn;
+    public static GoogleSignInAccount googleSignIn;
 
 
 

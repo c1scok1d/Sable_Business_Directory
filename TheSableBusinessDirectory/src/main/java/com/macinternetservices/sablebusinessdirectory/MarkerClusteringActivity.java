@@ -16,14 +16,13 @@
 
 package com.macinternetservices.sablebusinessdirectory;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,6 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -42,7 +40,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
@@ -52,10 +49,8 @@ import com.macinternetservices.sablebusinessdirectory.clustering.view.DefaultClu
 import com.macinternetservices.sablebusinessdirectory.model.Business;
 import com.macinternetservices.sablebusinessdirectory.clustering.ClusterItem;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Demonstrates heavy customisation of the look of rendered clusters.
@@ -66,11 +61,9 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         ClusterManager.OnClusterItemInfoWindowClickListener<Business> {
 
     ClusterManager<Business> mClusterManager;
-   // private Random random = new Random(1984);
     private Business clickedVenueMarker;
     ArrayList<ListingsModel> locationReviewShow = new ArrayList<>();
     boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-
 
 
     /**
@@ -121,7 +114,6 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
             for (Business p : cluster.getItems()) {
                 // Draw 4 at most.
                 if (profilePhotos.size() == 4) break;
-                //dummyBitmap = Picasso.get().load(p.profilePhoto);
 
                 try {
                     dummyBitmap = Glide.with(getApplicationContext())
@@ -135,8 +127,6 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
                 drawable.setBounds(0, 0, width, height);
                 profilePhotos.add(drawable);
             }
-
-
 
             MultiDrawable multiDrawable = new MultiDrawable(profilePhotos);
             multiDrawable.setBounds(0, 0, width, height);
@@ -339,19 +329,16 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         noListingsTextView.setVisibility(View.GONE);
     }
 
+    @SuppressLint("SetTextI18n")
     private void showOtherStuff() {
 
         Animation imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
         Animation imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        Animation imgZoomOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_out);
-        Animation imgZoomIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in);
 
         spinner.setVisibility(View.GONE); //hide progressBar
         loginButton.setVisibility(View.VISIBLE);
         loadingLayout.setAnimation(imgAnimationOut);
         loadingLayout.setVisibility(View.GONE);
-        //searchView.setAnimation(imgAnimationIn);
-        //searchView.setVisibility(View.VISIBLE);
         noListingsImageView.setAnimation(imgAnimationIn);
         noListingsImageView.setVisibility(View.VISIBLE);
         noListingsTextView.setAnimation(imgAnimationIn);
@@ -359,7 +346,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
         //noListingsTextView.setTextSize(16);
 
         if(isLoggedIn) {
-           noListingsTextView.setText("This is terrible " + firstName +"!!!!\n\nLooks like there aren't any black owned businesses near you in our directory.\n" +
+           noListingsTextView.setText("This is terrible "+firstName+"!!!!\n\nLooks like there aren't any black owned businesses near you in our directory.\n" +
                     "Tap Add (+) from the menu to add any black owned business you visit to our directory.");
         } else {
             noListingsTextView.setText("This is terrible!!!!\n\nLooks like there aren't any black owned businesses near you in our directory.\n" +
