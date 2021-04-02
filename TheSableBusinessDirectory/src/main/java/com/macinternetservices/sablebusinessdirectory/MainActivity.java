@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -301,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements
     ImageSwitcher imageSwitcher3;
     LinearLayout  textSwitcher3Layout, sliderLayout;
     private Handler imageSwitchHandler;
-    SharedPreferences pref;
+    public static SharedPreferences pref;
 
 
     public static Context context;
@@ -977,6 +978,8 @@ public class MainActivity extends AppCompatActivity implements
 
        latitude = location.getLatitude();
        longitude = location.getLongitude();
+        getApplication().registerReceiver(receiver,
+                new IntentFilter("me.hoen.geofence_21.geolocation.service"));
 
         //check google login info
         googleSignIn = GoogleSignIn.getLastSignedInAccount(this);
@@ -1370,21 +1373,21 @@ public class MainActivity extends AppCompatActivity implements
                     }
                     setMarkers();
                 }
-            }
-            if(!MainActivity.isLoggedIn) {
-                if (currentMarker!=null)
-                    currentMarker.remove();
-                currentMarker=mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                        .title("You are here!").snippet("Double tap\nanywhere on\nthe map to zoom")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            } else {
-                if (currentMarker!=null)
-                    currentMarker.remove();
-                currentMarker= mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                        .title("Welcome "+ MainActivity.firstName).snippet("Double tap\nanywhere on\nthe map to zoom")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+               /* if (isLoggedIn) {
+                    if (currentMarker != null)
+                        currentMarker.remove();
+                    currentMarker = mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                            .title("You are here!").snippet("Double tap anywhere on the map to zoom")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                } else {
+                    if (currentMarker != null)
+                        currentMarker.remove();
+                    currentMarker = mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                            .title("Welcome "+firstName+"!").snippet("Double tap anywhere on the map to zoom")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                } */
             }
         }
 
@@ -1424,9 +1427,7 @@ public class MainActivity extends AppCompatActivity implements
             if (alertOn) {
                 ivAlertOn.setVisibility(View.VISIBLE);
                 ivAlertOff.setVisibility(View.GONE);
-                if (!isMyServiceRunning()) {
-                    startService(new Intent(MainActivity.this, GeolocationService.class));
-                }
+                startService(new Intent(MainActivity.this, GeolocationService.class));
             }
             setMarkers();
         }
