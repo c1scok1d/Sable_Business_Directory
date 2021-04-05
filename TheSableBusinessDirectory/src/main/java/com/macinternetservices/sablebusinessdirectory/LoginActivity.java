@@ -89,9 +89,6 @@ public class LoginActivity extends AppCompatActivity {
 
         tvSecureMsg = findViewById(R.id.tvSecureMsg);
         btnBack = findViewById(R.id.btnBack);
-        //tvGreeting = findViewById(R.id.tvGreeting);
-        //textView6 = findViewById(R.id.textView6);
-        //textView7 = findViewById(R.id.textView7);
         ivGreeter = findViewById(R.id.ivGreeter);
         ivLogo = findViewById(R.id.ivLogo);
         loginButton = findViewById(R.id.login_button);
@@ -99,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
         googleSignInButton = findViewById(R.id.google_login_button);
         googleSignInButton.setSize(SignInButton.SIZE_STANDARD);
         googleSignInButton.setColorScheme(googleSignInButton.COLOR_DARK);
-        //googleSignInButton.setVisibility(View.GONE);
+        googleSignInButton.setVisibility(View.VISIBLE);
         imgAnimationIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 
 
@@ -194,7 +191,6 @@ public class LoginActivity extends AppCompatActivity {
                         tvSecureMsg.setAnimation(imgAnimationIn);
                         tvSecureMsg.setText("Apologies looks like there was an error!\nWe're constantly working to improve our service.\nPlease try again later.");
                         Log.w("GoolgeSignInResult", "handleSignInResult:error", exception);
-                        Log.w("GoogleSignInStatus: ", "signInResult:failed code=" + exception);
                     }
                 });
         tvSecureMsg.setVisibility(View.VISIBLE);

@@ -106,17 +106,13 @@ public class AddListingActivity extends AppCompatActivity implements
     objects of text view and button widgets.
      */
     TextView tvCurrentAddress;
-    LinearLayout addressAutocompleteLayout, addressChangeBtnLayout, currentAddressHeaderLayout, businessHoursLayoutTitle;
     EditText etName, etDescription, etPhone, etEmail, etWebsite, etTwitter, etFacebook;
-    Button btnNext, changeAddressBtn, addPhotoBtn, addHoursBtn;
-    //AutoCompleteTextView tvCurrentAddress;
+    Button btnNext, addPhotoBtn, addHoursBtn;
     Spinner spnCategory;
-    //ListView spnCategory;
     AutoCompleteTextView tvCategory;
     private ArrayList<String> addListingCategory = new ArrayList<>();
 
     ArrayList<ListingsAddModel> locationAdd = new ArrayList<>();
-    List<BusinessHours> bhs = new ArrayList<>();
     ArrayList<String> userActivityArray = new ArrayList<>();
     private ArrayList<MediaFile> photos = new ArrayList<>();
 
@@ -130,15 +126,13 @@ public class AddListingActivity extends AppCompatActivity implements
     private static final int GALLERY_REQUEST_CODE = 7502;
     private static final int DOCUMENTS_REQUEST_CODE = 7503;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 4077;
-    protected ImageView ivLogo;
+    protected ImageView ivPhotos, changeAddressBtn;
     private EasyImage easyImage;
-    //private TextView tvLoading;
-    //BusinessHoursWeekPicker bh_picker;
     JSONArray businessHours = new JSONArray();
-    //LinearLayout viewBusinessHoursLayout;
     PlacesClient placesClient;
 
     public static final String BH_LIST = "bh_list";
+    private ImagesAdapter imagesAdapter;
 
 
     /**
@@ -148,55 +142,12 @@ public class AddListingActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_listing);
-
-        BusinessHoursWeekPicker bh_picker = findViewById(R.id.bh_picker);
-        BusinessHoursWeekView businessHoursWeekView = findViewById(R.id.bh_view);
-        Button btn_apply = findViewById(R.id.btn_apply);
-        LinearLayout businessHoursLayout = findViewById(R.id.businessHoursLayout);
-        businessHoursLayout.setVisibility(View.GONE);
-        LinearLayout viewBusinessHoursLayout = findViewById(R.id.viewBusinessHoursLayout);
-        viewBusinessHoursLayout.setVisibility(View.GONE);
-        //TextView tvAddHours;
         addListingCategory.add("Tap To Select Business Category"); //add heading to category spinner
-
-        btn_apply.setOnClickListener(view -> {
-
-            try {
-
-                bhs = bh_picker.getBusinessHoursList();
-
-                for(int i=0; i< bhs.size();i++){
-
-                    businessHours.put(bhs.get(i).getShortDayOfWeek() + " " +bhs.get(i).getFrom24()+ "-" +bhs.get(i).getTo24());
-                }
-
-                //System.out.println(json);
-                System.out.println("Hours String: " +bhs.toString());
-                System.out.println("Hours String For data: " +businessHours.toString());
-
-            } catch (ValdationException e) {
-                Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
-                return;
-            }
-            businessHoursWeekView.setModel(bhs);
-            viewBusinessHoursLayout.setVisibility(View.VISIBLE);
-            businessHoursLayout.setVisibility(View.GONE);
-        });
-
         tvCurrentAddress = findViewById(R.id.tvAddress);
         addPhotoBtn = findViewById(R.id.addPhotoBtn);
-        currentAddressHeaderLayout = findViewById(R.id.currentAddressHeaderLayout);
-        //currentAddressHeaderLayout.setVisibility(View.GONE);
-        addressChangeBtnLayout = findViewById(R.id.addressChangeBtnLayout);
-        addressAutocompleteLayout = findViewById(R.id.addressAutocompleteLayout);
-        addressAutocompleteLayout.setVisibility(View.GONE);
         changeAddressBtn = findViewById(R.id.changeAddressBtn);
-        businessHoursLayoutTitle = findViewById(R.id.businessHoursLayoutTitle);
-        businessHoursLayoutTitle.setVisibility(View.GONE);
-
         btnNext = findViewById(R.id.btnNext);
         spnCategory = findViewById(R.id.spnCategory);
-        //spnCategory.setFastScrollEnabled(true);
         tvCategory = findViewById(R.id.tvCategory);
         etName = findViewById(R.id.etName);
         etDescription = findViewById(R.id.etDescription);
@@ -206,10 +157,7 @@ public class AddListingActivity extends AppCompatActivity implements
         etWebsite = findViewById(R.id.etWebsite);
         etTwitter  = findViewById(R.id.etTwitter);
         etFacebook = findViewById(R.id.etFacebook);
-        //tvAddHours = findViewById(R.id.tvAddHours);
         addHoursBtn = findViewById(R.id.addHoursBtn);
-//        tvLoading = findViewById(R.id.tvLoading);
-//        tvLoading.setVisibility(View.GONE);
 
 
         SupportMapFragment mapFragment =
@@ -219,65 +167,52 @@ public class AddListingActivity extends AppCompatActivity implements
         query.put("per_page", "100");
        getRetrofitCategories(query);
 
-        changeAddressBtn.setOnClickListener(view -> {
-            if(addressAutocompleteLayout.getVisibility() == View.GONE) {
-                addressAutocompleteLayout.setVisibility(View.VISIBLE);
-            } else {
-                addressAutocompleteLayout.setVisibility(View.GONE);
-            }
-        });
-
-        addHoursBtn.setOnClickListener(v -> {
-            if(businessHoursLayout.getVisibility() == View.GONE) {
-                businessHoursLayout.setVisibility(View.VISIBLE);
-                businessHoursLayoutTitle.setVisibility(View.VISIBLE);
-            } else {
-                businessHoursLayout.setVisibility(View.GONE);
-                businessHoursLayoutTitle.setVisibility(View.GONE);
-            }
-        });
-
-
         String apiKey = getString(R.string.api_key);
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), apiKey);
         }
 
-        // Create a new Places client instance.
-        placesClient = Places.createClient(this);
-
-        // Initialize the AutocompleteSupportFragment.
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        autocompleteFragment.setHint("Enter address to begin search");
-        autocompleteFragment.setTypeFilter(TypeFilter.ADDRESS);
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
-        //LatLng latlng = Place.Field.LAT_LNG();
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(@NonNull Place place) {
-                // TODO: Get info about the selected place.
-                //Toast.makeText(getApplicationContext(), place.getName(), Toast.LENGTH_SHORT).show();
-                addressAutocompleteLayout.setVisibility(View.GONE);
+        autocompleteFragment.getView().setVisibility(View.GONE);
 
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 13));
-                setAddress(place.getLatLng().latitude, place.getLatLng().longitude);
+        changeAddressBtn.setOnClickListener(view -> {
+                    {
+                        // Create a new Places client instance.
+                        placesClient = Places.createClient(this);
 
-                CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(place.getLatLng())      // Sets the center of the map to location user
-                        .zoom(17)                   // Sets the zoom
-                        .bearing(90)                // Sets the orientation of the camera to east
-                        .tilt(40)                   // Sets the tilt of the camera to 30 degrees
-                        .build();                   // Creates a CameraPosition from the builder
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            }
+                        // Initialize the AutocompleteSupportFragment.
+                        autocompleteFragment.getView().setVisibility(View.VISIBLE);
+                        autocompleteFragment.setHint("Enter address to begin search");
+                        autocompleteFragment.setTypeFilter(TypeFilter.ADDRESS);
+                        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+                        //LatLng latlng = Place.Field.LAT_LNG();
+                        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                            @Override
+                            public void onPlaceSelected(@NonNull Place place) {
+                                // TODO: Get info about the selected place.
+                                //Toast.makeText(getApplicationContext(), place.getName(), Toast.LENGTH_SHORT).show();
+//                                addressAutocompleteLayout.setVisibility(View.GONE);
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 13));
+                                setAddress(place.getLatLng().latitude, place.getLatLng().longitude);
 
-            @Override
-            public void onError(@NonNull Status status) {
-                // TODO: Handle the error.
-                Toast.makeText(getApplicationContext(), status.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                                CameraPosition cameraPosition = new CameraPosition.Builder()
+                                        .target(place.getLatLng())      // Sets the center of the map to location user
+                                        .zoom(17)                   // Sets the zoom
+                                        .bearing(90)                // Sets the orientation of the camera to east
+                                        .tilt(40)                   // Sets the tilt of the camera to 30 degrees
+                                        .build();                   // Creates a CameraPosition from the builder
+                                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                            }
+
+                            @Override
+                            public void onError(@NonNull Status status) {
+                                // TODO: Handle the error.
+                                Toast.makeText(getApplicationContext(), status.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
 
         /**
          * OnClick take user to add location page
@@ -560,8 +495,8 @@ public class AddListingActivity extends AppCompatActivity implements
                 //Log.d("onNothingSelected", "[AutoCompleteTextView] Nothing here");
             }
         });
-        ivLogo = findViewById(R.id.ivLogo);
-        ivLogo.setVisibility(View.GONE);
+        ivPhotos = findViewById(R.id.ivPhotos);
+        ivPhotos.setVisibility(View.GONE);
         //galleryButton = findViewById(R.id.gallery_button);
 
         if (savedInstanceState != null) {
@@ -569,10 +504,10 @@ public class AddListingActivity extends AppCompatActivity implements
         }
 
         easyImage = new EasyImage.Builder(this)
-                .setChooserTitle("Pick media")
+                .setChooserTitle("Select Image")
                 .setCopyImagesToPublicGalleryFolder(false)
                 .setChooserType(ChooserType.CAMERA_AND_GALLERY)
-                .setFolderName("EasyImage sample")
+                .setFolderName("sable")
                 .allowMultiple(true)
                 .build();
 
@@ -603,6 +538,7 @@ public class AddListingActivity extends AppCompatActivity implements
         }*/
     }
     ////  END OF ONCREATE ////
+
 
     public void onStart() {
         super.onStart();
@@ -762,8 +698,8 @@ public class AddListingActivity extends AppCompatActivity implements
 
     private void onPhotosReturned(@NonNull MediaFile[] returnedPhotos) {
         photos.addAll(Arrays.asList(returnedPhotos));
-        ivLogo.setVisibility(View.VISIBLE);
-        ivLogo.setImageBitmap(BitmapFactory.decodeFile(photos.get(0).getFile().toString()));
+        ivPhotos.setVisibility(View.VISIBLE);
+        ivPhotos.setImageBitmap(BitmapFactory.decodeFile(photos.get(0).getFile().toString()));
     }
 
     private boolean arePermissionsGranted(String[] permissions) {
@@ -798,7 +734,7 @@ public class AddListingActivity extends AppCompatActivity implements
                     .build();                   // Creates a CameraPosition from the builder
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-            setAddress(latitude, longitude);  // method to reverse geocode to physical address
+            setAddress(location.getLatitude(), location.getLongitude());  // method to reverse geocode to physical address
         }
 
         /**
@@ -839,7 +775,7 @@ public class AddListingActivity extends AppCompatActivity implements
 
         @SuppressLint("MissingPermission") Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
         if (location != null) {
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
@@ -849,9 +785,9 @@ public class AddListingActivity extends AppCompatActivity implements
                     .build();                   // Creates a CameraPosition from the builder
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        setAddress(latitude, longitude);
+        //latitude = location.getLatitude();
+        //longitude = location.getLongitude();
+        setAddress(location.getLatitude(), location.getLongitude());
     }
 
     /**
@@ -999,7 +935,7 @@ public class AddListingActivity extends AppCompatActivity implements
                 for (int i = 0; i < response.body().size(); i++) {
                     addListingCategory.add(response.body().get(i).getName());
                 }
-                ArrayAdapter<String> listingCategoryAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.select_dialog_item, addListingCategory);
+                ArrayAdapter<String> listingCategoryAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, addListingCategory);
                 tvCategory.setThreshold(2);
                 spnCategory.setAdapter(listingCategoryAdapter);
                 tvCategory.setAdapter(listingCategoryAdapter);

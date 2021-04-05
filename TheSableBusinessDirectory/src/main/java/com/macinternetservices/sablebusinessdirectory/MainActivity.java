@@ -1,5 +1,7 @@
 package com.macinternetservices.sablebusinessdirectory;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
@@ -71,6 +73,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -82,6 +85,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.macinternetservices.sablebusinessdirectory.model.Business;
 import com.ramotion.circlemenu.CircleMenuView;
@@ -176,23 +180,17 @@ public class MainActivity extends AppCompatActivity implements
     public static Double latitude, longitude;
 
     public static TextView tvMore, tvUserName, tvWpUserId, tvCity, tvCategories, tvLoading, noListingsTextView, textViewFoo, fooListingsTextView;
-    //Button  btnContinue;
     LoginButton loginButton, loginButton3;
     RecyclerView verticalRecyclerView, featuredRecyclervView, recentListingsRecyclervView, recentReviewsRecyclervView;
-    //ProgressBar progressBar;
     LinearLayoutManager mLayoutManager, featuredRecyclerViewLayoutManager,
             recentListingsRecyclerViewLayoutManager, recentReviewsRecyclerViewLayoutManager;
-    LinearLayout recentReviewsLayout, recentReviewsRecyclerLayout;
-    //FrameLayout mapLayout;
+
     RelativeLayout loadingLayout, noListingsLayout, container, fooListingsLayout;
 
 
-    //VerticalAdapter verticalAdapter;
     FeaturedListAdapter featuredListAdapter;
     RecentListingsAdapter recentListingsAdapter;
     RecentReviewListingsAdapter recentReviewListingsAdapter;
-
-    Animation imgAnimationIn, imgAnimationOut = null;
 
     public static String baseURL = "https://www.thesablebusinessdirectory.com", radius, address, state, country,
             zipcode, city, street, bldgno, todayRange, username = "android_app", isOpen, email,
@@ -203,23 +201,24 @@ public class MainActivity extends AppCompatActivity implements
     public static ArrayList<ListingsModel> featuredList = new ArrayList<>();
     public static ArrayList<ListingsModel> recentList = new ArrayList<>();
     public static ArrayList<RecentReviewListingsModel> recentReviewList = new ArrayList<>();
-    //public static ArrayList<ListingsModel> locationMatch = new ArrayList<>();
     public static ArrayList<Business> mapLocations = new ArrayList<>();
     private static final long GEOFENCE_EXPIRATION_IN_HOURS = 12;
     public static final long GEOFENCE_EXPIRATION_IN_MILLISECONDS = GEOFENCE_EXPIRATION_IN_HOURS
             * DateUtils.HOUR_IN_MILLIS;
     static public boolean geofencesAlreadyRegistered = false;
     public static HashMap<String, SimpleGeofence> geofences = new HashMap<String, SimpleGeofence>();
-    //ArrayList<String> userActivityArray = new ArrayList<>();
     ImageView ivUserImage, spokesperson, ivLoading, noListingsImageView, fooListingImageView,
-            ivSettings, ivAlertOn, ivAlertOff, ivLogo, ivHelp, ivClose;
+            ivSettings, ivAlertOn, ivAlertOff, ivLogo, ivHelp, ivClose, greeter;
     CardView ivUserImageCardview;
     ProgressBar spinner;
     GoogleSignInClient mGoogleSignInClient;
+    private FusedLocationProviderClient fusedLocationClient;
 
 
     private static final int FRAME_TIME_MS = 8000;
     public AccessTokenTracker accessTokenTracker;
+    private int shortAnimationDuration;
+
 
 
     Cache cache;
@@ -233,9 +232,6 @@ public class MainActivity extends AppCompatActivity implements
     protected int getLayoutId() {
         return R.layout.activity_main;
     }
-
-
-    //private FusedLocationProviderClient fusedLocationClient;
 
     LocationManager locationManager;
     Location location;
@@ -391,36 +387,35 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
-        //isRestore = savedInstanceState != null;
         ivSettings = findViewById(R.id.btnSettings);
         loadingLayout = findViewById(R.id.loadingLayout);
-        noListingsLayout = findViewById(R.id.noListingsLayout);
-        fooListingsLayout = findViewById(R.id.fooListingsLayout);
+        loadingLayout.setVisibility(View.GONE);
         tvLoading = findViewById(R.id.tvLoading);
         tvLoading.setVisibility(View.GONE);
+        ivLoading = findViewById(R.id.ivLoading);
+        ivLoading.setVisibility(View.GONE);
+
         tvMore = findViewById(R.id.tvMore);
         tvMore.setVisibility(View.GONE);
         sliderLayout = findViewById(R.id.sliderLayout);
         sliderLayout.setVisibility(View.GONE);
-        //progressBar = findViewById(R.id.progressBar1);
-        recentReviewsRecyclerLayout = findViewById(R.id.recentReviewsRecyclerLayout);
-        recentReviewsRecyclerLayout.setVisibility(View.GONE);
-        recentReviewsLayout = findViewById(R.id.recentReviewsLayout);
-        recentReviewsLayout.setVisibility(View.GONE);
-        ivLoading = findViewById(R.id.ivLoading);
-        ivLoading.setVisibility(View.GONE);
+
+        noListingsLayout = findViewById(R.id.noListingsLayout);
+        noListingsLayout.setVisibility(View.GONE);
         noListingsImageView = findViewById(R.id.noListingsImageView);
         noListingsImageView.setVisibility(View.GONE);
         noListingsTextView = findViewById(R.id.noListingsTextView);
+        noListingsTextView.setVisibility(View.GONE);
+
         noListingsTextView.setVisibility(View.GONE);
         fooListingImageView = findViewById(R.id.fooListingsImageView);
         fooListingImageView.setVisibility(View.GONE);
         fooListingsTextView = findViewById(R.id.fooListingsTextView);
         fooListingsTextView.setVisibility(View.GONE);
         spinner = findViewById(R.id.progressBar1);
-        imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
         container = findViewById(R.id.container);
+        greeter = findViewById(R.id.greeter);
+        greeter.setVisibility(View.GONE);
 
         /**
          * ABOUT US
@@ -429,30 +424,63 @@ public class MainActivity extends AppCompatActivity implements
          * facebook login
          */
         loginButton = findViewById(R.id.login_button2);
-        loginButton.setVisibility(View.GONE);
+        //loginButton.setAlpha(0f);
+        //loginButton.setVisibility(View.VISIBLE);
 
         loginButton3 = findViewById(R.id.login_button3);
-        loginButton3.setVisibility(View.GONE);
+        //loginButton3.setAlpha(0f);
+        //loginButton3.setVisibility(View.VISIBLE);
 
         ivClose = findViewById(R.id.ivClose);
         ivClose.setVisibility(View.GONE);
+       // ivClose.setAlpha(0f);
+        //ivClose.setVisibility(View.VISIBLE);
 
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingLayout.setAnimation(imgAnimationOut);
-                loadingLayout.setVisibility(View.GONE);
-                ivLoading.setAnimation(imgAnimationOut);
-                ivLoading.setVisibility(View.GONE);
-                tvLoading.setAnimation(imgAnimationOut);
-                tvLoading.setVisibility(View.GONE);
-                loginButton3.setAnimation(imgAnimationOut);
-                loginButton3.setVisibility(View.GONE);
-                ivClose.setAnimation(imgAnimationOut);
-                ivClose.setVisibility(View.GONE);
-                ivHelp.setAnimation(imgAnimationIn);
+                // Animate the content view to 100% opacity, and clear any animation
+                // listener set on the view.
+                ivHelp.setAlpha(0f);
                 ivHelp.setVisibility(View.VISIBLE);
+                ivHelp.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
+
+                // Animate the loading view to 0% opacity. After the animation ends,
+                // set its visibility to GONE as an optimization step (it won't
+                // participate in layout passes, etc.)
+
+                tvLoading.animate()
+                        .alpha(0f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                tvLoading.setVisibility(View.GONE);
+                            }
+                        });
+                ivLoading.animate()
+                        .alpha(0f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                ivLoading.setVisibility(View.GONE);
+                            }
+                        });
+                ivClose.animate()
+                        .alpha(0f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                ivClose.setVisibility(View.GONE);
+                            }
+                        });
                 container.setBackgroundColor(Color.TRANSPARENT);
+                //ivHelp.setVisibility(View.VISIBLE);
 
                 pref.edit().putBoolean("instructed", true).apply();
             }
@@ -525,8 +553,6 @@ public class MainActivity extends AppCompatActivity implements
         });
 
         imageSwitcher3 = findViewById(R.id.imageSwitcher3);
-        imageSwitcher3.setAnimation(imgAnimationIn);
-        imageSwitcher3.setAnimation(imgAnimationOut);
         imageSwitcher3.setVisibility(View.GONE);
 
 
@@ -546,8 +572,6 @@ public class MainActivity extends AppCompatActivity implements
          */
 
         textSwitcher3Layout = findViewById(R.id.textSwitcher3Layout);
-        textSwitcher3Layout.setAnimation(imgAnimationIn);
-        textSwitcher3Layout.setAnimation(imgAnimationOut);
         textSwitcher3Layout.setVisibility(View.GONE);
 
         ViewGroup.LayoutParams textSwitcherLayoutParams = new ImageSwitcher.LayoutParams(
@@ -599,37 +623,16 @@ public class MainActivity extends AppCompatActivity implements
         ivLogo = findViewById(R.id.ivLogo);
         ivLogo.setVisibility(View.GONE);
         ivHelp = findViewById(R.id.ivHelp);
+        ivHelp.setVisibility(View.GONE);
         tvUserName = findViewById(R.id.tvUserName);
         ivUserImage = findViewById(R.id.ivUserImage);
         ivUserImage.setVisibility(View.GONE);
         tvWpUserId = findViewById(R.id.tvWpUserId);
         textSwitcher = findViewById(R.id.textSwitcher1);
 
-        /*
-            BEGIN vertical Recycler View
-         */
-        //verticalRecyclerView = findViewById(R.id.verticalRecyclerView);
-        //mLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
-        //verticalRecyclerView.setLayoutManager(mLayoutManager);
-        //verticalList = new ArrayList<>();
-        //locationMatch = new ArrayList<>();
-
-
-        /*verticalAdapter = new VerticalAdapter(verticalList, userName, userEmail, userImage, userId, MainActivity.this);
-        featuredListAdapter = new FeaturedListAdapter(featuredList, MainActivity.this);
-        recentListingsAdapter = new RecentListingsAdapter(recentList, MainActivity.this);
-        verticalRecyclerView.setAdapter(verticalAdapter);
-        verticalRecyclerView.setNestedScrollingEnabled(false);
-
-        featuredRecyclervView.setAdapter(featuredListAdapter);
-        featuredRecyclervView.setNestedScrollingEnabled(false);
-
-        recentListingsRecyclervView.setAdapter(recentListingsAdapter);
-        recentListingsRecyclervView.setNestedScrollingEnabled(false); */
-
         spokesperson = findViewById(R.id.spokesperson);
         tvCity = findViewById(R.id.tvCity);
-        tvMore = findViewById(R.id.tvMore);
+        //tvMore = findViewById(R.id.tvMore);
 
         ivAlertOn = findViewById(R.id.ivAlertOn);
         ivAlertOn.setVisibility(View.GONE);
@@ -638,120 +641,6 @@ public class MainActivity extends AppCompatActivity implements
 
         menu = findViewById(R.id.circle_menu);
         menu.setVisibility(View.GONE);
-        //TextView tvTapForOptions = findViewById(R.id.tvTapForOptions);
-
-
-        /**
-         *  directory search
-         */
-        /*ArrayAdapter<String> searchViewAdapter = new ArrayAdapter<String>(getApplicationContext(),
-                android.R.layout.simple_list_item_1, listingName);
-        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View arg1, int pos,
-                                    long id) {
-                //Animation imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-                Map<String, String> query = new HashMap<>();
-                query.put("per_page", "100");
-
-                spinner.setVisibility(View.VISIBLE);
-                loadingLayout.setVisibility(View.VISIBLE);
-                loadingLayout.setAnimation(imgAnimationIn);
-                ivLoading.setImageResource(R.mipmap.online_reviews_foreground);
-                String listingName = "<font color='#4FC1E9'>" + parent.getItemAtPosition(pos).toString() + "</font>";
-                tvLoading.setText(Html.fromHtml(("Thank you for your waiting while we load reviews for " + listingName)));
-
-                HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-                logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-                OkHttpClient client = new OkHttpClient.Builder()
-                        .connectTimeout(10, TimeUnit.SECONDS)
-                        .writeTimeout(10, TimeUnit.SECONDS)
-                        .readTimeout(30, TimeUnit.SECONDS)
-                        .addInterceptor(new BasicAuthInterceptor(username, password))
-                        .addInterceptor(logging)
-                        .addInterceptor(offlineInterceptor)
-                        .addInterceptor(onlineInterceptor)
-                        .cache(cache)
-                        .build();
-
-                retrofit = null;
-                retrofit = new Retrofit.Builder()
-                        .baseUrl(baseURL)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .client(client)
-                        .build();
-                RetrofitArrayApi service = retrofit.create(RetrofitArrayApi.class);
-                // pass JSON data to BusinessListings class for filtering
-                Call<List<BusinessListings>> call = service.search(query);
-
-                // get filtered data from BusinessListings class and add to recyclerView adapter for display on screen
-                call.enqueue(new Callback<List<BusinessListings>>() {
-                    @Override
-                    public void onResponse(Call<List<BusinessListings>> call, Response<List<BusinessListings>> response) {
-
-                        loop through JSON response get parse and output to log
-                        for (int i = 0; i < response.body().size(); i++) {
-                            if (parent.getItemAtPosition(pos).toString().equals(response.body().get(i).getTitle().getRaw())) {
-                                ArrayList<ListingsModel> locationReview = new ArrayList<>();
-                                Intent showReviews = new Intent(getApplicationContext(), ListReviewActivity.class);
-                                locationReview.add((new ListingsModel(ListingsModel.IMAGE_TYPE,
-                                        response.body().get(i).getId(),
-                                        response.body().get(i).getTitle().getRaw(),
-                                        response.body().get(i).getLink(),
-                                        response.body().get(i).getStatus(),
-                                        response.body().get(i).getPostCategory().get(0).getName(),
-                                        response.body().get(i).getFeatured(),
-                                        response.body().get(i).getFeaturedImage().getSrc(),
-                                        response.body().get(i).getBldgNo(),
-                                        response.body().get(i).getStreet(),
-                                        response.body().get(i).getCity(),
-                                        response.body().get(i).getRegion(),
-                                        response.body().get(i).getCountry(),
-                                        response.body().get(i).getZip(),
-                                        response.body().get(i).getLatitude(),
-                                        response.body().get(i).getLongitude(),
-                                        response.body().get(i).getRating(),
-                                        response.body().get(i).getRatingCount(),
-                                        response.body().get(i).getPhone(),
-                                        response.body().get(i).getEmail(),
-                                        response.body().get(i).getWebsite(),
-                                        response.body().get(i).getTwitter(),
-                                        response.body().get(i).getFacebook(),
-                                        response.body().get(i).getVideo(),
-                                        todayRange,
-                                        isOpen,
-                                        response.body().get(i).getLogo(),
-                                        response.body().get(i).getContent().getRaw(),
-                                        response.body().get(i).getFeaturedImage().getThumbnail(),
-                                        response.body().get(i).getTitle().getRaw(), new SimpleGeofence(response.body().get(i).getTitle().getRaw(), response.body().get(i).getLatitude(), response.body().get(i).getLongitude(),
-                                        100, GEOFENCE_EXPIRATION_IN_MILLISECONDS, response.body().get(i).getFeaturedImage().getThumbnail(),
-                                        Geofence.GEOFENCE_TRANSITION_ENTER
-                                                | Geofence.GEOFENCE_TRANSITION_DWELL
-                                                | Geofence.GEOFENCE_TRANSITION_EXIT))));
-                                Bundle locationReviewBundle = new Bundle();
-                                locationReviewBundle.putParcelableArrayList("locationReviewBundle", locationReview);
-                                showReviews.putExtra("locationReview", locationReview);
-                                startActivity(showReviews);
-                                finish();
-                                break;
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<BusinessListings>> call, Throwable t) {
-                        ////Log.e("CategoryNumber", " response: " + t);
-                    }
-                });
-            }
-        });
-        searchView.setThreshold(1);
-        searchView.setAdapter(searchViewAdapter);
-
-        if (!userActivityArray.isEmpty()) {
-            userActivityArray = this.getIntent().getExtras().getStringArrayList("userActivityArray");
-        } */
 
 
         /***
@@ -781,19 +670,48 @@ public class MainActivity extends AppCompatActivity implements
         });
         mLayout.setFadeOnClickListener(view -> mLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED));
 
+
         ivUserImageCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!menu.isShown()){
-                    loadingLayout.setAnimation(imgAnimationOut);
-                    loadingLayout.setVisibility(View.GONE);
-                    noListingsLayout.setAnimation(imgAnimationOut);
-                    noListingsLayout.setVisibility(View.GONE);
+
+                    menu.setAlpha(0f);
                     menu.setVisibility(View.VISIBLE);
+                    menu.animate()
+                            .alpha(1f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(null);
+                    loadingLayout.animate()
+                            .alpha(0f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    loadingLayout.setVisibility(View.GONE);
+                                }
+                            });
+                    noListingsLayout.animate()
+                            .alpha(0f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    noListingsLayout.setVisibility(View.GONE);
+                                }
+                            });
                     container.setBackgroundColor(Color.WHITE);
                     container.getBackground().setAlpha(204); //80% transparency
                 } else {
-                    menu.setVisibility(View.GONE);
+                    menu.animate()
+                            .alpha(0f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    menu.setVisibility(View.GONE);
+                                }
+                            });
                     container.setBackgroundColor(Color.TRANSPARENT);
                 }
             }
@@ -802,20 +720,134 @@ public class MainActivity extends AppCompatActivity implements
         ivHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                noListingsLayout.setAnimation(imgAnimationOut);
-                noListingsLayout.setVisibility(View.GONE);
-                loadingLayout.setAnimation(imgAnimationIn);
-                loadingLayout.setVisibility(View.VISIBLE);
                 ivLoading.setImageResource(R.mipmap.holding_phone_foreground);
-                ivLoading.setAnimation(imgAnimationIn);
-                ivLoading.setVisibility(View.VISIBLE);
-                tvLoading.setAnimation(imgAnimationIn);
-                tvLoading.setVisibility(View.VISIBLE);
-                ivClose.setAnimation(imgAnimationIn);
-                ivClose.setVisibility(View.VISIBLE);
-                ivHelp.setAnimation(imgAnimationOut);
+                if(isLoggedIn){
+                    tvLoading.setText("Using the app is easy. Tap a numbered cluster or image to find, rate and review businesses.\nTap your profile pic in the upper left corner for more options.");
+                } else {
+                    tvLoading.setText("Using the app is easy. Tap a numbered cluster or image to find, rate and review businesses.\nTap the logo the upper left corner for more options.");
+
+                }
+                container.setBackgroundColor(Color.WHITE);
+                container.getBackground().setAlpha(204); //80% transparency
                 ivHelp.setVisibility(View.GONE);
-                tvLoading.setText("Using the app is easy. Tap a numbered cluster or image to find, rate and review businesses.\nTap in the upper left corner for more options.");
+
+                loadingLayout.setAlpha(0f);
+                loadingLayout.setVisibility(View.VISIBLE);
+                loadingLayout.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
+
+                tvLoading.setAlpha(0f);
+                tvLoading.setVisibility(View.VISIBLE);
+                tvLoading.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
+
+                ivLoading.setAlpha(0f);
+                ivLoading.setVisibility(View.VISIBLE);
+                ivLoading.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
+
+                ivClose.setAlpha(0f);
+                ivClose.setVisibility(View.VISIBLE);
+                ivClose.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
+
+            }
+        });
+
+        ivAlertOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivLoading.setImageResource(R.mipmap.noreviews_foreground);
+                if(isLoggedIn){
+                    tvLoading.setText("You can disable alerts by tapping your profile pic in the upper left corner to display the options menu. Tap the speaker menu icon to enable or disable alerts.");
+                } else {
+                    tvLoading.setText("You can disable alerts by tapping the logo in the upper left corner to display the options menu. Tap the speaker menu icon to enable or disable alerts.");
+
+                }
+                container.setBackgroundColor(Color.WHITE);
+                container.getBackground().setAlpha(204); //80% transparency
+                ivHelp.setVisibility(View.GONE);
+
+                loadingLayout.setAlpha(0f);
+                loadingLayout.setVisibility(View.VISIBLE);
+                loadingLayout.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
+
+                tvLoading.setAlpha(0f);
+                tvLoading.setVisibility(View.VISIBLE);
+                tvLoading.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
+
+                ivLoading.setAlpha(0f);
+                ivLoading.setVisibility(View.VISIBLE);
+                ivLoading.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
+
+                ivClose.setAlpha(0f);
+                ivClose.setVisibility(View.VISIBLE);
+                ivClose.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
+
+            }
+        });
+
+        ivAlertOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivLoading.setImageResource(R.mipmap.noreviews_foreground);
+                if(isLoggedIn){
+                    tvLoading.setText("You can disable alerts by tapping your profile pic in the upper left corner to display the options menu. Tap the speaker menu icon to enable or disable alerts.");
+                } else {
+                    tvLoading.setText("You can disable alerts by tapping the logo in the upper left corner to display the options menu. Tap the speaker menu icon to enable or disable alerts.");
+                }
+                container.setBackgroundColor(Color.WHITE);
+                container.getBackground().setAlpha(204); //80% transparency
+                ivHelp.setVisibility(View.GONE);
+
+                loadingLayout.setAlpha(0f);
+                loadingLayout.setVisibility(View.VISIBLE);
+                loadingLayout.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
+
+                tvLoading.setAlpha(0f);
+                tvLoading.setVisibility(View.VISIBLE);
+                tvLoading.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
+
+                ivLoading.setAlpha(0f);
+                ivLoading.setVisibility(View.VISIBLE);
+                ivLoading.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
+
+                ivClose.setAlpha(0f);
+                ivClose.setVisibility(View.VISIBLE);
+                ivClose.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
+
             }
         });
 
@@ -840,7 +872,15 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onMenuCloseAnimationEnd(@NonNull CircleMenuView view) {
                 Log.d("D", "onMenuCloseAnimationEnd");
-                menu.setVisibility(View.GONE);
+                menu.animate()
+                        .alpha(0f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                menu.setVisibility(View.GONE);
+                            }
+                        });
                 container.setBackgroundColor(Color.TRANSPARENT);
             }
 
@@ -857,30 +897,44 @@ public class MainActivity extends AppCompatActivity implements
                     case 4: //clear and reload
                         startActivity(getIntent());
                         finish();
-                        overridePendingTransition(0, 0);
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                        //overridePendingTransition(0, 0);
                         break;
                     case 2: //search popup
-                        menu.setVisibility(View.GONE);
-                        container.setBackgroundColor(Color.WHITE);
-                        container.getBackground().setAlpha(204); //80% transparency
-                        loadingLayout.setAnimation(imgAnimationIn);
-                        loadingLayout.setVisibility(View.VISIBLE);
-                        ivLoading.setImageResource(R.mipmap.under_construction_foreground);
-                        ivLoading.setAnimation(imgAnimationIn);
-                        ivLoading.setVisibility(View.VISIBLE);
-                        tvLoading.setAnimation(imgAnimationIn);
-                        tvLoading.setVisibility(View.VISIBLE);
-                        ivClose.setAnimation(imgAnimationIn);
-                        ivClose.setVisibility(View.VISIBLE);
-                        ivHelp.setVisibility(View.GONE);
-
                         if (isLoggedIn) {
-                            tvLoading.setText("Apologies "+firstName+",\nlooks like there was an error.\nWe're constantly working to improve our service. Please try again later.");
-                            menu.setVisibility(View.GONE);
+                            tvLoading.setText("Apologies "+firstName+", looks like there was an error.\nWe're constantly working to improve our service. Please try again later.");
                         } else {
-                            ivHelp.setAnimation(imgAnimationOut);
                             tvLoading.setText("Apologies, looks like there was an error.\nWe're constantly working to improve our service. Please try again later.");
                         }
+                        ivLoading.setImageResource(R.mipmap.under_construction_foreground);
+                        container.setBackgroundColor(Color.WHITE);
+                        container.getBackground().setAlpha(204); //80% transparency
+                        ivHelp.setVisibility(View.GONE);
+                        loadingLayout.setAlpha(0f);
+                        loadingLayout.setVisibility(View.VISIBLE);
+                        loadingLayout.animate()
+                                .alpha(1f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(null);
+                        ivLoading.setAlpha(0f);
+                        ivLoading.setVisibility(View.VISIBLE);
+                        ivLoading.animate()
+                                .alpha(1f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(null);
+                        tvLoading.setAlpha(0f);
+                        tvLoading.setVisibility(View.VISIBLE);
+                        tvLoading.animate()
+                                .alpha(1f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(null);
+                        ivClose.setAlpha(0f);
+                        ivClose.setVisibility(View.VISIBLE);
+                        ivClose.animate()
+                                .alpha(1f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(null);
+                        ivClose.setVisibility(View.VISIBLE);
                         break;
                     case 3: //add listing
                         if (!isLoggedIn) {
@@ -890,7 +944,15 @@ public class MainActivity extends AppCompatActivity implements
                         }
                         finish();
                         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                        menu.setVisibility(View.GONE);
+                        menu.animate()
+                                .alpha(0f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        menu.setVisibility(View.GONE);
+                                    }
+                                });
                         container.setBackgroundColor(Color.TRANSPARENT);
                         break;
                     case 5: //login
@@ -909,12 +971,28 @@ public class MainActivity extends AppCompatActivity implements
                                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                             }
                         }
-                        menu.setVisibility(View.GONE);
+                        menu.animate()
+                                .alpha(0f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        menu.setVisibility(View.GONE);
+                                    }
+                                });
                         container.setBackgroundColor(Color.TRANSPARENT);
                         break;
                     default:
                         buildAlertMessageEnableAlerts();
-                        menu.setVisibility(View.GONE);
+                        menu.animate()
+                                .alpha(0f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        menu.setVisibility(View.GONE);
+                                    }
+                                });
                         container.setBackgroundColor(Color.TRANSPARENT);
                         break;
                 }
@@ -923,11 +1001,11 @@ public class MainActivity extends AppCompatActivity implements
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment)).getMapAsync(this);
 
 
-        printHashKey(this);
+       // printHashKey(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000,
                 4800, LocationListener);
-        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+       fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         // Request only the user's ID token, which can be used to identify the
         // user securely to your backend. This will contain the user's basic
@@ -940,8 +1018,9 @@ public class MainActivity extends AppCompatActivity implements
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        //url = getIntent().getStringExtra("image_url");
-
+// Retrieve and cache the system's default "short" animation time.
+        shortAnimationDuration = getResources().getInteger(
+                android.R.integer.config_shortAnimTime);
 
     }
 
@@ -971,10 +1050,26 @@ public class MainActivity extends AppCompatActivity implements
         super.onResume();
         //mapLocations.removeAll(mapLocations);
         kickItOff = true;
+        //greeter.setVisibility(View.VISIBLE);
         spinner.setVisibility(View.VISIBLE); //hide progressBar
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-       latitude = location.getLatitude();
-       longitude = location.getLongitude();
+        if(location != null) {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        } else {
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                latitude = location.getLatitude();
+                                longitude = location.getLongitude();
+                            }
+                        }
+                    });
+        }
         getApplication().registerReceiver(receiver,
                 new IntentFilter("me.hoen.geofence_21.geolocation.service"));
 
@@ -1004,11 +1099,6 @@ public class MainActivity extends AppCompatActivity implements
             pref.edit().putBoolean("firstrun", false).apply();
         }
         if (isLoggedIn) {
-           /* ivLoading.setImageResource(R.mipmap.searching_foreground);
-            ivLoading.setAnimation(imgAnimationIn);
-            ivLoading.setVisibility(View.VISIBLE);
-            tvLoading.setText(Html.fromHtml(("Welcome "+firstName+ ",\nThanks for your patience while we search for black owned businesses near you.")));
-            */
             ivUserImage.setVisibility(View.VISIBLE);
             ivLogo.setVisibility(View.GONE);
         } else {
@@ -1048,10 +1138,28 @@ public class MainActivity extends AppCompatActivity implements
            // googleAccessToken = account.getIdToken();
             useGoogleLoginInformation(googleSignIn.getIdToken());
         } catch (ApiException e) {
-            fooListingsLayout.setAnimation(imgAnimationIn);
+            fooListingImageView.setAlpha(0f);
+            fooListingImageView.setVisibility(View.VISIBLE);
+            fooListingsTextView.setAlpha(0f);
+            fooListingsTextView.setVisibility(View.VISIBLE);
+            fooListingsLayout.setAlpha(0f);
             fooListingsLayout.setVisibility(View.VISIBLE);
+            // Animate the content view to 100% opacity, and clear any animation
+            // listener set on the view.
+            fooListingsLayout.animate()
+                    .alpha(1f)
+                    .setDuration(shortAnimationDuration);
+            fooListingsTextView.animate()
+                    .alpha(1f)
+                    .setDuration(shortAnimationDuration)
+                    .setListener(null);
+            fooListingImageView.animate()
+                    .alpha(1f)
+                    .setDuration(shortAnimationDuration)
+                    .setListener(null);
             fooListingImageView.setImageResource(R.mipmap.sorry);
             fooListingsTextView.setTextSize(16);
+            ivClose.setVisibility(View.VISIBLE);
 
             if(isLoggedIn) {
                 fooListingsTextView.setText("This is terrible " + firstName +"!!!!\n\nLooks like there aren't any black owned businesses near you in our directory.\n" +
@@ -1199,7 +1307,7 @@ public class MainActivity extends AppCompatActivity implements
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if (alertOn) {
             if (isLoggedIn) {
-                message = "Hello "+firstName+"\n Tap 'Yes' to stop receiving alerts when you are near a black owned business?";
+                message = "Hello "+firstName+"\nTap 'Yes' to stop receiving alerts when you are near a black owned business?";
 
             } else {
                 message = "Would you like to disable alerts when you are near a black owned business?";
@@ -1427,6 +1535,13 @@ public class MainActivity extends AppCompatActivity implements
                 startService(new Intent(MainActivity.this, GeolocationService.class));
             }
             setMarkers();
+            greeter.setVisibility(View.GONE);
+            ivHelp.setAlpha(0f);
+            ivHelp.setVisibility(View.VISIBLE);
+            ivHelp.animate()
+                    .alpha(1f)
+                    .setDuration(shortAnimationDuration)
+                    .setListener(null);
         }
     }
 
@@ -1548,21 +1663,43 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 if (response.body().isEmpty()) {
                     spinner.setVisibility(View.GONE); //hide progressBar
+                    loadingLayout.animate()
+                            .alpha(0f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    menu.setVisibility(View.GONE);
+                                }
+                            });
 
-                    loadingLayout.setAnimation(imgAnimationOut);
-                    loadingLayout.setVisibility(View.GONE);
-                    //searchView.setAnimation(imgAnimationIn);
-                    //searchView.setVisibility(View.VISIBLE);
-                    noListingsImageView.setAnimation(imgAnimationIn);
+                    noListingsImageView.setAlpha(0f);
                     noListingsImageView.setVisibility(View.VISIBLE);
-                    noListingsTextView.setAnimation(imgAnimationIn);
+                    noListingsImageView.animate()
+                            .alpha(1f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(null);
+
+                    noListingsTextView.setAlpha(0f);
                     noListingsTextView.setVisibility(View.VISIBLE);
-                    //noListingsTextView.setTextSize(16);
+                    noListingsTextView.animate()
+                            .alpha(1f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(null);
 
                     if(isLoggedIn) {
                         noListingsTextView.setText("This is terrible " + firstName +"!!!!\nLooks like there aren't any black owned businesses near you in our directory.\n" +
                                 "Tap the logo and select Add (+) from the menu to add any black owned business you visit to our directory.");
-                        loginButton3.setVisibility(View.GONE);
+                        //loginButton3.setVisibility(View.GONE);
+                        loginButton3.animate()
+                                .alpha(0f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        loginButton3.setVisibility(View.GONE);
+                                    }
+                                });
                         menu.setVisibility(View.VISIBLE);
                     } else {
                         loginButton3.setVisibility(View.VISIBLE);
@@ -1643,31 +1780,54 @@ public class MainActivity extends AppCompatActivity implements
                         kickItOff = false;
                         if (alertOn) {
                             //if (!isMyServiceRunning()) {
-                                startService(new Intent(MainActivity.this, GeolocationService.class));
-                           // }
+                            startService(new Intent(MainActivity.this, GeolocationService.class));
+                            // }
                         }
                         setMarkers();
                     }
-                    if(!pref.getBoolean("instructed", false)){
-                        loadingLayout.setAnimation(imgAnimationIn);
-                        loadingLayout.setVisibility(View.VISIBLE);
+                    if (!pref.getBoolean("instructed", false)) {
                         ivLoading.setImageResource(R.mipmap.holding_phone_foreground);
-                        ivLoading.setAnimation(imgAnimationIn);
-                        ivLoading.setVisibility(View.VISIBLE);
-                        tvLoading.setAnimation(imgAnimationIn);
+                        if(isLoggedIn){
+                            tvLoading.setText("Using the app is easy. Tap a numbered cluster or image to find, rate and review businesses.\nTap your profile image in the upper left corner for more options.");
+                        } else {
+                            tvLoading.setText("Using the app is easy. Tap a numbered cluster or image to find, rate and review businesses.\nTap the logo the upper left corner for more options.");
+
+                        }
+                        container.setBackgroundColor(Color.WHITE);
+                        container.getBackground().setAlpha(204); //80% transparency
+                        ivHelp.setVisibility(View.GONE);
+
+                        loadingLayout.setAlpha(0f);
+                        loadingLayout.setVisibility(View.VISIBLE);
+                        loadingLayout.animate()
+                                .alpha(1f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(null);
+
+                        tvLoading.setAlpha(0f);
                         tvLoading.setVisibility(View.VISIBLE);
-                        //loginButton3.setLoginText("Login via Facebook");
-                        //loginButton3.setVisibility(View.VISIBLE);
+                        tvLoading.animate()
+                                .alpha(1f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(null);
+
+                        ivLoading.setAlpha(0f);
+                        ivLoading.setVisibility(View.VISIBLE);
+                        ivLoading.animate()
+                                .alpha(1f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(null);
+
+                        ivClose.setAlpha(0f);
                         ivClose.setVisibility(View.VISIBLE);
-                        tvLoading.setText("Using the app is easy.  Click on a numbered cluster to show all businesses in that cluster. Tap an individual business image "+
-                                "to learn more about that business.  Tap that businesses popup window to find, rate and review that business.");
-                    }else {
-                        loadingLayout.setVisibility(View.GONE);
-                        spinner.setVisibility(View.GONE);
-                        ivLoading.setVisibility(View.GONE);
-                        tvLoading.setVisibility(View.GONE);
-                        ivClose.setVisibility(View.GONE);
+                        ivClose.animate()
+                                .alpha(1f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(null);
                     }
+                    //loadingLayout.setVisibility(View.GONE);
+                    spinner.setVisibility(View.GONE);
+                    //ivLoading.setVisibility(View.GONE);
                 }
             }
 
@@ -1677,24 +1837,52 @@ public class MainActivity extends AppCompatActivity implements
                 menu.setVisibility(View.GONE);
                 container.setBackgroundColor(Color.WHITE);
                 container.getBackground().setAlpha(204); //80% transparency
-                loadingLayout.setAnimation(imgAnimationIn);
-                loadingLayout.setVisibility(View.VISIBLE);
                 ivLoading.setImageResource(R.mipmap.under_construction_foreground);
-                ivLoading.setAnimation(imgAnimationIn);
-                ivLoading.setVisibility(View.VISIBLE);
-                tvLoading.setAnimation(imgAnimationIn);
-                tvLoading.setVisibility(View.VISIBLE);
-                ivClose.setAnimation(imgAnimationIn);
-                ivClose.setVisibility(View.VISIBLE);
-                ivHelp.setVisibility(View.GONE);
-
                 if (isLoggedIn) {
                     tvLoading.setText("Apologies "+firstName+",\nlooks like there was an error.\nWe're constantly working to improve our service. Please try again later.");
                     menu.setVisibility(View.GONE);
                 } else {
-                    ivHelp.setAnimation(imgAnimationOut);
+                    ivHelp.animate()
+                            .alpha(0f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    ivHelp.setVisibility(View.GONE);
+                                }
+                            });
                     tvLoading.setText("Apologies, looks like there was an error.\nWe're constantly working to improve our service. Please try again later.");
-                }
+                }                container.setBackgroundColor(Color.WHITE);
+                container.getBackground().setAlpha(204); //80% transparency
+                ivHelp.setVisibility(View.GONE);
+
+                loadingLayout.setAlpha(0f);
+                loadingLayout.setVisibility(View.VISIBLE);
+                loadingLayout.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
+
+                tvLoading.setAlpha(0f);
+                tvLoading.setVisibility(View.VISIBLE);
+                tvLoading.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
+
+                ivLoading.setAlpha(0f);
+                ivLoading.setVisibility(View.VISIBLE);
+                ivLoading.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
+
+                ivClose.setAlpha(0f);
+                ivClose.setVisibility(View.VISIBLE);
+                ivClose.animate()
+                        .alpha(1f)
+                        .setDuration(shortAnimationDuration)
+                        .setListener(null);
                 return;
             }
         });
@@ -1743,9 +1931,6 @@ public class MainActivity extends AppCompatActivity implements
                     Log.e("Network", "Reviews response came from server");
                 }
                 if (response.isSuccessful() && response.body().size() > 0) {
-                    // tvLoading.setAnimation(imgAnimationIn);
-                    // tvLoading.setText("Loading recent reviews...");
-
                     for (int i = 0; i < response.body().size(); i++) {
                         /**
                          * populate vertical recycler in Main Activity
@@ -1932,18 +2117,14 @@ public class MainActivity extends AppCompatActivity implements
 
         String[] text;
 
-        // String image;
         @Override
         public void run() {
-           // String[] text = new String[text.length];
-            //Animation imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-            //Animation imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
 
 
             if(isLoggedIn){
+                loginButton.setVisibility(View.GONE);
                 text = new String[]{
                         "Hello "+firstName+",\nWelcome to The Sable Business Directory!",
-
 
                         "The Sable Business Directory is designed to help users find black owned businesses and service providers.",
 
@@ -1971,8 +2152,7 @@ public class MainActivity extends AppCompatActivity implements
                 };
             } else {
                 text = new String[]{
-                        "Hello,\nWelcome to The Sable Business Directory!",
-
+                        "Welcome to The Sable Business Directory!",
 
                         "The Sable Business Directory is designed to help users find black owned businesses and service providers.",
 
@@ -2003,42 +2183,64 @@ public class MainActivity extends AppCompatActivity implements
                     R.mipmap.one_of_akind_foreground, R.mipmap.showing_tablet_foreground, R.mipmap.holding_phone_foreground, R.mipmap.making_thumbs_up_foreground,
                     R.mipmap.online_reviews_foreground, R.mipmap.showing_with_left_hand_foreground, R.mipmap.smiling_peace_foreground};
 
-            if (count == text.length) {
-                count = 0;
-            }
             switch (count) {
 
                 case 8:
+
                     imageSwitcher3.setImageResource(images[count]);
-                    imageSwitcher3.setAnimation(imgAnimationIn);
+                    imageSwitcher3.setAlpha(0f);
                     imageSwitcher3.setVisibility(View.VISIBLE);
-                    textSwitcher3.setText(text[count]);
-                    textSwitcher3Layout.setAnimation(imgAnimationIn);
+                    imageSwitcher3.animate()
+                            .alpha(1f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(null);
+
+                    textSwitcher3.setAlpha(0f);
+                    textSwitcher3.setVisibility(View.VISIBLE);
+                    textSwitcher3.animate()
+                            .alpha(1f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(null);
+                    textSwitcher3Layout.setAlpha(0f);
                     textSwitcher3Layout.setVisibility(View.VISIBLE);
-                    loginButton.setAnimation(imgAnimationIn);
-                    loginButton.setVisibility(View.VISIBLE);
+                    textSwitcher3Layout.animate()
+                            .alpha(1f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(null);
                     imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
-                    count++;
+                    count = 0;
                     break;
-                case 2:
-                case 4:
-                case 6:
+                case 0:
                 case 1:
+                case 2:
                 case 3:
+                case 4:
                 case 5:
+                case 6:
                 case 7:
                 default:
-                    loginButton.setAnimation(imgAnimationOut);
-                    loginButton.setVisibility(View.GONE);
-
                     imageSwitcher3.setImageResource(images[count]);
-                    imageSwitcher3.setAnimation(imgAnimationIn);
-                    imageSwitcher3.setVisibility(View.VISIBLE);
-
                     textSwitcher3.setText(text[count]);
-                    textSwitcher3Layout.setAnimation(imgAnimationIn);
-                    textSwitcher3Layout.setVisibility(View.VISIBLE);
 
+                    imageSwitcher3.setAlpha(0f);
+                    imageSwitcher3.setVisibility(View.VISIBLE);
+                    imageSwitcher3.animate()
+                            .alpha(1f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(null);
+
+                    textSwitcher3.setAlpha(0f);
+                    textSwitcher3.setVisibility(View.VISIBLE);
+                    textSwitcher3.animate()
+                            .alpha(1f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(null);
+                    textSwitcher3Layout.setAlpha(0f);
+                    textSwitcher3Layout.setVisibility(View.VISIBLE);
+                    textSwitcher3Layout.animate()
+                            .alpha(1f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(null);
                     imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
                     count++;
                     break;

@@ -50,6 +50,38 @@
                     android:layout_marginEnd="5dp">
 
                     <ImageView
+                        android:id="@+id/greeter"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        sothree:srcCompat="@mipmap/hello_foreground" />
+
+                    <ImageView
+                        android:id="@+id/ivAlertOn"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_below="@id/tvTapForOptions"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="false"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="5dp"
+                        sothree:srcCompat="@mipmap/alert_on_foreground" />
+
+                    <ImageView
+                        android:id="@+id/ivAlertOff"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_below="@id/tvTapForOptions"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="false"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="5dp"
+                        sothree:srcCompat="@mipmap/alert_off_foreground" />
+
+                    <ImageView
                         android:id="@+id/ivHelp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -82,7 +114,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/ivUserImageCardview"
-                        android:layout_alignParentEnd="false"
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="5dp"
@@ -92,6 +123,18 @@
                         android:textColor="@color/black"
                         android:textSize="8sp"
                         android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/ivClose"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="25dp"
+                        android:layout_marginBottom="10dp"
+                        sothree:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/ivUserImageCardview"
@@ -106,15 +149,13 @@
                         <androidx.cardview.widget.CardView
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:layout_gravity="center"
                             app:cardCornerRadius="250dp">
 
                             <ImageView
                                 android:id="@+id/ivLogo"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:scaleType="fitCenter"
-                                sothree:srcCompat="@mipmap/sable_logo_black_foreground" />
+                                app:srcCompat="@mipmap/sable_logo_black_foreground" />
 
                             <ImageView
                                 android:id="@+id/ivUserImage"
@@ -125,32 +166,6 @@
                         </androidx.cardview.widget.CardView>
 
                     </androidx.cardview.widget.CardView>
-
-                    <ImageView
-                        android:id="@+id/ivAlertOff"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_below="@id/tvTapForOptions"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="false"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginBottom="5dp"
-                        sothree:srcCompat="@mipmap/alert_off_foreground" />
-
-                    <ImageView
-                        android:id="@+id/ivAlertOn"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_below="@id/tvTapForOptions"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="false"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginBottom="5dp"
-                        sothree:srcCompat="@mipmap/alert_on_foreground" />
 
                     <!--AutoCompleteTextView
                         android:id="@+id/search"
@@ -192,8 +207,7 @@
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            app:srcCompat="@mipmap/under_construction_foreground" />
+                            android:layout_centerVertical="true" />
 
                         <TextView
                             android:id="@+id/fooListingsTextView"
@@ -202,17 +216,10 @@
                             android:layout_below="@id/fooListingsImageView"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentBottom="false"
-                            android:layout_centerVertical="false"
-                            android:layout_marginBottom="15dp"
+                            android:layout_marginBottom="10dp"
                             android:background="@drawable/roundedcorner"
                             android:backgroundTint="#80000000"
                             android:fontFamily="@font/open_sans"
-                            android:gravity="center"
-                            android:paddingStart="5dp"
-                            android:paddingTop="3dp"
-                            android:paddingBottom="3dp"
-                            android:text="loadingText"
                             android:textColor="@color/white"
                             android:textSize="14sp" />
 
@@ -236,8 +243,7 @@
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            app:srcCompat="@mipmap/sorry_foreground" />
+                            android:layout_centerVertical="true" />
 
                         <TextView
                             android:id="@+id/noListingsTextView"
@@ -246,16 +252,10 @@
                             android:layout_below="@id/noListingsImageView"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentBottom="false"
-                            android:layout_centerVertical="false"
-                            android:layout_marginBottom="15dp"
+                            android:layout_marginBottom="10dp"
                             android:background="@drawable/roundedcorner"
                             android:backgroundTint="#80000000"
                             android:fontFamily="@font/open_sans"
-                            android:gravity="center"
-                            android:paddingStart="5dp"
-                            android:paddingTop="3dp"
-                            android:paddingBottom="3dp"
                             android:text="loadingText"
                             android:textColor="@color/white"
                             android:textSize="14sp" />
@@ -281,18 +281,6 @@
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="10dp">
 
-                        <ImageView
-                            android:id="@+id/ivClose"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginEnd="25dp"
-                            android:layout_marginBottom="10dp"
-                            sothree:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
-
                         <Button
                             android:id="@+id/btnContinue"
                             android:layout_width="wrap_content"
@@ -316,8 +304,7 @@
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            app:srcCompat="@mipmap/searching_foreground" />
+                            android:layout_centerVertical="true" />
 
                         <TextView
                             android:id="@+id/tvLoading"
@@ -326,13 +313,10 @@
                             android:layout_below="@id/ivLoading"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentBottom="false"
-                            android:layout_centerVertical="false"
-                            android:layout_marginBottom="15dp"
+                            android:layout_marginBottom="10dp"
                             android:background="@drawable/roundedcorner"
                             android:backgroundTint="#80000000"
                             android:fontFamily="@font/open_sans"
-                            android:gravity="center"
                             android:paddingStart="5dp"
                             android:paddingTop="3dp"
                             android:paddingBottom="3dp"
@@ -475,7 +459,7 @@
                             android:layout_below="@id/textSwitcher3Layout"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
+                            android:layout_centerHorizontal="false"
                             android:layout_centerVertical="false"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
@@ -753,19 +737,6 @@
                 </androidx.recyclerview.widget.RecyclerView>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
-
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            sothree:srcCompat="@mipmap/sable_logo_black_foreground" />
-
-        <ImageView
-            android:id="@+id/myImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY" />
 
     </LinearLayout>
 

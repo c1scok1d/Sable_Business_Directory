@@ -16,6 +16,8 @@
 
 package com.macinternetservices.sablebusinessdirectory;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -64,6 +66,9 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
     private Business clickedVenueMarker;
     ArrayList<ListingsModel> locationReviewShow = new ArrayList<>();
     boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+    private int shortAnimationDuration;
+
+
 
 
     /**
@@ -281,6 +286,8 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
 
    @Override
     public void setMarkers() {
+       shortAnimationDuration = getResources().getInteger(
+               android.R.integer.config_shortAnimTime);
         if(mapLocations.size() == 0) {
                 showOtherStuff();
                 getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 200));
@@ -315,18 +322,50 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
     }
     private void showStuff() {
 
+        tvMore.setAlpha(0f);
+        tvMore.setVisibility(View.VISIBLE);
+        tvMore.animate()
+                .alpha(1f)
+                .setDuration(shortAnimationDuration)
+                .setListener(null);
+
+        sliderLayout.setAlpha(0f);
+        sliderLayout.setVisibility(View.VISIBLE);
+        sliderLayout.animate()
+                .alpha(1f)
+                .setDuration(shortAnimationDuration)
+                .setListener(null);
+
+        loadingLayout.animate()
+                .alpha(0f)
+                .setDuration(shortAnimationDuration)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        loadingLayout.setVisibility(View.GONE);
+                    }
+                });
+        noListingsImageView.animate()
+                .alpha(0f)
+                .setDuration(shortAnimationDuration)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        noListingsLayout.setVisibility(View.GONE);
+                    }
+                });
+        noListingsTextView.animate()
+                .alpha(0f)
+                .setDuration(shortAnimationDuration)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        noListingsTextView.setVisibility(View.GONE);
+                    }
+                });
+
         spinner.setVisibility(View.GONE); //hide progressBar
         loginButton.setVisibility(View.VISIBLE);
-        loadingLayout.setAnimation(imgAnimationOut);
-        loadingLayout.setVisibility(View.GONE);
-        tvMore.setAnimation(imgAnimationIn);
-        tvMore.setVisibility(View.VISIBLE);
-        sliderLayout.setAnimation(imgAnimationIn);
-        sliderLayout.setVisibility(View.VISIBLE);
-        noListingsImageView.setAnimation(imgAnimationOut);
-        noListingsImageView.setVisibility(View.GONE);
-        noListingsTextView.setAnimation(imgAnimationOut);
-        noListingsTextView.setVisibility(View.GONE);
     }
 
     @SuppressLint("SetTextI18n")

@@ -277,15 +277,7 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.FOREGROUND_SERVICE},
                     REQUEST_FOREGROUND_SERVICE);
-        } else/* if  (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) */{
+        } else {
             //Ask se to geo to settings and manually allow permissions
             showDialog("", "You have denied some permissions.  Allow all permissions at [Settings] > [Permissions]",
                     "Go to Settings",
@@ -420,8 +412,6 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
         @Override
         public void run() {
             Animation imgAnimationIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-            Animation imgAnimationOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
-
 
             String[] text = {
                     "Hello and welcome to The Sable Business Directory mobile app.",
@@ -432,15 +422,15 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
 
                     "It's FREE to register a business and get alerts.",
 
-                    "Rate & review black owned everytime you shop.",
+                    "Rate and review black owned everytime you shop.",
 
-                    "Online reviews are an great way to increase sales.",
+                    "Online reviews are a great way to increase sales.",
 
                     "We insure high quality feedback by requiring users to login before adding or reviewing a listing.",
 
                     "We need your permission to alert you when you're near a black owned business.",
 
-                    "Tap below to allow all permissions all the time to get alerted when you're near a registered black owned business."
+                    "Tap below to begin and allow all permissions all the time to get alerted when you're near a registered black owned business."
 
             };
 
@@ -465,11 +455,7 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
                     approve_permission_request.setAnimation(imgAnimationIn);
                     approve_permission_request.setVisibility(View.VISIBLE);
 
-                    //deny_permission_request.setAnimation(imgAnimationIn);
-                    //deny_permission_request.setVisibility(View.VISIBLE);
-
                     imageSwitchHandler.removeCallbacks(this);
-                    //imageSwitchHandler.postDelayed(this, FRAME_TIME_MS);
                     count++;
                     break;
                 case 2:
