@@ -1003,8 +1003,6 @@ public class MainActivity extends AppCompatActivity implements
 
        // printHashKey(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000,
-                4800, LocationListener);
        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         // Request only the user's ID token, which can be used to identify the
@@ -1018,7 +1016,7 @@ public class MainActivity extends AppCompatActivity implements
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-// Retrieve and cache the system's default "short" animation time.
+        // Retrieve and cache the system's default "short" animation time.
         shortAnimationDuration = getResources().getInteger(
                 android.R.integer.config_shortAnimTime);
 
@@ -1048,17 +1046,17 @@ public class MainActivity extends AppCompatActivity implements
     @SuppressLint("MissingPermission")
     public void onResume() {
         super.onResume();
-        //mapLocations.removeAll(mapLocations);
         kickItOff = true;
-        //greeter.setVisibility(View.VISIBLE);
         spinner.setVisibility(View.VISIBLE); //hide progressBar
+        //start location listener
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000,
                 4800, LocationListener);
-        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        if(location != null) {
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
+        // get last know lat/lng
+        if (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
+            location = locationManager
+                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
         } else {
             fusedLocationClient.getLastLocation()
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -1072,6 +1070,7 @@ public class MainActivity extends AppCompatActivity implements
                         }
                     });
         }
+        // register geofence transition receiver
         getApplication().registerReceiver(receiver,
                 new IntentFilter("me.hoen.geofence_21.geolocation.service"));
 
@@ -1090,12 +1089,13 @@ public class MainActivity extends AppCompatActivity implements
                                 }
                             });
         }
-        //check user login info
+        //check facebook login info
         accessToken = AccessToken.getCurrentAccessToken();
         isLoggedInFB = accessToken != null && !accessToken.isExpired();
         accessTokenTracker.startTracking();
         facebookLogin();
-        /* first run check */
+
+        // first run check
         if (pref.getBoolean("firstrun", true)) {
             pref.edit().putBoolean("alertOn", true).apply();
             pref.edit().putBoolean("firstrun", false).apply();
@@ -1127,7 +1127,7 @@ public class MainActivity extends AppCompatActivity implements
             alertOn = false;
             pref.edit().putBoolean("alertOn", false).apply();
         }
-    }
+    } //END ONRESUME
 
     //begin user auth for google
     private void handleSignInResult(@NonNull Task<GoogleSignInAccount> completedTask) {
