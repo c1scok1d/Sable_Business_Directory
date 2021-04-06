@@ -22,7 +22,7 @@ import android.os.AsyncTask;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Marker;
-import com.google.maps.android.MarkerManager;
+import com.google.maps.android.collections.MarkerManager;
 import com.macinternetservices.sablebusinessdirectory.clustering.algo.Algorithm;
 import com.macinternetservices.sablebusinessdirectory.clustering.algo.NonHierarchicalDistanceBasedAlgorithm;
 import com.macinternetservices.sablebusinessdirectory.clustering.algo.PreCachingAlgorithmDecorator;

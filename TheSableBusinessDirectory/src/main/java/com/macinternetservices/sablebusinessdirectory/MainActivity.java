@@ -1052,6 +1052,8 @@ public class MainActivity extends AppCompatActivity implements
         kickItOff = true;
         //greeter.setVisibility(View.VISIBLE);
         spinner.setVisibility(View.VISIBLE); //hide progressBar
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000,
+                4800, LocationListener);
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
         if(location != null) {

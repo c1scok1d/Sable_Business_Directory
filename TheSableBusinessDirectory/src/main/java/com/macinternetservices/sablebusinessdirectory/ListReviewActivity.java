@@ -35,6 +35,7 @@ import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.location.Geofence;
 import com.squareup.picasso.Picasso;
 
@@ -78,6 +79,7 @@ public class ListReviewActivity extends AppCompatActivity {
     //Integer category, id, rating;
 
     ProgressBar pDialog;
+    LoginButton login_button;
 
     ArrayList<ListingsModel> locationReview = new ArrayList<>();
 
@@ -117,6 +119,8 @@ public class ListReviewActivity extends AppCompatActivity {
         tvOurReviews = findViewById(R.id.tvOurReviews);
         tvOurReviews.setVisibility(View.GONE);
         websiteBtnLayout = findViewById(R.id.websiteBtnLayout);
+        login_button = findViewById(R.id.login_button);
+        login_button.setVisibility(View.GONE);
 
         verticalList = new ArrayList<>();
 
@@ -451,12 +455,13 @@ public class ListReviewActivity extends AppCompatActivity {
                         reviewImagesRecyclerLayout.setVisibility(View.GONE);
                         reviewRecyclerLayout.setVisibility(View.GONE);
                         notLoggedInLayout.setVisibility(View.VISIBLE);
-                        //String listingName = "<font color='#4FC1E9'>" +tvName.getText().toString()+"</font>";
-                        tvNoReviews.setText("Identify yourself via Facebook and use the rate button to be the first to rate " + tvName.getText().toString() + ".");
                         if (isLoggedIn) {
                             tvNoReviews.setText("Use the rate button to be the first to rate " + tvName.getText().toString() + ".");
+                        } else {
+                            login_button.setVisibility(View.VISIBLE);
+                            tvNoReviews.setText("Identify yourself via Facebook and use the rate button to be the first to rate " + tvName.getText().toString() + ".");
                         }
-                        } else { //list each review
+                    } else { //list each review
 
                         for (int i = 0; i < response.body().size(); i++) {
                             /**

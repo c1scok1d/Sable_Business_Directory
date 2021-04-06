@@ -63,7 +63,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/listingInfoLayout"
         android:layout_alignParentBottom="false"
-        android:layout_gravity="center_vertical"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@id/featuredImageCardView"
         android:orientation="horizontal">
@@ -72,9 +71,9 @@
             android:id="@+id/ratingBar3"
             style="@style/Widget.AppCompat.RatingBar.Small"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/white"
-            android:theme="@style/RatingBar"/>
+            android:theme="@style/RatingBar" />
 
         <TextView
             android:id="@+id/tvRatingCount"
@@ -82,21 +81,23 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
             android:text="0"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="10sp" />
-
-        <TextView
-            android:id="@+id/tvReviewFirst"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="be first to review"
-            android:textAllCaps="true"
             android:textColor="@color/colorAccent"
-            android:textSize="8sp"
+            android:textSize="10sp"
             android:textStyle="bold" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvReviewFirst"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ratingLayout"
+        android:layout_toEndOf="@id/featuredImageCardView"
+        android:text="be first to review"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccent"
+        android:textSize="8sp"
+        android:textStyle="bold" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/featuredImageCardView"
@@ -115,7 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="false"
-            android:layout_centerVertical="true"
+            android:layout_centerVertical="false"
             android:background="@drawable/roundedcorner"
             android:scaleType="centerCrop" />
 
@@ -127,9 +128,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/locationLayout"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentEnd="false"
         android:layout_alignParentBottom="false"
-        android:layout_centerVertical="true"
+        android:layout_centerVertical="false"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_toEndOf="@id/featuredImageCardView"

@@ -3,6 +3,14 @@ apply plugin: 'com.android.application'
 final BUILD_DATE = new Date().format('-HH:mm:ss')
 
 android {
+    signingConfigs {
+        foo {
+            storeFile file('/Users/c1scok1d/keystore/sable/keystore.jks')
+            storePassword 'zwiefe1.Hafter'
+            keyAlias 'upload'
+            keyPassword 'zwiefe1.Hafter'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "29.0.3"
     task prepareKotlinBuildScriptModel {
@@ -14,6 +22,7 @@ android {
         targetSdkVersion 30
         versionCode 10
         versionName "$versionCode-tewPoinOh.20210403$BUILD_DATE"
+        signingConfig signingConfigs.foo
     }
     buildTypes {
         release {
@@ -48,9 +57,9 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.gms:play-services-base:17.6.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
@@ -58,9 +67,9 @@ dependencies {
     implementation "com.google.android.libraries.places:places:2.4.0"
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.karumi:dexter:6.0.2'
-    implementation 'org.jsoup:jsoup:1.12.1'
-    implementation 'com.facebook.android:facebook-login:5.15.0'
-    implementation 'com.google.maps.android:android-maps-utils:0.6.2'
+    implementation 'com.karumi:dexter:6.2.2'
+    implementation 'org.jsoup:jsoup:1.13.1'
+    implementation 'com.facebook.android:facebook-login:9.1.0'
+    implementation 'com.google.maps.android:android-maps-utils:2.2.2'
     implementation 'com.ramotion.circlemenu:circle-menu:0.3.2'
 }

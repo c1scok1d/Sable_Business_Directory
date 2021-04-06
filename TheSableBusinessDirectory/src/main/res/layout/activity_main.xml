@@ -45,15 +45,12 @@
                     android:id="@+id/container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp">
+                    android:layout_gravity="center">
 
                     <ImageView
                         android:id="@+id/greeter"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        sothree:srcCompat="@mipmap/hello_foreground" />
+                        android:layout_height="match_parent" />
 
                     <ImageView
                         android:id="@+id/ivAlertOn"
@@ -207,7 +204,10 @@
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true" />
+                            android:layout_centerVertical="true"
+                            android:padding="5dp"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp" />
 
                         <TextView
                             android:id="@+id/fooListingsTextView"
@@ -256,6 +256,9 @@
                             android:background="@drawable/roundedcorner"
                             android:backgroundTint="#80000000"
                             android:fontFamily="@font/open_sans"
+                            android:padding="5dp"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
                             android:text="loadingText"
                             android:textColor="@color/white"
                             android:textSize="14sp" />
@@ -317,9 +320,9 @@
                             android:background="@drawable/roundedcorner"
                             android:backgroundTint="#80000000"
                             android:fontFamily="@font/open_sans"
-                            android:paddingStart="5dp"
-                            android:paddingTop="3dp"
-                            android:paddingBottom="3dp"
+                            android:padding="5dp"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
                             android:text="loadingText"
                             android:textColor="@color/white"
                             android:textSize="14sp" />
