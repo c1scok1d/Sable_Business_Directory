@@ -211,23 +211,29 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
                 ratingCount.setVisibility(View.GONE);
                 TextView firstReview = view.findViewById(R.id.tvReviewFirst);
                 firstReview.setVisibility(View.GONE);
-                //RatingBar ratingBar = view.findViewById(R.id.ratingBar3);
-                //ratingBar.setVisibility(View.GONE);
+                RatingBar ratingBar = view.findViewById(R.id.ratingBar3);
+                ratingBar.setVisibility(View.GONE);
                 ImageView featuredImage = view.findViewById(R.id.featuredImage);
                 TextView ratings = view.findViewById(R.id.tvRatings);
+                ratings.setVisibility(View.GONE);
 
                 if(!clickedVenueMarker.getSnippet().isEmpty()){
                     venueSnippetTextView.setText(clickedVenueMarker.getSnippet());
                     venueSnippetTextView.setVisibility(View.VISIBLE);
 
                 }
-                if(clickedVenueMarker.getRatingCount().equals(0)){
+                if(!clickedVenueMarker.getRatingCount().equals(0)){
+                    if(clickedVenueMarker.getRatingCount().equals(1)) {
+                        ratings.setText("Rating");
+                    }
+                    ratings.setVisibility(View.VISIBLE);
+                    ratingBar.setVisibility(View.VISIBLE);
                     ratingCount.setText(String.valueOf(clickedVenueMarker.getRatingCount()));
                     ratingCount.setVisibility(View.VISIBLE);
                     firstReview.setVisibility(View.VISIBLE);
-                }
-                if(clickedVenueMarker.getRatingCount().equals(1)) {
-                    ratings.setText("Rating");
+
+
+
                 }
 
                 if(!clickedVenueMarker.getFeaturedImage().isEmpty()){
