@@ -78,6 +78,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -1483,14 +1484,14 @@ public class MainActivity extends AppCompatActivity implements
                         currentMarker.remove();
                     currentMarker = mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                            .title("You are here!").snippet("Double tap anywhere on the map to zoom")
+                            .title("You are here!").snippet("Tap any number cluster or image to begin")
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                 } else {
                     if (currentMarker != null)
                         currentMarker.remove();
                     currentMarker = mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                            .title("Welcome "+firstName+"!").snippet("Double tap anywhere on the map to zoom")
+                            .title("Welcome "+firstName+"!").snippet("Tap any number cluster or image to begin")
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                 }
             }
@@ -1713,7 +1714,7 @@ public class MainActivity extends AppCompatActivity implements
                             currentMarker.remove();
                         currentMarker = mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                                .title("You are here!").snippet("Double tap anywhere on the map to zoom")
+                                .title("You are here!").snippet("Tap any number cluster or image to begin")
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                         LatLng latLng = new LatLng(latitude, longitude);
                         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -1731,7 +1732,7 @@ public class MainActivity extends AppCompatActivity implements
                             currentMarker.remove();
                         currentMarker = mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                                .title("Welcome "+firstName+"!").snippet("Double tap anywhere on the map to zoom")
+                                .title("Welcome "+firstName+"!").snippet("Tap any number cluster or image to begin")
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                         LatLng latLng = new LatLng(latitude, longitude);
                         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -1939,7 +1940,7 @@ public class MainActivity extends AppCompatActivity implements
                         currentMarker.remove();
                     currentMarker = mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                            .title("You are here!").snippet("Double tap anywhere on the map to zoom")
+                            .title("You are here!").snippet("Tap any number cluster or image to begin")
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                     LatLng latLng = new LatLng(latitude, longitude);
                     CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -1957,7 +1958,7 @@ public class MainActivity extends AppCompatActivity implements
                         currentMarker.remove();
                     currentMarker = mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                            .title("Welcome "+firstName+"!").snippet("Double tap anywhere on the map to zoom")
+                            .title("Welcome "+firstName+"!").snippet("Tap any number cluster or image to begin")
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                     LatLng latLng = new LatLng(latitude, longitude);
                     CameraPosition cameraPosition = new CameraPosition.Builder()

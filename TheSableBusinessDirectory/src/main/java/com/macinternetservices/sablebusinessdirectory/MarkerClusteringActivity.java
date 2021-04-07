@@ -220,9 +220,11 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
                 if(!clickedVenueMarker.getSnippet().isEmpty()){
                     venueSnippetTextView.setText(clickedVenueMarker.getSnippet());
                     venueSnippetTextView.setVisibility(View.VISIBLE);
-
                 }
-                if(!clickedVenueMarker.getRatingCount().equals(0)){
+                if(clickedVenueMarker.getRatingCount().equals(0)) {
+                    firstReview.setText("Be the first to review "+clickedVenueMarker.getTitle());
+                    firstReview.setVisibility(View.VISIBLE);
+                } else {
                     if(clickedVenueMarker.getRatingCount().equals(1)) {
                         ratings.setText("Rating");
                     }
@@ -230,10 +232,6 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
                     ratingBar.setVisibility(View.VISIBLE);
                     ratingCount.setText(String.valueOf(clickedVenueMarker.getRatingCount()));
                     ratingCount.setVisibility(View.VISIBLE);
-                    firstReview.setVisibility(View.VISIBLE);
-
-
-
                 }
 
                 if(!clickedVenueMarker.getFeaturedImage().isEmpty()){

@@ -243,13 +243,13 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 //            currentMarker.remove();
             currentMarker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                    .title("You are here!").snippet("Double tap anywhere on the map to zoom")
+                    .title("You are here!").snippet("Tap any number cluster or image to begin")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         } else {
   //          currentMarker.remove();
             currentMarker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                    .title("Welcome "+firstName+"!").snippet("Double tap anywhere on the map to zoom")
+                    .title("Welcome "+firstName+"!").snippet("Tap any number cluster or image to begin")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         }
     }
