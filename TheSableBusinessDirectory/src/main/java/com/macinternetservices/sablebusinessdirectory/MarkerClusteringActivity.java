@@ -198,31 +198,42 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
 
                 TextView venueNameTextView = view.findViewById(R.id.venue_name);
                 venueNameTextView.setText(clickedVenueMarker.getTitle());
-
+                //venueNameTextView.setVisibility(View.GONE);
                 TextView venueCity = view.findViewById(R.id.venue_city);
                 venueCity.setText(String.valueOf(clickedVenueMarker.getCity()));
-
+                //venueCity.setVisibility(View.GONE);
                 TextView venueState = view.findViewById(R.id.venue_state);
                 venueState.setText(String.valueOf(clickedVenueMarker.getState()));
-
+                //venueState.setVisibility(View.GONE);
                 TextView venueSnippetTextView = view.findViewById(R.id.venue_snippet);
-                venueSnippetTextView.setText(clickedVenueMarker.getSnippet());
-
+                venueSnippetTextView.setVisibility(View.GONE);
                 TextView ratingCount = view.findViewById(R.id.tvRatingCount);
-                ratingCount.setText(String.valueOf(clickedVenueMarker.getRatingCount()));
-
+                ratingCount.setVisibility(View.GONE);
                 TextView firstReview = view.findViewById(R.id.tvReviewFirst);
                 firstReview.setVisibility(View.GONE);
-
-                RatingBar ratingBar = view.findViewById(R.id.ratingBar3);
-                ratingBar.setRating(clickedVenueMarker.getRating());
-
+                //RatingBar ratingBar = view.findViewById(R.id.ratingBar3);
+                //ratingBar.setVisibility(View.GONE);
                 ImageView featuredImage = view.findViewById(R.id.featuredImage);
-                Picasso.get().load(clickedVenueMarker.getFeaturedImage()).into(featuredImage);
+                TextView ratings = view.findViewById(R.id.tvRatings);
 
-                if(clickedVenueMarker.getRating() == 0){
-                    firstReview.setText("REVIEW FIRST");
+                if(!clickedVenueMarker.getSnippet().isEmpty()){
+                    venueSnippetTextView.setText(clickedVenueMarker.getSnippet());
+                    venueSnippetTextView.setVisibility(View.VISIBLE);
+
+                }
+                if(clickedVenueMarker.getRatingCount().equals(0)){
+                    ratingCount.setText(String.valueOf(clickedVenueMarker.getRatingCount()));
+                    ratingCount.setVisibility(View.VISIBLE);
                     firstReview.setVisibility(View.VISIBLE);
+                }
+                if(clickedVenueMarker.getRatingCount().equals(1)) {
+                    ratings.setText("Rating");
+                }
+
+                if(!clickedVenueMarker.getFeaturedImage().isEmpty()){
+                    Picasso.get().load(clickedVenueMarker.getFeaturedImage()).into(featuredImage);
+                } else {
+                    featuredImage.setImageResource(R.mipmap.sable_logo_black_foreground);
                 }
                 return view;
             }

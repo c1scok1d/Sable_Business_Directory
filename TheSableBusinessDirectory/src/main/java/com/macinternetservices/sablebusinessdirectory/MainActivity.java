@@ -408,6 +408,7 @@ public class MainActivity extends AppCompatActivity implements
         noListingsTextView.setVisibility(View.GONE);
 
         noListingsTextView.setVisibility(View.GONE);
+        //fooListingsLayout = findViewById(R.id.f)
         fooListingImageView = findViewById(R.id.fooListingsImageView);
         fooListingImageView.setVisibility(View.GONE);
         fooListingsTextView = findViewById(R.id.fooListingsTextView);
@@ -1460,9 +1461,6 @@ public class MainActivity extends AppCompatActivity implements
      */
     LocationListener LocationListener = new LocationListener() {
 
-        /**
-         * @param location
-         */
         @Override
         public void onLocationChanged(Location location) {
 
@@ -1480,7 +1478,7 @@ public class MainActivity extends AppCompatActivity implements
                     }
                     setMarkers();
                 }
-               /* if (isLoggedIn) {
+                if (MainActivity.isLoggedIn) {
                     if (currentMarker != null)
                         currentMarker.remove();
                     currentMarker = mMap.addMarker(new MarkerOptions()
@@ -1494,7 +1492,7 @@ public class MainActivity extends AppCompatActivity implements
                             .position(new LatLng(location.getLatitude(), location.getLongitude()))
                             .title("Welcome "+firstName+"!").snippet("Double tap anywhere on the map to zoom")
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                } */
+                }
             }
         }
 
@@ -1663,34 +1661,43 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     Log.e("Network", "Response came from server");
                 }
-                if (response.body().isEmpty()) {
-                    spinner.setVisibility(View.GONE); //hide progressBar
+                if (response.body().size() == 0 || response.body().isEmpty()) {
+                    ivLoading.setImageResource(R.mipmap.sorry_foreground);
+                    container.setBackgroundColor(Color.WHITE);
+                    container.getBackground().setAlpha(204); //80% transparency
+                    ivHelp.setVisibility(View.GONE);
+
+                    loadingLayout.setAlpha(0f);
+                    loadingLayout.setVisibility(View.VISIBLE);
                     loadingLayout.animate()
-                            .alpha(0f)
-                            .setDuration(shortAnimationDuration)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    menu.setVisibility(View.GONE);
-                                }
-                            });
-
-                    noListingsImageView.setAlpha(0f);
-                    noListingsImageView.setVisibility(View.VISIBLE);
-                    noListingsImageView.animate()
                             .alpha(1f)
                             .setDuration(shortAnimationDuration)
                             .setListener(null);
 
-                    noListingsTextView.setAlpha(0f);
-                    noListingsTextView.setVisibility(View.VISIBLE);
-                    noListingsTextView.animate()
+                    tvLoading.setAlpha(0f);
+                    tvLoading.setVisibility(View.VISIBLE);
+                    tvLoading.animate()
                             .alpha(1f)
                             .setDuration(shortAnimationDuration)
                             .setListener(null);
 
-                    if(isLoggedIn) {
-                        noListingsTextView.setText("This is terrible " + firstName +"!!!!\nLooks like there aren't any black owned businesses near you in our directory.\n" +
+                    ivLoading.setAlpha(0f);
+                    ivLoading.setVisibility(View.VISIBLE);
+                    ivLoading.animate()
+                            .alpha(1f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(null);
+
+                    ivClose.setAlpha(0f);
+                    ivClose.setVisibility(View.VISIBLE);
+                    ivClose.animate()
+                            .alpha(1f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(null);
+                    spinner.setVisibility(View.GONE);
+
+                    if (MainActivity.isLoggedIn) {
+                        tvLoading.setText("This is terrible " + firstName +"!!!!\nLooks like there aren't any black owned businesses near you in our directory.\n" +
                                 "Tap the logo and select Add (+) from the menu to add any black owned business you visit to our directory.");
                         //loginButton3.setVisibility(View.GONE);
                         loginButton3.animate()
@@ -1702,14 +1709,42 @@ public class MainActivity extends AppCompatActivity implements
                                         loginButton3.setVisibility(View.GONE);
                                     }
                                 });
-                        menu.setVisibility(View.VISIBLE);
+                        if (currentMarker != null)
+                            currentMarker.remove();
+                        currentMarker = mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                                .title("You are here!").snippet("Double tap anywhere on the map to zoom")
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                        LatLng latLng = new LatLng(latitude, longitude);
+                        CameraPosition cameraPosition = new CameraPosition.Builder()
+                                .target(latLng) // Center Set
+                                .zoom(11.0f)                // Zoom
+                                .bearing(90)                // Orientation of the camera to east
+                                .tilt(30)                   // Tilt of the camera to 30 degrees
+                                .build();                   // Creates a CameraPosition from the builder
+                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                     } else {
                         loginButton3.setVisibility(View.VISIBLE);
-                        noListingsTextView.setText("This is terrible!!!!\nLooks like there aren't any black owned businesses near you in our directory.\n" +
+                        tvLoading.setText("This is terrible!!!!\nLooks like there aren't any black owned businesses near you in our directory.\n" +
                                 "Tap the login button to add any black owned business you visit to our directory.");
-                    };
+                        if (currentMarker != null)
+                            currentMarker.remove();
+                        currentMarker = mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                                .title("Welcome "+firstName+"!").snippet("Double tap anywhere on the map to zoom")
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                        LatLng latLng = new LatLng(latitude, longitude);
+                        CameraPosition cameraPosition = new CameraPosition.Builder()
+                                .target(latLng) // Center Set
+                                .zoom(11.0f)                // Zoom
+                                .bearing(90)                // Orientation of the camera to east
+                                .tilt(30)                   // Tilt of the camera to 30 degrees
+                                .build();                   // Creates a CameraPosition from the builder
+                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                    }
                     return;
                 }
+
                 if (response.isSuccessful()) {
                     pref.edit().putString("lastQuery", String.valueOf(response.raw())).apply();
                     mapLocations = new ArrayList<>();
@@ -1885,6 +1920,54 @@ public class MainActivity extends AppCompatActivity implements
                         .alpha(1f)
                         .setDuration(shortAnimationDuration)
                         .setListener(null);
+
+
+                if (MainActivity.isLoggedIn) {
+                    tvLoading.setText("This is terrible " + firstName +"!!!!\nLooks like there aren't any black owned businesses near you in our directory.\n" +
+                            "Tap the logo and select Add (+) from the menu to add any black owned business you visit to our directory.");
+                    //loginButton3.setVisibility(View.GONE);
+                    loginButton3.animate()
+                            .alpha(0f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    loginButton3.setVisibility(View.GONE);
+                                }
+                            });
+                    if (currentMarker != null)
+                        currentMarker.remove();
+                    currentMarker = mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                            .title("You are here!").snippet("Double tap anywhere on the map to zoom")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    LatLng latLng = new LatLng(latitude, longitude);
+                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                            .target(latLng) // Center Set
+                            .zoom(11.0f)                // Zoom
+                            .bearing(90)                // Orientation of the camera to east
+                            .tilt(30)                   // Tilt of the camera to 30 degrees
+                            .build();                   // Creates a CameraPosition from the builder
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                } else {
+                    loginButton3.setVisibility(View.VISIBLE);
+                    tvLoading.setText("This is terrible!!!!\nLooks like there aren't any black owned businesses near you in our directory.\n" +
+                            "Tap the login button to add any black owned business you visit to our directory.");
+                    if (currentMarker != null)
+                        currentMarker.remove();
+                    currentMarker = mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                            .title("Welcome "+firstName+"!").snippet("Double tap anywhere on the map to zoom")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    LatLng latLng = new LatLng(latitude, longitude);
+                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                            .target(latLng) // Center Set
+                            .zoom(11.0f)                // Zoom
+                            .bearing(90)                // Orientation of the camera to east
+                            .tilt(30)                   // Tilt of the camera to 30 degrees
+                            .build();                   // Creates a CameraPosition from the builder
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                }
                 return;
             }
         });

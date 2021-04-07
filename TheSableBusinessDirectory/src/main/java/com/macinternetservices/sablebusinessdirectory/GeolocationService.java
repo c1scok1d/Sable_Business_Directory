@@ -41,6 +41,7 @@ import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -48,12 +49,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import static android.content.ContentValues.TAG;
 import static com.macinternetservices.sablebusinessdirectory.GeofenceNotification.CHANNEL_ID;
 import static com.macinternetservices.sablebusinessdirectory.MainActivity.currentMarker;
+import static com.macinternetservices.sablebusinessdirectory.MainActivity.firstName;
 import static com.macinternetservices.sablebusinessdirectory.MainActivity.geofencesAlreadyRegistered;
 import static com.macinternetservices.sablebusinessdirectory.MainActivity.mMap;
 
 public class GeolocationService extends Service implements ConnectionCallbacks,
         OnConnectionFailedListener, LocationListener, ResultCallback<Status> {
-    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 30000;
     public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 5;
     protected GoogleApiClient mGoogleApiClient;
     protected LocationRequest mLocationRequest;
@@ -135,10 +137,6 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
     public void onDestroy() {
         super.onDestroy();
         restartService();
-     /*   if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-
-        }*/
         //stoptimertask();
     }
     private Timer timer;
@@ -222,18 +220,38 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
         startLocationUpdates();
     }
 
+    double lat1, lng1, lat2, lng2;
+   /* double lng1 = lng2;
+    double lat2 = location.getLatitude();
+    double lng2 = location.getLongitude(); */
 
     @Override
     public void onLocationChanged(Location location) {
+
+        lat1 = lat2;
+        lng1 = lng2;
+        lat2 = location.getLatitude();
+        lng2 = location.getLongitude();
+
         Log.d("Geofence",
                 "new location : " + location.getLatitude() + ", "
                         + location.getLongitude() + ". "
-                        + location.getAccuracy());
+                        + location.getAccuracy() + " Distance: " + distance(lat1, lng1, lat2, lng2));
         broadcastLocationFound(location);
-    //geofencesAlreadyRegistered = false;
-                registerGeofences();
-            //}
-       // }
+        registerGeofences();
+        if (MainActivity.isLoggedIn) {
+//            currentMarker.remove();
+            currentMarker = mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                    .title("You are here!").snippet("Double tap anywhere on the map to zoom")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        } else {
+  //          currentMarker.remove();
+            currentMarker = mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                    .title("Welcome "+firstName+"!").snippet("Double tap anywhere on the map to zoom")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        }
     }
     /**
      * calculates the distance between two locations in MILES
@@ -279,7 +297,7 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
         mLocationRequest
                 .setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setSmallestDisplacement(400);
+        mLocationRequest.setSmallestDisplacement(4800);
     }
 
     @Override

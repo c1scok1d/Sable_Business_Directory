@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">The Sable Business Directory</string>
+    <string name="app_name">Sable Business Directory</string>
     <string name="business_logo">Business Logo</string>
     <string name="business_near_you">Business Near You</string>
     <string name="filter_by">Filter by...</string>

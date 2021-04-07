@@ -63,7 +63,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/listingInfoLayout"
         android:layout_alignParentBottom="false"
-        android:layout_marginTop="5dp"
         android:layout_toEndOf="@id/featuredImageCardView"
         android:orientation="horizontal">
 
@@ -72,6 +71,8 @@
             style="@style/Widget.AppCompat.RatingBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:background="@color/white"
             android:theme="@style/RatingBar" />
 
@@ -79,10 +80,22 @@
             android:id="@+id/tvRatingCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
+            android:layout_margin="5dp"
             android:text="0"
             android:textColor="@color/colorAccent"
-            android:textSize="10sp"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvRatings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:text="Ratings"
+            android:textColor="@color/colorAccent"
+            android:textSize="12sp"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -118,7 +131,8 @@
             android:layout_centerHorizontal="false"
             android:layout_centerVertical="false"
             android:background="@drawable/roundedcorner"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            app:srcCompat="@mipmap/sable_logo_black_foreground" />
 
     </androidx.cardview.widget.CardView>
 

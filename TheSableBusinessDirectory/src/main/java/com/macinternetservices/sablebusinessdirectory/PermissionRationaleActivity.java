@@ -34,6 +34,7 @@ import android.widget.Button;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 
@@ -78,6 +79,8 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
     private static final int FRAME_TIME_MS = 4000;
 
     private Handler imageSwitchHandler;
+    ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,8 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
         /**
          * ABOUT US
          */
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
        imageView = findViewById(R.id.imageView);
        imageView.setVisibility(View.GONE);
         ImageView imageView = new ImageView(getApplicationContext());
@@ -217,26 +222,10 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
         }
         return true;
     }
-    private void showExplanation(String title,
-                                 String message,
-                                 final String[] permission,
-                                 final int permissionRequestCode) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.Q)
-                    public void onClick(DialogInterface dialog, int id) {
-                        ActivityCompat.requestPermissions(PermissionRationaleActivity.this,
-                                permission,
-                                permissionRequestCode);
-                    }
-                });
-        builder.create().show();
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private  boolean checkPermissionsQ() {
+        //progressBar.setVisibility(View.VISIBLE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.INTERNET},
@@ -279,6 +268,7 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
                     REQUEST_FOREGROUND_SERVICE);
         } else {
             //Ask se to geo to settings and manually allow permissions
+            progressBar.setVisibility(View.GONE);
             showDialog("", "You have denied some permissions.  Allow all permissions at [Settings] > [Permissions]",
                     "Go to Settings",
                     new DialogInterface.OnClickListener() {
@@ -355,12 +345,6 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
     public void onRequestPermissionsResult(
             int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        String permissionResult = "Request code: " + requestCode + ", Permissions: " +
-                Arrays.toString(permissions) + ", Results: " + Arrays.toString(grantResults);
-
-        Log.e(TAG, "onRequestPermissionsResult(): " + permissionResult);
-
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
@@ -372,7 +356,8 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.FOREGROUND_SERVICE) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    checkPermissionsQ();
+                progressBar.setVisibility(View.VISIBLE);
+                checkPermissionsQ();
             } else {
                 startActivity(new Intent(this, MainActivity.class));
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
@@ -389,8 +374,10 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.FOREGROUND_SERVICE) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED){
-                    checkPermissions();
+                progressBar.setVisibility(View.VISIBLE);
+                checkPermissions();
             } else {
+                progressBar.setVisibility(View.GONE);
                 startActivity(new Intent(this, MainActivity.class));
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
@@ -407,6 +394,8 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
     private Runnable runnableCode = new Runnable() {
 
        int count=0;
+       //progressBar.setVisibility(View.VISIBLE);
+
 
         // String image;
         @Override
