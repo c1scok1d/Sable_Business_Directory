@@ -229,6 +229,7 @@ public class MarkerClusteringActivity extends MainActivity implements ClusterMan
                         ratings.setText("Rating");
                     }
                     ratings.setVisibility(View.VISIBLE);
+                    ratingBar.setRating(clickedVenueMarker.getRating());
                     ratingBar.setVisibility(View.VISIBLE);
                     ratingCount.setText(String.valueOf(clickedVenueMarker.getRatingCount()));
                     ratingCount.setVisibility(View.VISIBLE);

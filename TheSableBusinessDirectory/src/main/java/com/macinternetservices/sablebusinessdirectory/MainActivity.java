@@ -767,7 +767,19 @@ public class MainActivity extends AppCompatActivity implements
         ivAlertOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ivLoading.setImageResource(R.mipmap.noreviews_foreground);
+                buildAlertMessageEnableAlerts();
+                        menu.animate()
+                                .alpha(0f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        menu.setVisibility(View.GONE);
+                                    }
+                                });
+                        container.setBackgroundColor(Color.TRANSPARENT);
+            }
+                /*ivLoading.setImageResource(R.mipmap.noreviews_foreground);
                 if(isLoggedIn){
                     tvLoading.setText("You can disable alerts by tapping your profile pic in the upper left corner to display the options menu. Tap the speaker menu icon to enable or disable alerts.");
                 } else {
@@ -806,13 +818,25 @@ public class MainActivity extends AppCompatActivity implements
                         .setDuration(shortAnimationDuration)
                         .setListener(null);
 
-            }
+            } */
         });
 
         ivAlertOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ivLoading.setImageResource(R.mipmap.noreviews_foreground);
+                buildAlertMessageEnableAlerts();
+                        menu.animate()
+                                .alpha(0f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        menu.setVisibility(View.GONE);
+                                    }
+                                });
+                        container.setBackgroundColor(Color.TRANSPARENT);
+            }
+               /* ivLoading.setImageResource(R.mipmap.noreviews_foreground);
                 if(isLoggedIn){
                     tvLoading.setText("You can disable alerts by tapping your profile pic in the upper left corner to display the options menu. Tap the speaker menu icon to enable or disable alerts.");
                 } else {
@@ -850,7 +874,7 @@ public class MainActivity extends AppCompatActivity implements
                         .setDuration(shortAnimationDuration)
                         .setListener(null);
 
-            }
+            } */
         });
 
         //circleMenu hidden in center of parent
