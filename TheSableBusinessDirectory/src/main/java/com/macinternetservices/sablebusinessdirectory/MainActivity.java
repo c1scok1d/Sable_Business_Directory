@@ -21,6 +21,7 @@ import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
@@ -297,6 +298,8 @@ public class MainActivity extends AppCompatActivity implements
     LinearLayout  textSwitcher3Layout, sliderLayout;
     private Handler imageSwitchHandler;
     public static SharedPreferences pref;
+    int version = Build.VERSION.SDK_INT;
+    int reqVersion = Build.VERSION_CODES.Q;
 
 
     public static Context context;
@@ -767,17 +770,44 @@ public class MainActivity extends AppCompatActivity implements
         ivAlertOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buildAlertMessageEnableAlerts();
-                        menu.animate()
-                                .alpha(0f)
-                                .setDuration(shortAnimationDuration)
-                                .setListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        menu.setVisibility(View.GONE);
-                                    }
-                                });
-                        container.setBackgroundColor(Color.TRANSPARENT);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+                    buildAlertMessageEnableAlerts();
+                    menu.animate()
+                            .alpha(0f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    menu.setVisibility(View.GONE);
+                                }
+                            });
+                    container.setBackgroundColor(Color.TRANSPARENT);
+                } else {
+                    int version = Build.VERSION.SDK_INT;
+                    //progressBar.setVisibility(View.GONE);
+                    showDialog("Limited Functionality", "Android version "+reqVersion+" is required to receive alerts when near a black owned business. Your device is version "+version+". You will still be able to add, rate & review black owned businesses.",
+                            "Continue",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    //Go to app settings
+
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                                    finish();
+                                }
+                            },
+                            "No, Exit app", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    ;
+                                    fileList();
+                                }
+                            }, false);
+                }
             }
                 /*ivLoading.setImageResource(R.mipmap.noreviews_foreground);
                 if(isLoggedIn){
@@ -824,17 +854,44 @@ public class MainActivity extends AppCompatActivity implements
         ivAlertOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buildAlertMessageEnableAlerts();
-                        menu.animate()
-                                .alpha(0f)
-                                .setDuration(shortAnimationDuration)
-                                .setListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        menu.setVisibility(View.GONE);
-                                    }
-                                });
-                        container.setBackgroundColor(Color.TRANSPARENT);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+                    buildAlertMessageEnableAlerts();
+                    menu.animate()
+                            .alpha(0f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    menu.setVisibility(View.GONE);
+                                }
+                            });
+                    container.setBackgroundColor(Color.TRANSPARENT);
+                } else {
+                //int version = Build.VERSION.SDK_INT;
+                //progressBar.setVisibility(View.GONE);
+                    showDialog("Limited Functionality", "Android version "+reqVersion+" is required to receive alerts when near a black owned business. Your device is version "+version+". You will still be able to add, rate & review black owned businesses.",
+                        "Continue",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                                //Go to app settings
+
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                                finish();
+                            }
+                        },
+                        "No, Exit app", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                                ;
+                                fileList();
+                            }
+                        }, false);
+                }
             }
                /* ivLoading.setImageResource(R.mipmap.noreviews_foreground);
                 if(isLoggedIn){
@@ -1009,17 +1066,44 @@ public class MainActivity extends AppCompatActivity implements
                         container.setBackgroundColor(Color.TRANSPARENT);
                         break;
                     default:
-                        buildAlertMessageEnableAlerts();
-                        menu.animate()
-                                .alpha(0f)
-                                .setDuration(shortAnimationDuration)
-                                .setListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        menu.setVisibility(View.GONE);
-                                    }
-                                });
-                        container.setBackgroundColor(Color.TRANSPARENT);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+                    buildAlertMessageEnableAlerts();
+                    menu.animate()
+                            .alpha(0f)
+                            .setDuration(shortAnimationDuration)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    menu.setVisibility(View.GONE);
+                                }
+                            });
+                    container.setBackgroundColor(Color.TRANSPARENT);
+                } else {
+                            //String version = BuildConfig.VERSION_NAME;
+                            //progressBar.setVisibility(View.GONE);
+                showDialog("Limited Functionality", "Android version "+reqVersion+" is required to receive alerts when near a black owned business. Your device is version "+version+". You will still be able to add, rate & review black owned businesses.",
+                        "Continue",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                                //Go to app settings
+
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                                finish();
+                            }
+                        },
+                        "No, Exit app", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                                ;
+                                fileList();
+                            }
+                            }, false);
+                        }
                         break;
                 }
             }
@@ -1123,7 +1207,11 @@ public class MainActivity extends AppCompatActivity implements
 
         // first run check
         if (pref.getBoolean("firstrun", true)) {
-            pref.edit().putBoolean("alertOn", true).apply();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                pref.edit().putBoolean("alertOn", true).apply();
+            } else {
+                pref.edit().putBoolean("alertOn", false).apply();
+            }
             pref.edit().putBoolean("firstrun", false).apply();
         }
         if (isLoggedIn) {
@@ -1737,7 +1825,7 @@ public class MainActivity extends AppCompatActivity implements
                         if (currentMarker != null)
                             currentMarker.remove();
                         currentMarker = mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                                .position(new LatLng(latitude, longitude))
                                 .title("You are here!").snippet("Tap any number cluster or image to begin")
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                         LatLng latLng = new LatLng(latitude, longitude);
@@ -1755,7 +1843,7 @@ public class MainActivity extends AppCompatActivity implements
                         if (currentMarker != null)
                             currentMarker.remove();
                         currentMarker = mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                                .position(new LatLng(latitude, longitude))
                                 .title("Welcome "+firstName+"!").snippet("Tap any number cluster or image to begin")
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                         LatLng latLng = new LatLng(latitude, longitude);
@@ -2358,6 +2446,19 @@ public class MainActivity extends AppCompatActivity implements
         }
     };
 
+    public androidx.appcompat.app.AlertDialog showDialog(String title, String msg, String positiveLabel, DialogInterface.OnClickListener positiveOnClick,
+                                                         String negativeLabel, DialogInterface.OnClickListener negativeOnClick, boolean isCancelAble){
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setCancelable(isCancelAble);
+        builder.setMessage(msg);
+        builder.setPositiveButton(positiveLabel, positiveOnClick);
+        builder.setNegativeButton(negativeLabel, negativeOnClick);
+
+        androidx.appcompat.app.AlertDialog alert = builder.create();
+        alert.show();
+        return alert;
+    }
     //create map markers and begin geofence monitoring
     protected void setMarkers() {
         startActivity(new Intent(getApplicationContext(), MarkerClusteringActivity.class));

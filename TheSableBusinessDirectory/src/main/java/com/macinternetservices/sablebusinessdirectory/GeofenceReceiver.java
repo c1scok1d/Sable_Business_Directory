@@ -58,12 +58,11 @@ public class GeofenceReceiver extends IntentService {
                             break;
                     }
                 }
-                GeofenceNotification geofenceNotification = new GeofenceNotification(
-                        this);
-                geofenceNotification
-                        .displayNotification(sg, transitionType, near);
-
                 if(near > 0){
+                    GeofenceNotification geofenceNotification = new GeofenceNotification(
+                            this);
+                    geofenceNotification
+                            .displayNotification(sg, transitionType, near);
                     Toast.makeText(getApplicationContext(), "There are " +near+ " black owned businesses near your current location", Toast.LENGTH_LONG).show();
                 }
             }

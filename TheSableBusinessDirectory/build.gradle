@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-final BUILD_DATE = new Date().format('-HH:mm:ss')
+final BUILD_DATE = new Date().format('yyyyMMddHHmmss')
 
 android {
     signingConfigs {
@@ -20,8 +20,8 @@ android {
         applicationId "com.sable.businesslistingapi"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 10
-        versionName "$versionCode-tewPoinOh.20210403$BUILD_DATE"
+        versionCode 102
+        versionName "$versionCode-tewPoinOh.$BUILD_DATE"
         signingConfig signingConfigs.foo
     }
     buildTypes {

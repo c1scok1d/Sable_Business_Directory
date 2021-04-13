@@ -123,9 +123,6 @@ public class ListReviewActivity extends AppCompatActivity {
         login_button.setVisibility(View.GONE);
 
         verticalList = new ArrayList<>();
-
-
-       //Picasso.Builder builder = new Picasso.Builder(this);
         pDialog = new ProgressBar(this);
 
         LinearLayoutManager hLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -458,7 +455,7 @@ public class ListReviewActivity extends AppCompatActivity {
                         if (isLoggedIn) {
                             tvNoReviews.setText("Use the rate button to be the first to rate " + tvName.getText().toString() + ".");
                         } else {
-                            login_button.setVisibility(View.VISIBLE);
+                            //login_button.setVisibility(View.VISIBLE);
                             tvNoReviews.setText("Identify yourself via Facebook and use the rate button to be the first to rate " + tvName.getText().toString() + ".");
                         }
                     } else { //list each review

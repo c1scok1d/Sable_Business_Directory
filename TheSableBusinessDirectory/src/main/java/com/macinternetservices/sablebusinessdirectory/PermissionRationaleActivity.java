@@ -16,6 +16,7 @@
 package com.macinternetservices.sablebusinessdirectory;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -48,6 +49,9 @@ import androidx.core.content.ContextCompat;
 import java.util.Arrays;
 import java.util.Random;
 
+import static com.macinternetservices.sablebusinessdirectory.MainActivity.context;
+import static com.macinternetservices.sablebusinessdirectory.MainActivity.pref;
+
 /**
  * Displays rationale for allowing the activity recognition permission and allows user to accept
  * the permission. After permission is accepted, finishes the activity so main activity can
@@ -58,16 +62,17 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
 
     private static final String TAG = "PermissionRational";
 
+
     /* Id to identify Activity Recognition permission request. */
     //private static final int PERMISSION_BACKGROUD_LOCATION = 45;
     private static final int REQUEST_READ_PHONE_STATE = 110 ,
             REQUEST_ACCESS_FINE_LOCATION = 111,
             REQUEST_WRITE_STORAGE = 112,
-            REQUEST_INTERNET_STATE =113,
+            //REQUEST_INTERNET_STATE =113,
             REQUEST_ACCESS_COARSE_LOCATION = 114,
             REQUEST_READ_STORAGE = 115,
             REQUEST_CAMERA =116,
-            REQUEST_NETWORK = 117,
+            //REQUEST_NETWORK = 117,
             REQUEST_CALL_PHONE = 118,
             REQUEST_BACKGROUND_LOCATION = 119,
             REQUEST_FOREGROUND_SERVICE = 120;
@@ -80,6 +85,8 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
 
     private Handler imageSwitchHandler;
     ProgressBar progressBar;
+    int version = Build.VERSION.SDK_INT;
+    int reqVersion = Build.VERSION_CODES.Q;
 
 
     @Override
@@ -157,12 +164,7 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
     }
     //@RequiresApi(api = Build.VERSION_CODES.Q)
     private  boolean checkPermissions() {
-
-         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-           ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.INTERNET},
-                    REQUEST_INTERNET_STATE);
-        } else if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_ACCESS_FINE_LOCATION);
@@ -182,10 +184,6 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA},
                     REQUEST_CAMERA);
-        } else if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_NETWORK_STATE},
-                    REQUEST_NETWORK);
         } else  if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CALL_PHONE},
@@ -226,11 +224,7 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private  boolean checkPermissionsQ() {
         //progressBar.setVisibility(View.VISIBLE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.INTERNET},
-                    REQUEST_INTERNET_STATE);
-        } else if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_ACCESS_FINE_LOCATION);
@@ -250,18 +244,27 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA},
                     REQUEST_CAMERA);
-        } else if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_NETWORK_STATE},
-                    REQUEST_NETWORK);
         } else  if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CALL_PHONE},
                     REQUEST_CALL_PHONE);
         } else  if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION},
-                    REQUEST_BACKGROUND_LOCATION);
+            ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION);{
+                //Show permission explanation dialog...
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+                alertBuilder.setCancelable(true);
+                alertBuilder.setTitle("Special Permissions Required");
+                alertBuilder.setMessage("This app requires special permission to access your current location when running in the background.  Tap 'Continue' and select 'Allow all the time' from the next screen to receive alerts.");
+                alertBuilder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, int id) {
+                        ActivityCompat.requestPermissions(PermissionRationaleActivity.this,
+                                new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION},
+                                REQUEST_BACKGROUND_LOCATION);
+                    }
+                });
+                AlertDialog alert = alertBuilder.create();
+                alert.show();
+            }
         }  else if (ActivityCompat.checkSelfPermission(this, Manifest.permission.FOREGROUND_SERVICE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.FOREGROUND_SERVICE},
@@ -346,13 +349,13 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
             int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED ||
+            if (/*ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED || */
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED ||
+                    //ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.FOREGROUND_SERVICE) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -364,23 +367,42 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
                 finish();            //h.postDelayed(r, 1500);
             }
         } else {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED ||
+            if (/*ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED || */
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED ||
-                    ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
-                    ActivityCompat.checkSelfPermission(this, Manifest.permission.FOREGROUND_SERVICE) != PackageManager.PERMISSION_GRANTED ||
-                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                    //ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED ||
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED/* ||
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.FOREGROUND_SERVICE) != PackageManager.PERMISSION_GRANTED
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED*/){
                 progressBar.setVisibility(View.VISIBLE);
                 checkPermissions();
             } else {
                 progressBar.setVisibility(View.GONE);
-                startActivity(new Intent(this, MainActivity.class));
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                finish();
+                showDialog("Limited Functionality", "Android version "+reqVersion+" is required to receive alerts when near a black owned business. Your device is version "+version+". You will still be able to add, rate & review black owned businesses.",
+                        "Continue",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                                //Go to app settings
+
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                                finish();
+                            }
+                        },
+                        "No, Exit app", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                                ;
+                                fileList();
+                            }
+                        }, false);
+
             }
         }
     }
@@ -413,13 +435,13 @@ public class PermissionRationaleActivity extends AppCompatActivity implements
 
                     "Rate and review black owned everytime you shop.",
 
-                    "Online reviews are a great way to increase sales.",
-
                     "We insure high quality feedback by requiring users to login before adding or reviewing a listing.",
 
                     "We need your permission to alert you when you're near a black owned business.",
 
-                    "Tap below to begin and allow all permissions all the time to get alerted when you're near a registered black owned business."
+                    "The app requires special permission to access your location when not running to alert you when you're near a registered black owned business.",
+
+                    "Click begin and allow all of the following permissions when prompted."
 
             };
 
