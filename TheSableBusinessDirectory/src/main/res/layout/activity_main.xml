@@ -153,6 +153,7 @@
                             android:id="@+id/ivLogo"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:background="@mipmap/sable_logo_black_foreground"
                             android:scaleType="fitCenter"
                             app:srcCompat="@mipmap/sable_logo_black_foreground" />
                     </androidx.cardview.widget.CardView>

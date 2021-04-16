@@ -20,7 +20,7 @@ android {
         applicationId "com.sable.businesslistingapi"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 102
+        versionCode 104
         versionName "$versionCode-tewPoinOh.$BUILD_DATE"
         signingConfig signingConfigs.foo
     }

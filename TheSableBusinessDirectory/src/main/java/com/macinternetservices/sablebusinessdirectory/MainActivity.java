@@ -770,44 +770,17 @@ public class MainActivity extends AppCompatActivity implements
         ivAlertOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-
-                    buildAlertMessageEnableAlerts();
-                    menu.animate()
-                            .alpha(0f)
-                            .setDuration(shortAnimationDuration)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    menu.setVisibility(View.GONE);
-                                }
-                            });
-                    container.setBackgroundColor(Color.TRANSPARENT);
-                } else {
-                    int version = Build.VERSION.SDK_INT;
-                    //progressBar.setVisibility(View.GONE);
-                    showDialog("Limited Functionality", "Android version "+reqVersion+" is required to receive alerts when near a black owned business. Your device is version "+version+". You will still be able to add, rate & review black owned businesses.",
-                            "Continue",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.dismiss();
-                                    //Go to app settings
-
-                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                                    finish();
-                                }
-                            },
-                            "No, Exit app", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.dismiss();
-                                    ;
-                                    fileList();
-                                }
-                            }, false);
-                }
+                buildAlertMessageEnableAlerts();
+                        menu.animate()
+                                .alpha(0f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        menu.setVisibility(View.GONE);
+                                    }
+                                });
+                        container.setBackgroundColor(Color.TRANSPARENT);
             }
                 /*ivLoading.setImageResource(R.mipmap.noreviews_foreground);
                 if(isLoggedIn){
@@ -854,44 +827,17 @@ public class MainActivity extends AppCompatActivity implements
         ivAlertOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-
-                    buildAlertMessageEnableAlerts();
-                    menu.animate()
-                            .alpha(0f)
-                            .setDuration(shortAnimationDuration)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    menu.setVisibility(View.GONE);
-                                }
-                            });
-                    container.setBackgroundColor(Color.TRANSPARENT);
-                } else {
-                //int version = Build.VERSION.SDK_INT;
-                //progressBar.setVisibility(View.GONE);
-                    showDialog("Limited Functionality", "Android version "+reqVersion+" is required to receive alerts when near a black owned business. Your device is version "+version+". You will still be able to add, rate & review black owned businesses.",
-                        "Continue",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                                //Go to app settings
-
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                                finish();
-                            }
-                        },
-                        "No, Exit app", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                                ;
-                                fileList();
-                            }
-                        }, false);
-                }
+                buildAlertMessageEnableAlerts();
+                        menu.animate()
+                                .alpha(0f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        menu.setVisibility(View.GONE);
+                                    }
+                                });
+                        container.setBackgroundColor(Color.TRANSPARENT);
             }
                /* ivLoading.setImageResource(R.mipmap.noreviews_foreground);
                 if(isLoggedIn){
@@ -1066,44 +1012,17 @@ public class MainActivity extends AppCompatActivity implements
                         container.setBackgroundColor(Color.TRANSPARENT);
                         break;
                     default:
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-
-                    buildAlertMessageEnableAlerts();
-                    menu.animate()
-                            .alpha(0f)
-                            .setDuration(shortAnimationDuration)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    menu.setVisibility(View.GONE);
-                                }
-                            });
-                    container.setBackgroundColor(Color.TRANSPARENT);
-                } else {
-                            //String version = BuildConfig.VERSION_NAME;
-                            //progressBar.setVisibility(View.GONE);
-                showDialog("Limited Functionality", "Android version "+reqVersion+" is required to receive alerts when near a black owned business. Your device is version "+version+". You will still be able to add, rate & review black owned businesses.",
-                        "Continue",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                                //Go to app settings
-
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                                finish();
-                            }
-                        },
-                        "No, Exit app", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                                ;
-                                fileList();
-                            }
-                            }, false);
-                        }
+                        buildAlertMessageEnableAlerts();
+                        menu.animate()
+                                .alpha(0f)
+                                .setDuration(shortAnimationDuration)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        menu.setVisibility(View.GONE);
+                                    }
+                                });
+                        container.setBackgroundColor(Color.TRANSPARENT);
                         break;
                 }
             }
@@ -1207,11 +1126,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // first run check
         if (pref.getBoolean("firstrun", true)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                pref.edit().putBoolean("alertOn", true).apply();
-            } else {
-                pref.edit().putBoolean("alertOn", false).apply();
-            }
+            pref.edit().putBoolean("alertOn", true).apply();
             pref.edit().putBoolean("firstrun", false).apply();
         }
         if (isLoggedIn) {
